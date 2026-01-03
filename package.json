@@ -4,8 +4,10 @@
   "main": "index.js",
   "scripts": {
     "dev": "npx esbuild src/main.jsx --bundle --outfile=dist/assets/main.js --servedir=dist --watch",
-    "build": "npx esbuild src/main.jsx --bundle --outfile=dist/assets/main.js --minify --sourcemap && npm run copy:html",
+    "build": "npx esbuild src/main.jsx --bundle --outfile=dist/assets/main.js --minify --sourcemap && npm run copy:html && npm run refactor",
     "copy:html": "mkdir -p dist && cp dashboard.html index.html login.html output.css dist/ 2>/dev/null || true",
+    "refactor": "node scripts/refactor_html_for_production.js --all",
+    "refactor:file": "node scripts/refactor_html_for_production.js",
     "preview": "npx serve dist",
     "sync:r2": "node scripts/sync_assets_to_r2.js",
     "deploy:worker": "npx wrangler deploy",
