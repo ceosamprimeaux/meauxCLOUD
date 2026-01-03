@@ -7,9 +7,13 @@
 .env
 .env.local
 .env.production
+.env.*
+!.env.example
+*.env
 /scripts/setup_env.sh
 /scripts/MeauxMasterSync.sh
 /scripts/sync_images.js
+.secrets-collected.json
 
 # OS files
 .DS_Store
