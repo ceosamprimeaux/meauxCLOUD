@@ -56,10 +56,14 @@
         // Environment Detection & API Configuration
         (function() {
             const ENV = {
-                isDev: true,
-                isProduction: false,
-                baseUrl: 'https://ceosamprimeaux.github.io/meauxCLOUD',
-                apiBase: 'https://ceosamprimeaux.github.io/meauxCLOUD',
+                isDev: window.location.hostname.includes('github.io'),
+                isProduction: !window.location.hostname.includes('github.io'),
+                baseUrl: window.location.hostname.includes('github.io') 
+                    ? 'https://ceosamprimeaux.github.io/meauxCLOUD'
+                    : 'https://meauxcloud.org',
+                apiBase: window.location.hostname.includes('github.io')
+                    ? 'https://meauxcloud.org' // GitHub Pages uses production API
+                    : 'https://meauxcloud.org',
                 endpoints: {
   "dashboard": "/api/dashboard/stats",
   "meshy": "/api/meshy/generate",

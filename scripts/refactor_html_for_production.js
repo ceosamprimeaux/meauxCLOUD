@@ -48,6 +48,16 @@ const CONFIG = {
             messages: '/api/chat/messages',
             send: '/api/chat/send',
             ws: '/api/chat/ws'
+        },
+        // Group Call / Video
+        sfu: {
+            session: '/api/sfu/session',
+            turn: '/api/turn/credentials'
+        },
+        // Google AI
+        google: {
+            proxy: '/api/google/proxy',
+            ai: '/api/ai/rag'
         }
     }
 };
@@ -202,6 +212,46 @@ function refactorHTML(content, filePath) {
                     return this.call(ENV.endpoints.chat.send, {
                         method: 'POST',
                         body: JSON.stringify(data)
+                    });
+                },
+                
+                // Group Call / Video (SFU)
+                async createCallSession() {
+                    return this.call(ENV.endpoints.sfu.session, {
+                        method: 'POST'
+                    });
+                },
+                
+                async getTURNCredentials() {
+                    return this.call(ENV.endpoints.sfu.turn);
+                },
+                
+                // Google AI Assistant
+                async callGoogleAI(prompt, systemContext = 'default') {
+                    return this.call(ENV.endpoints.google.proxy, {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            endpoint: 'v1beta/models/gemini-2.0-flash-exp:generateContent',
+                            method: 'POST',
+                            body: {
+                                contents: [{ parts: [{ text: prompt }] }],
+                                systemInstruction: { 
+                                    parts: [{ 
+                                        text: systemContext === 'assistant' 
+                                            ? 'You are MeauxAI, an advanced AI assistant for MeauxCLOUD.'
+                                            : 'You are a helpful assistant.' 
+                                    }] 
+                                }
+                            }
+                        })
+                    });
+                },
+                
+                // AutoRAG (Advanced AI)
+                async queryAI(query) {
+                    return this.call(ENV.endpoints.google.ai, {
+                        method: 'POST',
+                        body: JSON.stringify({ query })
                     });
                 }
             };
