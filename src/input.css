@@ -1,0 +1,131 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        /* Peach Theme Palette */
+        --color-peach-50: #fef5f1;
+        --color-peach-100: #fdeae0;
+        --color-peach-200: #fbd4c1;
+        --color-peach-300: #f8b99c;
+        --color-peach-400: #f59870;
+        --color-peach-500: #f27a4f;
+        --color-peach-600: #e85d30;
+        --color-peach-700: #c54a22;
+        --color-peach-800: #a2381a;
+        --color-peach-900: #842d15;
+
+        /* App Variables */
+        --accent: var(--color-peach-500);
+        --accent2: var(--color-peach-600);
+        --accent-glow: rgba(242, 122, 79, 0.4);
+
+        --bg: #faf8f6;
+        --surface-0: #ffffff;
+        --surface-1: #fafafa;
+
+        --text-primary: #1f2937;
+        --text-secondary: #4b5563;
+        --text-muted: #9ca3af;
+
+        --glass-bg: rgba(255, 255, 255, 0.75);
+        --glass-border: rgba(255, 255, 255, 0.5);
+        --glass-blur: 20px;
+
+        --sidebar-bg: linear-gradient(180deg, var(--color-peach-50) 0%, #fff 100%);
+        --sidebar-border: rgba(242, 122, 79, 0.1);
+        --sidebar-text: #4a4a4a;
+        --sidebar-text-muted: #9ca3af;
+        --sidebar-hover: rgba(242, 122, 79, 0.1);
+        --sidebar-active: var(--color-peach-100);
+
+        --border-subtle: rgba(0, 0, 0, 0.06);
+
+        --radius-sm: 6px;
+        --radius-md: 10px;
+        --radius-lg: 16px;
+        --radius-xl: 24px;
+
+        --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+        --shadow-lift: 0 10px 30px -5px rgba(242, 122, 79, 0.15), 0 8px 10px -5px rgba(242, 122, 79, 0.05);
+
+        --sidenav-width: 260px;
+        --topbar-height: 70px;
+        --dock-height: 80px;
+    }
+
+    body {
+        background-color: var(--bg);
+        color: var(--text-primary);
+        font-family: 'Inter', sans-serif;
+    }
+}
+
+@layer components {
+    .glass-panel {
+        background: var(--glass-bg);
+        backdrop-filter: blur(var(--glass-blur));
+        -webkit-backdrop-filter: blur(var(--glass-blur));
+        border: 1px solid var(--glass-border);
+        box-shadow: var(--shadow-lift);
+    }
+
+    .sidebar-item {
+        @apply flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200;
+        color: var(--sidebar-text);
+    }
+
+    .sidebar-item:hover {
+        background: var(--sidebar-hover);
+        color: var(--color-peach-600);
+        transform: translateX(2px);
+    }
+
+    .sidebar-item.active {
+        background: var(--sidebar-active);
+        color: var(--color-peach-700);
+        box-shadow: var(--shadow-soft);
+    }
+
+    .clay-btn {
+        background: var(--surface-0);
+        color: var(--text-secondary);
+        border: 1px solid var(--border-subtle);
+        box-shadow:
+            inset 2px 2px 5px rgba(255, 255, 255, 1),
+            inset -3px -3px 7px rgba(0, 0, 0, 0.02),
+            0 5px 10px rgba(0, 0, 0, 0.05);
+        transition: all 0.2s ease;
+    }
+
+    .clay-btn:hover {
+        transform: translateY(-2px);
+        box-shadow:
+            inset 2px 2px 5px rgba(255, 255, 255, 1),
+            inset -3px -3px 7px rgba(0, 0, 0, 0.02),
+            0 8px 15px rgba(242, 122, 79, 0.15);
+        border-color: var(--accent);
+        color: var(--accent);
+    }
+
+    .clay-btn:active {
+        transform: translateY(0);
+        box-shadow:
+            inset 3px 3px 6px rgba(0, 0, 0, 0.05),
+            inset -2px -2px 5px rgba(255, 255, 255, 0.8);
+    }
+
+    .clay-card {
+        background: var(--surface-0);
+        border-radius: var(--radius-lg);
+        box-shadow:
+            20px 20px 60px #d1d9e6,
+            -20px -20px 60px #ffffff;
+        /* Adjusted for flat look per reference but with clay hint */
+        box-shadow:
+            0 10px 25px -5px rgba(0, 0, 0, 0.05),
+            0 8px 10px -6px rgba(0, 0, 0, 0.01);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+    }
+}

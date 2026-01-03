@@ -1,0 +1,298 @@
+{
+    "meta": {
+        "version": "3.57.1",
+        "updated": "2025-01-02"
+    },
+    "globalFlags": [
+        {
+            "name": "help",
+            "alias": "h",
+            "type": "boolean",
+            "desc": "Show help"
+        },
+        {
+            "name": "config",
+            "alias": "c",
+            "type": "string",
+            "desc": "Path to .toml configuration file"
+        },
+        {
+            "name": "cwd",
+            "type": "string",
+            "desc": "Run as if in this directory"
+        },
+        {
+            "name": "env",
+            "alias": "e",
+            "type": "string",
+            "desc": "Environment to use"
+        }
+    ],
+    "categories": [
+        {
+            "id": "core",
+            "name": "Core Lifecycle",
+            "commands": [
+                {
+                    "name": "dev",
+                    "description": "Start a local development server",
+                    "args": [
+                        {
+                            "name": "script",
+                            "required": false,
+                            "desc": "The entry point file"
+                        }
+                    ],
+                    "flags": [
+                        {
+                            "name": "local",
+                            "type": "boolean",
+                            "default": true,
+                            "desc": "Run on local machine"
+                        },
+                        {
+                            "name": "remote",
+                            "type": "boolean",
+                            "default": false,
+                            "desc": "Run on Cloudflare network"
+                        },
+                        {
+                            "name": "port",
+                            "type": "number",
+                            "desc": "Port to listen on"
+                        }
+                    ]
+                },
+                {
+                    "name": "deploy",
+                    "description": "Deploy your Worker to Cloudflare",
+                    "flags": [
+                        {
+                            "name": "dry-run",
+                            "type": "boolean",
+                            "desc": "Don't actually deploy"
+                        },
+                        {
+                            "name": "keep-vars",
+                            "type": "boolean",
+                            "desc": "Stop undefined vars from being deleted"
+                        }
+                    ]
+                },
+                {
+                    "name": "tail",
+                    "description": "Start a log tailing session",
+                    "args": [
+                        {
+                            "name": "worker",
+                            "required": false,
+                            "desc": "Name of worker"
+                        }
+                    ],
+                    "flags": [
+                        {
+                            "name": "format",
+                            "type": "string",
+                            "options": [
+                                "json",
+                                "pretty"
+                            ],
+                            "default": "pretty"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "d1",
+            "name": "D1 Database",
+            "commands": [
+                {
+                    "name": "d1 create",
+                    "description": "Create a new D1 database",
+                    "args": [
+                        {
+                            "name": "name",
+                            "required": true,
+                            "desc": "Database name"
+                        }
+                    ]
+                },
+                {
+                    "name": "d1 execute",
+                    "description": "Execute SQL query",
+                    "args": [
+                        {
+                            "name": "database",
+                            "required": true,
+                            "desc": "Database name"
+                        }
+                    ],
+                    "flags": [
+                        {
+                            "name": "command",
+                            "alias": "c",
+                            "type": "string",
+                            "desc": "SQL statement"
+                        },
+                        {
+                            "name": "file",
+                            "alias": "f",
+                            "type": "string",
+                            "desc": "SQL file path"
+                        },
+                        {
+                            "name": "local",
+                            "type": "boolean",
+                            "desc": "Run against local DB"
+                        },
+                        {
+                            "name": "remote",
+                            "type": "boolean",
+                            "desc": "Run against remote DB"
+                        }
+                    ]
+                },
+                {
+                    "name": "d1 list",
+                    "description": "List your D1 databases"
+                }
+            ]
+        },
+        {
+            "id": "r2",
+            "name": "R2 Storage",
+            "commands": [
+                {
+                    "name": "r2 bucket create",
+                    "description": "Create a new R2 bucket",
+                    "args": [
+                        {
+                            "name": "name",
+                            "required": true
+                        }
+                    ]
+                },
+                {
+                    "name": "r2 bucket list",
+                    "description": "List R2 buckets"
+                },
+                {
+                    "name": "r2 object put",
+                    "description": "Upload an object",
+                    "args": [
+                        {
+                            "name": "path",
+                            "required": true,
+                            "desc": "bucket/key"
+                        }
+                    ],
+                    "flags": [
+                        {
+                            "name": "file",
+                            "type": "string",
+                            "required": true,
+                            "desc": "Local file path"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "ai",
+            "name": "AI & Vectorize",
+            "commands": [
+                {
+                    "name": "vectorize create",
+                    "description": "Create a vector index",
+                    "args": [
+                        {
+                            "name": "name",
+                            "required": true
+                        }
+                    ],
+                    "flags": [
+                        {
+                            "name": "dimensions",
+                            "type": "number",
+                            "required": true
+                        },
+                        {
+                            "name": "metric",
+                            "type": "string",
+                            "options": [
+                                "cosine",
+                                "euclidean",
+                                "dot-product"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "ai list",
+                    "description": "List available AI models"
+                }
+            ]
+        },
+        {
+            "id": "kv",
+            "name": "KV Namespace",
+            "commands": [
+                {
+                    "name": "kv:namespace create",
+                    "args": [
+                        {
+                            "name": "binding",
+                            "required": true
+                        }
+                    ]
+                },
+                {
+                    "name": "kv:key put",
+                    "args": [
+                        {
+                            "name": "key",
+                            "required": true
+                        },
+                        {
+                            "name": "value",
+                            "required": true
+                        }
+                    ]
+                },
+                {
+                    "name": "kv:key get",
+                    "args": [
+                        {
+                            "name": "key",
+                            "required": true
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "container",
+            "name": "Containers (Beta)",
+            "commands": [
+                {
+                    "name": "containers build",
+                    "description": "Build a container image",
+                    "flags": [
+                        {
+                            "name": "tag",
+                            "required": true,
+                            "type": "string",
+                            "desc": "Image tag"
+                        },
+                        {
+                            "name": "push",
+                            "type": "boolean",
+                            "desc": "Push after build"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

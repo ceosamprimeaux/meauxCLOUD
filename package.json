@@ -1,0 +1,33 @@
+{
+  "name": "meauxcloud",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "build:css": "./tailwindcss -i ./src/input.css -o ./output.css --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@vitejs/plugin-react": "^5.1.2",
+    "autoprefixer": "^10.4.23",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.19",
+    "vite": "^6.4.1"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.962.0",
+    "hono": "^4.11.3",
+    "lucide-react": "^0.562.0",
+    "mime-types": "^3.0.2",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "react-router-dom": "^7.11.0",
+    "resend": "^6.6.0",
+    "svix": "^1.84.1"
+  }
+}

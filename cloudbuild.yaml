@@ -1,0 +1,30 @@
+steps:
+  # 1. Install Dependencies
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['install']
+
+  # 2. Deploy Cloudflare Worker
+  # Secrets are mapped to environment variables here
+  - name: 'gcr.io/cloud-builders/npm'
+    entrypoint: 'npx'
+    args: ['wrangler', 'deploy']
+    secretEnv: ['CLOUDFLARE_API_TOKEN', 'CLOUDFLARE_ACCOUNT_ID']
+
+  # 3. Analytics: Check/Create BigQuery Dataset
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        bq mk --dataset --location=us-east1 meauxcloud_analytics || echo "Dataset exists"
+
+# Fetch secrets from Google Secret Manager
+secrets:
+  - secretManager:
+      - versionName: projects/meauxcloud/secrets/MEAUX_CF_TOKEN/versions/latest
+        env: 'CLOUDFLARE_API_TOKEN'
+      - versionName: projects/meauxcloud/secrets/MEAUX_CF_ACCOUNT/versions/latest
+        env: 'CLOUDF_ACCOUNT_ID'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
