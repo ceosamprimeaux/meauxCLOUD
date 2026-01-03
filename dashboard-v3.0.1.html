@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MeauxOS | Unified Operations v3.0.1</title>
+
+    <!-- Meta -->
+    <meta name="description" content="MeauxOS - Enterprise cloud operations platform">
+    <link rel="icon"
+        href="https://imagedelivery.net/g7wf09fCONpnidkRnR_5vw/85b76f95-8b55-4d39-65d9-bc705bea3100/thumbnail">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: ['class', '[data-theme="dark"]'],
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    },
+                    colors: {
+                        meaux: {
+                            cyan: '#22d3ee',
+                            blue: '#3b82f6',
+                            purple: '#a78bfa',
+                            pink: '#f472b6',
+                            indigo: '#818cf8',
+                            dark: '#050505',
+                            surface: '#0f172a'
+                        }
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.8s ease-out forwards',
+                        'slide-up': 'slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        'warp-out': 'warpOut 1.5s cubic-bezier(0.7, 0, 0.84, 0) forwards',
+                    },
+                    keyframes: {
+                        fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+                        slideUp: { '0%': { transform: 'translateY(20px)', opacity: '0' }, '100%': { transform: 'translateY(0)', opacity: '1' } },
+                        warpOut: { '0%': { transform: 'scale(1)', opacity: '1' }, '100%': { transform: 'scale(3)', opacity: '0' } }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* --- Core --- */
+        body {
+            background-color: #050505;
+            color: #e2e8f0;
+            overflow: hidden;
+            cursor: none;
+        }
+
+        /* --- Magnetic Cursor --- */
+        .cursor-dot {
+            width: 6px;
+            height: 6px;
+            background-color: #22d3ee;
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 9999;
+            pointer-events: none;
+            box-shadow: 0 0 15px #22d3ee;
+            transition: opacity 0.3s;
+        }
+
+        .cursor-outline {
+            width: 40px;
+            height: 40px;
+            border: 1.5px solid rgba(255, 255, 255, 0.3);
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 9999;
+            pointer-events: none;
+            transition: width 0.2s, height 0.2s, background-color 0.2s, border-color 0.2s;
+        }
+
+        body.hovering .cursor-outline {
+            width: 60px;
+            height: 60px;
+            background-color: rgba(34, 211, 238, 0.05);
+            border-color: #22d3ee;
+            backdrop-filter: blur(2px);
+        }
+
+        /* --- Glass UI System --- */
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .glass-sidebar {
+            background: linear-gradient(180deg, rgba(15, 23, 42, 0.9) 0%, rgba(5, 5, 10, 0.95) 100%);
+            backdrop-filter: blur(40px);
+            border-right: 1px solid rgba(255, 255, 255, 0.08);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.1s;
+        }
+
+        /* --- View Management --- */
+        #app-container {
+            display: none;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        #app-container.visible {
+            display: flex;
+            opacity: 1;
+        }
+
+        #login-view {
+            transition: opacity 0.5s ease;
+        }
+
+        #login-view.hidden {
+            opacity: 0;
+            pointer-events: none;
+            display: none;
+        }
+
+        .view-section {
+            display: none;
+            height: 100%;
+            width: 100%;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.4s ease;
+        }
+
+        .view-section.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Components --- */
+        .nav-link {
+            transition: all 0.2s ease;
+            color: #94a3b8;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+        }
+
+        .nav-link.active {
+            border-left: 2px solid #22d3ee;
+            background: linear-gradient(90deg, rgba(34, 211, 238, 0.1), transparent);
+            color: #22d3ee;
+        }
+
+        /* Submenu */
+        .submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .submenu.open {
+            max-height: 500px;
+            transition: max-height 0.5s ease-in;
+        }
+
+        /* Mobile Sidebar */
+        @media (max-width: 1024px) {
+            .glass-sidebar {
+                transform: translateX(-100%);
+                width: 280px !important;
+            }
+
+            .glass-sidebar.mobile-open {
+                transform: translateX(0);
+            }
+
+            .sidebar-resizer {
+                display: none;
+            }
+        }
+
+        /* Resizer Handle */
+        .sidebar-resizer {
+            position: absolute;
+            right: -4px;
+            top: 0;
+            bottom: 0;
+            width: 8px;
+            cursor: col-resize;
+            z-index: 100;
+        }
+
+        .sidebar-resizer:hover {
+            background: rgba(34, 211, 238, 0.2);
+        }
+
+        .nav-label {
+            white-space: nowrap;
+            overflow: hidden;
+            transition: opacity 0.2s;
+        }
+
+        .glass-sidebar.narrow .nav-label,
+        .glass-sidebar.narrow .submenu-icon {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Cursor -->
+    <div class="cursor-dot" id="cursor-dot"></div>
+    <div class="cursor-outline" id="cursor-outline"></div>
+
+    <!-- 3D Background -->
+    <div id="galaxy-canvas" class="fixed inset-0 z-0"></div>
+
+    <!-- Login Portal -->
+    <div id="login-view" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-md p-8 md:p-10 rounded-3xl animate-fade-in relative overflow-hidden">
+            <!-- Logo -->
+            <div class="text-center mb-8">
+                <div
+                    class="w-20 h-20 md:w-24 md:h-24 bg-white/5 rounded-full mx-auto flex items-center justify-center shadow-2xl mb-6 border border-white/10 p-1 interactable hover:scale-105 transition-transform overflow-hidden">
+                    <img src="https://imagedelivery.net/g7wf09fCONpnidkRnR_5vw/85b76f95-8b55-4d39-65d9-bc705bea3100/avatar"
+                        alt="MeauxOS Logo" class="w-full h-full object-cover rounded-full">
+                </div>
+                <h1 class="text-3xl font-display font-bold text-white tracking-tight">MeauxOS</h1>
+                <p class="text-sm text-slate-400 mt-2 font-medium tracking-wide">Unified Operations Platform</p>
+            </div>
+
+            <!-- Login Form -->
+            <form id="loginForm" class="space-y-4">
+                <!-- Social Logins -->
+                <div class="grid grid-cols-2 gap-3">
+                    <button type="button" id="google-login-btn" onclick="handleLogin('google')"
+                        class="flex items-center justify-center gap-2 bg-white text-slate-900 font-bold py-3 px-4 rounded-xl hover:bg-slate-200 transition-all transform active:scale-95 shadow-lg interactable">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24">
+                            <path
+                                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                                fill="#4285F4" />
+                            <path
+                                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                                fill="#34A853" />
+                            <path
+                                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                                fill="#FBBC05" />
+                            <path
+                                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                                fill="#EA4335" />
+                        </svg>
+                        Google
+                    </button>
+                    <button type="button" id="github-login-btn" onclick="handleLogin('github')"
+                        class="flex items-center justify-center gap-2 bg-[#24292e] text-white font-bold py-3 px-4 rounded-xl hover:bg-[#2f363d] transition-all transform active:scale-95 shadow-lg interactable">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                        </svg>
+                        GitHub
+                    </button>
+                </div>
+
+                <div class="relative flex items-center py-2">
+                    <div class="flex-grow border-t border-white/10"></div>
+                    <span class="flex-shrink-0 mx-4 text-[10px] text-slate-500 uppercase font-mono tracking-wider">or
+                        sign in with credentials</span>
+                    <div class="flex-grow border-t border-white/10"></div>
+                </div>
+
+                <div class="space-y-4">
+                    <input type="email" id="email-input" name="email"
+                        class="w-full bg-black/30 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-meaux-cyan focus:bg-black/50 outline-none transition-all placeholder-slate-600 interactable"
+                        placeholder="admin@meauxos.com">
+                    <input type="password" id="password-input" name="password"
+                        class="w-full bg-black/30 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-meaux-cyan focus:bg-black/50 outline-none transition-all placeholder-slate-600 interactable"
+                        placeholder="••••••••">
+                </div>
+
+                <button type="button" onclick="handleLogin()"
+                    class="w-full bg-gradient-to-r from-meaux-cyan to-meaux-blue text-white font-bold py-3.5 px-4 rounded-xl hover:opacity-90 transition-all transform active:scale-95 shadow-lg shadow-meaux-cyan/20 interactable">
+                    Sign In
+                </button>
+            </form>
+
+            <div class="mt-8 text-center flex items-center justify-center gap-2 opacity-50">
+                <div class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
+                <span class="text-[10px] font-mono text-slate-400">R2: ONLINE | D1: SYNCED</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard UI -->
+    <div id="app-container" class="fixed inset-0 z-40 h-full w-full">
+
+        <!-- Mobile Header -->
+        <div
+            class="lg:hidden absolute top-0 left-0 right-0 h-16 bg-[#0f172a]/80 backdrop-blur-md border-b border-white/10 flex items-center justify-between px-4 z-50">
+            <button onclick="toggleMobileMenu()" class="text-white p-2">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+            <span class="font-bold text-white">MeauxOS</span>
+            <div class="w-8 h-8 rounded-full overflow-hidden border border-white/20"><img
+                    src="https://imagedelivery.net/g7wf09fCONpnidkRnR_5vw/85b76f95-8b55-4d39-65d9-bc705bea3100/avatar"
+                    class="w-full h-full object-cover"></div>
+        </div>
+
+        <!-- Sidebar -->
+        <aside id="main-sidebar"
+            class="w-[260px] glass-sidebar flex flex-col z-50 fixed lg:relative h-full select-none min-w-[80px] max-w-[300px]">
+            <div class="sidebar-resizer" id="sidebar-resizer"></div>
+
+            <div class="p-6 border-b border-white/5 flex items-center gap-3 overflow-hidden h-20">
+                <div
+                    class="w-10 h-10 rounded-full bg-gradient-to-br from-meaux-cyan to-meaux-blue flex items-center justify-center shadow-lg p-0.5 flex-shrink-0">
+                    <img src="https://imagedelivery.net/g7wf09fCONpnidkRnR_5vw/85b76f95-8b55-4d39-65d9-bc705bea3100/avatar"
+                        class="w-full h-full object-cover rounded-full">
+                </div>
+                <div class="nav-label">
+                    <h2 class="font-bold text-white text-lg leading-none">MeauxOS</h2>
+                    <span class="text-[10px] text-slate-400 font-mono">v3.0.1</span>
+                </div>
+            </div>
+
+            <nav class="flex-1 overflow-y-auto py-6 px-3 space-y-1">
+
+                <a onclick="app.navigate('dashboard')" id="nav-dashboard"
+                    class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium active interactable">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                    </svg>
+                    <span class="nav-label">Dashboard</span>
+                </a>
+
+                <!-- MeauxWork Dropdown -->
+                <div>
+                    <a onclick="toggleSubmenu('meauxwork')" id="nav-meauxwork"
+                        class="nav-link flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium interactable cursor-pointer">
+                        <div class="flex items-center gap-3">
+                            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                            <span class="nav-label">MeauxWork</span>
+                        </div>
+                        <svg class="w-3 h-3 nav-label transition-transform" id="arrow-meauxwork" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </a>
+                    <div id="sub-meauxwork" class="submenu pl-9 space-y-1">
+                        <a onclick="app.navigate('meauxsql')"
+                            class="block py-2 text-xs text-slate-400 hover:text-white cursor-pointer nav-label">MeauxSQL</a>
+                        <a onclick="app.navigate('meauxide')"
+                            class="block py-2 text-xs text-slate-400 hover:text-white cursor-pointer nav-label">MeauxIDE</a>
+                        <a onclick="app.navigate('meauxtalk')"
+                            class="block py-2 text-xs text-slate-400 hover:text-white cursor-pointer nav-label">MeauxTalk</a>
+                        <a onclick="app.navigate('meauxmail')"
+                            class="block py-2 text-xs text-slate-400 hover:text-white cursor-pointer nav-label">MeauxMail</a>
+                    </div>
+                </div>
+
+                <a onclick="app.navigate('analytics')" id="nav-analytics"
+                    class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium interactable">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 002 2h2a2 2 0 002-2z" />
+                    </svg>
+                    <span class="nav-label">Analytics</span>
+                </a>
+
+                <a onclick="app.navigate('team')" id="nav-team"
+                    class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium interactable">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                    <span class="nav-label">MeauxTeam</span>
+                </a>
+
+                <div class="pt-4 pb-2">
+                    <div class="px-3 text-[10px] font-bold uppercase text-slate-500 tracking-wider nav-label">
+                        Infrastructure</div>
+                </div>
+
+                <a onclick="app.navigate('meauxcloud')" id="nav-meauxcloud"
+                    class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium interactable">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
+                    </svg>
+                    <span class="nav-label">MeauxCloud</span>
+                </a>
+
+                <a onclick="app.navigate('meauxcad')" id="nav-meauxcad"
+                    class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium interactable">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                    </svg>
+                    <span class="nav-label">MeauxCAD</span>
+                </a>
+
+                <div class="pt-4 pb-2">
+                    <div class="px-3 text-[10px] font-bold uppercase text-slate-500 tracking-wider nav-label">Media
+                    </div>
+                </div>
+
+                <a onclick="app.navigate('meauxphoto')" id="nav-meauxphoto"
+                    class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium interactable">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <span class="nav-label">MeauxPhoto</span>
+                </a>
+                <a onclick="app.navigate('meauxmedia')" id="nav-meauxmedia"
+                    class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium interactable">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    </svg>
+                    <span class="nav-label">MeauxMedia</span>
+                </a>
+
+                <div class="pt-4 pb-2">
+                    <div class="px-3 text-[10px] font-bold uppercase text-slate-500 tracking-wider nav-label">Apps</div>
+                </div>
+
+                <a onclick="app.navigate('automeaux')" id="nav-automeaux"
+                    class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium interactable">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                    </svg>
+                    <span class="nav-label">AutoMeaux</span>
+                </a>
+
+                <a onclick="app.navigate('meauxapps')" id="nav-meauxapps"
+                    class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium interactable">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M17 14v6m-3-3h6M6 10h2a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2zm10 0h2a2 2 0 002-2V6a2 2 0 00-2-2h-2a2 2 0 00-2 2v2a2 2 0 002 2zM6 20h2a2 2 0 002-2v-2a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2z" />
+                    </svg>
+                    <span class="nav-label">MeauxApps</span>
+                </a>
+
+            </nav>
+
+            <div class="p-4 border-t border-white/5 w-full">
+                <a onclick="app.navigate('settings')" id="nav-settings"
+                    class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium interactable mb-4">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    <span class="nav-label">Settings</span>
+                </a>
+                <a onclick="app.navigate('meauxos')" id="nav-meauxos"
+                    class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium interactable text-meaux-purple">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                    </svg>
+                    <span class="nav-label">MeauxOS System</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Area -->
+        <div class="flex-1 relative overflow-hidden">
+
+            <!-- VIEW: DASHBOARD -->
+            <div id="view-dashboard" class="view-section active overflow-y-auto h-full p-8 lg:p-12">
+                <div class="max-w-[1600px] mx-auto space-y-10">
+                    <!-- Hero -->
+                    <div
+                        class="glass-panel rounded-3xl p-12 relative overflow-hidden animate-fade-in border-l-4 border-meaux-cyan group">
+                        <div class="relative z-10 max-w-2xl space-y-6">
+                            <h1 class="text-5xl font-display font-bold text-white tracking-tight leading-tight">
+                                Welcome back, <br>
+                                <span
+                                    class="text-transparent bg-clip-text bg-gradient-to-r from-meaux-cyan to-meaux-purple"
+                                    id="user-name">Sam Primeaux</span>
+                            </h1>
+                            <p class="text-lg text-slate-300 leading-relaxed">
+                                Your cloud operations center is active. All R2 buckets and D1 databases are
+                                synchronized.
+                            </p>
+                            <div class="flex gap-4">
+                                <button onclick="app.navigate('meauxwork')"
+                                    class="px-8 py-3 rounded-xl bg-meaux-cyan text-black font-bold hover:bg-white transition-all interactable shadow-lg shadow-meaux-cyan/25">Open
+                                    MeauxWork</button>
+                                <button onclick="app.navigate('analytics')"
+                                    class="px-8 py-3 rounded-xl bg-white/5 border border-white/10 text-white font-medium hover:bg-white/10 transition-all interactable">View
+                                    Metrics</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stats Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="stats-grid">
+                        <!-- Stats will be populated by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Generic Views -->
+            <div id="view-meauxwork" class="view-section h-full flex items-center justify-center p-10">
+                <h1 class="text-4xl font-bold text-slate-700">MeauxWork Hub</h1>
+            </div>
+            <div id="view-meauxsql" class="view-section h-full flex items-center justify-center p-10">
+                <h1 class="text-4xl font-bold text-slate-700">MeauxSQL Studio</h1>
+            </div>
+            <div id="view-meauxide" class="view-section h-full flex items-center justify-center p-10">
+                <h1 class="text-4xl font-bold text-slate-700">MeauxIDE</h1>
+            </div>
+            <div id="view-meauxtalk" class="view-section h-full flex items-center justify-center p-10">
+                <h1 class="text-4xl font-bold text-slate-700">MeauxTalk</h1>
+            </div>
+            <div id="view-meauxmail" class="view-section h-full flex items-center justify-center p-10">
+                <h1 class="text-4xl font-bold text-slate-700">MeauxMail</h1>
+            </div>
+            <div id="view-analytics" class="view-section h-full flex items-center justify-center p-10">
+                <h1 class="text-4xl font-bold text-slate-700">Analytics</h1>
+            </div>
+            <div id="view-team" class="view-section h-full flex items-center justify-center p-10">
+                <h1 class="text-4xl font-bold text-slate-700">Team Management</h1>
+            </div>
+            <div id="view-meauxcloud" class="view-section h-full flex items-center justify-center p-10">
+                <h1 class="text-4xl font-bold text-slate-700">MeauxCloud Storage</h1>
+            </div>
+            <div id="view-meauxcad" class="view-section h-full flex items-center justify-center p-10">
+                <h1 class="text-4xl font-bold text-slate-700">MeauxCAD</h1>
+            </div>
+            <div id="view-meauxphoto" class="view-section h-full flex items-center justify-center p-10">
+                <h1 class="text-4xl font-bold text-slate-700">MeauxPhoto Editor</h1>
+            </div>
+            <div id="view-meauxmedia" class="view-section h-full flex items-center justify-center p-10">
+                <h1 class="text-4xl font-bold text-slate-700">MeauxMedia</h1>
+            </div>
+            <div id="view-meauxapps" class="view-section h-full flex items-center justify-center p-10">
+                <h1 class="text-4xl font-bold text-slate-700">MeauxApps Store</h1>
+            </div>
+            <div id="view-automeaux" class="view-section h-full flex items-center justify-center p-10">
+                <h1 class="text-4xl font-bold text-slate-700">AutoMeaux Automation</h1>
+            </div>
+            <div id="view-settings" class="view-section h-full flex items-center justify-center p-10">
+                <h1 class="text-4xl font-bold text-slate-700">System Settings</h1>
+            </div>
+            <div id="view-meauxos" class="view-section h-full flex items-center justify-center p-10">
+                <h1 class="text-4xl font-bold text-slate-700">MeauxOS Kernel</h1>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // --- GALAXY BACKGROUND ---
+        const initGalaxy = () => {
+            const canvas = document.getElementById('galaxy-canvas');
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            canvas.appendChild(renderer.domElement);
+
+            // Particles
+            const count = 15000;
+            const geom = new THREE.BufferGeometry();
+            const pos = new Float32Array(count * 3);
+            const col = new Float32Array(count * 3);
+
+            for (let i = 0; i < count; i++) {
+                const i3 = i * 3;
+                const r = Math.random() * 50;
+                const angle = i * 0.1;
+
+                pos[i3] = Math.cos(angle) * r + (Math.random() - 0.5) * 5;
+                pos[i3 + 1] = (Math.random() - 0.5) * (r / 5);
+                pos[i3 + 2] = Math.sin(angle) * r + (Math.random() - 0.5) * 5;
+
+                const color = new THREE.Color();
+                color.setHSL(0.5 + Math.random() * 0.2, 0.8, 0.6);
+                col[i3] = color.r; col[i3 + 1] = color.g; col[i3 + 2] = color.b;
+            }
+            geom.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+            geom.setAttribute('color', new THREE.BufferAttribute(col, 3));
+            const galaxy = new THREE.Points(geom, new THREE.PointsMaterial({ size: 0.1, vertexColors: true, transparent: true, opacity: 0.8 }));
+            scene.add(galaxy);
+
+            camera.position.z = 30; camera.position.y = 10; camera.lookAt(0, 0, 0);
+
+            const animate = () => {
+                requestAnimationFrame(animate);
+                galaxy.rotation.y += 0.0005;
+                renderer.render(scene, camera);
+            };
+            animate();
+
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+            window.galaxyCamera = camera;
+        };
+
+        // --- AUTH & NAVIGATION ---
+        function handleLogin(provider) {
+            if (provider === 'google') {
+                window.location.href = '/api/auth/google';
+            } else if (provider === 'github') {
+                window.location.href = '/api/auth/github';
+            } else {
+                // Email/password login
+                const email = document.getElementById('email-input').value;
+                const password = document.getElementById('password-input').value;
+
+                if (!email || !password) {
+                    alert('Please enter email and password');
+                    return;
+                }
+
+                // TODO: Implement email/password auth with D1
+                console.log('Email login:', email);
+
+                // For now, just show dashboard
+                showDashboard();
+            }
+        }
+
+        function showDashboard() {
+            if (window.galaxyCamera) {
+                const interval = setInterval(() => {
+                    window.galaxyCamera.position.z -= 0.5;
+                    if (window.galaxyCamera.position.z < 5) {
+                        clearInterval(interval);
+                        document.getElementById('login-view').classList.add('hidden');
+                        document.getElementById('app-container').classList.add('visible');
+                        window.galaxyCamera.position.z = 40;
+                        loadDashboardStats();
+                    }
+                }, 16);
+            }
+        }
+
+        async function loadDashboardStats() {
+            try {
+                const response = await fetch('/api/dashboard/stats');
+                const data = await response.json();
+
+                const statsGrid = document.getElementById('stats-grid');
+                statsGrid.innerHTML = `
+                    <div class="glass-panel p-6 rounded-2xl">
+                        <div class="text-3xl font-bold text-white">${data.users || 0}</div>
+                        <div class="text-sm text-slate-400 mt-1">Total Users</div>
+                    </div>
+                    <div class="glass-panel p-6 rounded-2xl">
+                        <div class="text-3xl font-bold text-white">${data.projects || 0}</div>
+                        <div class="text-sm text-slate-400 mt-1">Active Projects</div>
+                    </div>
+                    <div class="glass-panel p-6 rounded-2xl">
+                        <div class="text-3xl font-bold text-white">${data.tasks || 0}</div>
+                        <div class="text-sm text-slate-400 mt-1">Open Tasks</div>
+                    </div>
+                    <div class="glass-panel p-6 rounded-2xl">
+                        <div class="text-3xl font-bold text-white">${data.deployments || 0}</div>
+                        <div class="text-sm text-slate-400 mt-1">Deployments</div>
+                    </div>
+                `;
+            } catch (error) {
+                console.error('Failed to load stats:', error);
+            }
+        }
+
+        const app = {
+            navigate: (viewId) => {
+                document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+                const target = document.getElementById(`view-${viewId}`);
+                if (target) target.classList.add('active');
+
+                document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+                const nav = document.getElementById(`nav-${viewId}`);
+                if (nav) nav.classList.add('active');
+
+                const sidebar = document.getElementById('main-sidebar');
+                if (window.innerWidth < 1024) sidebar.classList.remove('mobile-open');
+            }
+        };
+
+        function toggleSubmenu(id) {
+            const el = document.getElementById(`sub-${id}`);
+            const arrow = document.getElementById(`arrow-${id}`);
+            el.classList.toggle('open');
+            arrow.style.transform = el.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('main-sidebar').classList.toggle('mobile-open');
+        }
+
+        // --- INIT ---
+        document.addEventListener('DOMContentLoaded', () => {
+            initGalaxy();
+
+            // FlexFit Resizer
+            const resizer = document.getElementById('sidebar-resizer');
+            const sidebar = document.getElementById('main-sidebar');
+            let isResizing = false;
+            if (resizer && sidebar) {
+                resizer.addEventListener('mousedown', (e) => { isResizing = true; e.preventDefault(); });
+                document.addEventListener('mousemove', (e) => {
+                    if (!isResizing) return;
+                    let w = e.clientX;
+                    if (w < 80) w = 80; if (w > 300) w = 300;
+                    sidebar.style.width = `${w}px`;
+                    if (w > 140) sidebar.classList.remove('narrow'); else sidebar.classList.add('narrow');
+                });
+                document.addEventListener('mouseup', () => { isResizing = false; });
+            }
+
+            // Cursor
+            const dot = document.getElementById('cursor-dot');
+            const outline = document.getElementById('cursor-outline');
+            window.addEventListener('mousemove', e => {
+                dot.style.left = e.clientX + 'px'; dot.style.top = e.clientY + 'px';
+                outline.animate({ left: e.clientX + 'px', top: e.clientY + 'px' }, { duration: 400, fill: 'forwards' });
+            });
+
+            // Check if already logged in
+            fetch('/api/auth/check').then(r => r.json()).then(data => {
+                if (data.authenticated) {
+                    showDashboard();
+                    if (data.user) {
+                        document.getElementById('user-name').textContent = data.user.name || data.user.email;
+                    }
+                }
+            }).catch(() => { });
+        });
+    </script>
+</body>
+
+</html>

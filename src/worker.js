@@ -36,7 +36,25 @@ app.get('/login', async (c) => {
     return getAsset(c, 'login.html')
 })
 
-// --- Dashboard Route ---
+// --- Root Route (marketing landing page) ---
+app.get('/', async (c) => {
+    const html = await c.env.R2_ASSETS.get('landing.html')
+    if (!html) {
+        // Fallback to index.html if landing.html doesn't exist
+        return getAsset(c, 'index.html')
+    }
+    return new Response(html.body, {
+        headers: { 'Content-Type': 'text/html' }
+    })
+})
+
+// --- Assets Route ---
+app.get('/assets/*', async (c) => {
+    const path = c.req.path.slice(1) // Remove leading slash
+    return getAsset(c, path)
+})
+
+// --- Dashboard Route (React app) ---
 app.get('/dashboard', async (c) => {
     return getAsset(c, 'dashboard.html')
 })
@@ -541,15 +559,6 @@ app.post('/api/sql/execute', async (c) => {
         return c.json({ error: e.message }, 500);
     }
 });
-
-app.get('/', (c) => getAsset(c, 'index.html'))
-app.get('/dashboard', (c) => getAsset(c, 'dashboard.html'))
-app.get('/dashboard/*', (c) => getAsset(c, 'dashboard.html'))
-app.get('/assets/*', (c) => {
-    const key = c.req.path.slice(1) // remove leading slash, e.g. "assets/main.js"
-    return getAsset(c, key)
-})
-app.get('/output.css', (c) => getAsset(c, 'output.css'))
 
 // --- WebSocket Upgrade (Durable Objects) ---
 app.get('/api/chat/ws/:room', async (c) => {

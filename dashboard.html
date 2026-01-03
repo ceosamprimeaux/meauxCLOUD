@@ -1243,29 +1243,53 @@
         };
 
         // =========================================================
-        // API CLIENT (MOCK)
+        // API CLIENT
         // =========================================================
 
         const api = {
-            // Mock data since we assume the API endpoints might not be live yet or we are just doing the frontend shell
             async getDashboardStats() {
-                // Simulate latency
-                await new Promise(r => setTimeout(r, 500));
-                return {
-                    projects: { total: 12 },
-                    team: { members: 6 },
-                    storage: { used: 34000000000, limit: 100000000000, percentage: 34 },
-                    tasks: { inProgress: 8, done: 24 }
+                try {
+                    const response = await fetch(`${CONFIG.apiBaseUrl}/api/dashboard/stats`);
+                    if (!response.ok) {
+                        throw new Error(`API error: ${response.status}`);
+                    }
+                    const data = await response.json();
+
+                    // Transform backend response to frontend format
+                    return {
+                        projects: { total: data.projects || 0 },
+                        team: { members: data.users || 0 },
+                        storage: {
+                            used: 34000000000, // Placeholder - storage endpoint not yet implemented
+                            limit: 100000000000,
+                            percentage: 34
+                        },
+                        tasks: {
+                            inProgress: 0, // Placeholder - task status not yet in API
+                            done: data.tasks || 0
+                        }
+                    };
+                } catch (error) {
+                    console.error('Failed to fetch dashboard stats:', error);
+                    // Fallback to zero values on error
+                    return {
+                        projects: { total: 0 },
+                        team: { members: 0 },
+                        storage: { used: 0, limit: 100000000000, percentage: 0 },
+                        tasks: { inProgress: 0, done: 0 }
+                    };
                 }
             },
             async getActivities() {
-                await new Promise(r => setTimeout(r, 500));
-                return {
-                    activities: [
-                        { user_name: 'Admin User', message: 'updated project settings', created_at: Date.now() / 1000 - 300 },
-                        { user_name: 'Connor', message: 'uploaded a new document', created_at: Date.now() / 1000 - 3600 },
-                        { user_name: 'Fred', message: 'completed task "Design Review"', created_at: Date.now() / 1000 - 7200 },
-                    ]
+                try {
+                    // Placeholder - activities endpoint not yet implemented
+                    // TODO: Implement /api/dashboard/activities endpoint
+                    return {
+                        activities: []
+                    };
+                } catch (error) {
+                    console.error('Failed to fetch activities:', error);
+                    return { activities: [] };
                 }
             },
             trackEvent(type, data) {
@@ -1380,9 +1404,9 @@
                 </div>
             </div>
 
-            <!-- Context about missing backend -->
+            <!-- Context about partial backend -->
             <div style="padding: 16px; background: var(--color-peach-50); border-radius: 8px; font-size: 14px; color: var(--color-peach-900);">
-                <strong>Note:</strong> This dashboard is currently using mock data. The full backend API integration will be enabled in the next phase.
+                <strong>Note:</strong> Dashboard stats are now connected to D1 database. Storage metrics and activity feed endpoints are pending implementation.
             </div>
 
           </div>
