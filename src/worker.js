@@ -65,6 +65,52 @@ app.get('/api/dashboard/stats', async (c) => {
     }
 })
 
+// --- GitHub Marketplace Webhook ---
+app.post('/api/webhook/github-marketplace', async (c) => {
+    try {
+        const signature = c.req.header('X-Hub-Signature-256');
+        const body = await c.req.text();
+
+        // Verify webhook signature
+        const secret = c.env.GITHUB_MARKETPLACE_WEBHOOK_SECRET;
+        const encoder = new TextEncoder();
+        const key = await crypto.subtle.importKey(
+            'raw',
+            encoder.encode(secret),
+            { name: 'HMAC', hash: 'SHA-256' },
+            false,
+            ['sign']
+        );
+        const sig = await crypto.subtle.sign('HMAC', key, encoder.encode(body));
+        const expectedSig = 'sha256=' + Array.from(new Uint8Array(sig))
+            .map(b => b.toString(16).padStart(2, '0'))
+            .join('');
+
+        if (signature !== expectedSig) {
+            return c.json({ error: 'Invalid signature' }, 401);
+        }
+
+        const event = JSON.parse(body);
+        console.log('GitHub Marketplace event:', event.action, event.marketplace_purchase);
+
+        // Store purchase in D1
+        const db = c.env.DB;
+        await db.prepare(`
+            INSERT INTO marketplace_purchases (github_user, plan, action, created_at)
+            VALUES (?, ?, ?, datetime('now'))
+        `).bind(
+            event.marketplace_purchase?.account?.login,
+            event.marketplace_purchase?.plan?.name,
+            event.action
+        ).run();
+
+        return c.json({ success: true });
+    } catch (error) {
+        console.error('Marketplace webhook error:', error);
+        return c.json({ error: 'Webhook processing failed' }, 500);
+    }
+})
+
 // Resend Email Endpoint
 app.post('/api/email/send', async (c) => {
     try {
