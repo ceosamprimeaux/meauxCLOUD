@@ -20,7 +20,7 @@ const CONFIG = {
         dev: 'https://ceosamprimeaux.github.io/meauxCLOUD',
         production: 'https://meauxcloud.org'
     },
-    
+
     // OAuth Endpoints
     oauth: {
         google: {
@@ -32,7 +32,7 @@ const CONFIG = {
             callback: '/api/auth/github/callback'
         }
     },
-    
+
     // API Routes
     apis: {
         dashboard: '/api/dashboard/stats',
@@ -87,9 +87,9 @@ function getBaseUrl(env) {
 function refactorHTML(content, filePath) {
     const env = detectEnvironment(filePath);
     const baseUrl = getBaseUrl(env);
-    
+
     let refactored = content;
-    
+
     // 1. Fix API endpoint references
     // Replace relative API calls with full URLs
     refactored = refactored.replace(
@@ -98,20 +98,20 @@ function refactorHTML(content, filePath) {
             return `fetch('${baseUrl}${endpoint}')`;
         }
     );
-    
+
     // 2. Fix OAuth links
     // Google OAuth
     refactored = refactored.replace(
         /href=["']\/api\/auth\/google["']/g,
         `href="${baseUrl}${CONFIG.oauth.google.auth}"`
     );
-    
+
     // GitHub OAuth
     refactored = refactored.replace(
         /href=["']\/api\/auth\/github["']/g,
         `href="${baseUrl}${CONFIG.oauth.github.auth}"`
     );
-    
+
     // 3. Add environment detection script
     const envScript = `
     <script>
@@ -259,12 +259,12 @@ function refactorHTML(content, filePath) {
             console.log('✅ MeauxCLOUD API initialized for', ENV.isDev ? 'DEV' : 'PRODUCTION');
         })();
     </script>`;
-    
+
     // Insert environment script before closing </head> tag
     if (!refactored.includes('window.MEAUX_ENV')) {
         refactored = refactored.replace('</head>', `${envScript}\n</head>`);
     }
-    
+
     // 4. Fix asset paths for GitHub Pages (dev)
     if (env === 'dev') {
         // GitHub Pages serves from root, so relative paths work
@@ -285,7 +285,7 @@ function refactorHTML(content, filePath) {
             }
         );
     }
-    
+
     // 5. Add error handling wrapper for API calls
     const errorHandler = `
     <script>
@@ -295,11 +295,11 @@ function refactorHTML(content, filePath) {
             // You can add user-facing error notifications here
         });
     </script>`;
-    
+
     if (!refactored.includes('unhandledrejection')) {
         refactored = refactored.replace('</body>', `${errorHandler}\n</body>`);
     }
-    
+
     return refactored;
 }
 
@@ -309,13 +309,13 @@ function refactorHTML(content, filePath) {
 function processFile(filePath) {
     try {
         console.log(`📄 Processing: ${filePath}`);
-        
+
         const content = fs.readFileSync(filePath, 'utf8');
         const refactored = refactorHTML(content, filePath);
-        
+
         // Write back to file
         fs.writeFileSync(filePath, refactored, 'utf8');
-        
+
         console.log(`✅ Refactored: ${filePath}`);
         return true;
     } catch (error) {
@@ -329,15 +329,15 @@ function processFile(filePath) {
  */
 function main() {
     const args = process.argv.slice(2);
-    
+
     if (args.length === 0) {
         console.log('Usage: node refactor_html_for_production.js <file1.html> [file2.html] ...');
         console.log('   or: node refactor_html_for_production.js --all');
         process.exit(1);
     }
-    
+
     let files = [];
-    
+
     if (args[0] === '--all') {
         // Process all HTML files in current directory and dist/
         const htmlFiles = [
@@ -352,17 +352,17 @@ function main() {
             const fullPath = path.join(__dirname, '..', f);
             return fs.existsSync(fullPath);
         });
-        
+
         files = htmlFiles.map(f => path.join(__dirname, '..', f));
     } else {
         files = args.map(f => path.resolve(f));
     }
-    
+
     console.log('🚀 Starting HTML refactoring for production...\n');
-    
+
     let successCount = 0;
     let failCount = 0;
-    
+
     files.forEach(file => {
         if (processFile(file)) {
             successCount++;
@@ -370,11 +370,11 @@ function main() {
             failCount++;
         }
     });
-    
+
     console.log(`\n📊 Refactoring complete:`);
     console.log(`   ✅ Success: ${successCount}`);
     console.log(`   ❌ Failed: ${failCount}`);
-    
+
     if (failCount > 0) {
         process.exit(1);
     }

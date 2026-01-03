@@ -861,50 +861,50 @@
 
     <script>
         // Environment Detection & API Configuration
-        (function() {
+        (function () {
             const ENV = {
                 isDev: false,
                 isProduction: true,
                 baseUrl: 'https://meauxcloud.org',
                 apiBase: 'https://meauxcloud.org',
                 endpoints: {
-  "dashboard": "/api/dashboard/stats",
-  "meshy": "/api/meshy/generate",
-  "cloudconvert": "/api/cloudconvert/jobs",
-  "resend": "/api/email/send",
-  "cloudflare": {
-    "gateways": "/api/cloudflare/gateways",
-    "images": "/api/images/list"
-  },
-  "sql": "/api/sql/execute",
-  "chat": {
-    "messages": "/api/chat/messages",
-    "send": "/api/chat/send",
-    "ws": "/api/chat/ws"
-  }
-},
+                    "dashboard": "/api/dashboard/stats",
+                    "meshy": "/api/meshy/generate",
+                    "cloudconvert": "/api/cloudconvert/jobs",
+                    "resend": "/api/email/send",
+                    "cloudflare": {
+                        "gateways": "/api/cloudflare/gateways",
+                        "images": "/api/images/list"
+                    },
+                    "sql": "/api/sql/execute",
+                    "chat": {
+                        "messages": "/api/chat/messages",
+                        "send": "/api/chat/send",
+                        "ws": "/api/chat/ws"
+                    }
+                },
                 oauth: {
-  "google": {
-    "auth": "/api/auth/google",
-    "callback": "/api/auth/google/callback"
-  },
-  "github": {
-    "auth": "/api/auth/github",
-    "callback": "/api/auth/github/callback"
-  }
-}
+                    "google": {
+                        "auth": "/api/auth/google",
+                        "callback": "/api/auth/google/callback"
+                    },
+                    "github": {
+                        "auth": "/api/auth/github",
+                        "callback": "/api/auth/github/callback"
+                    }
+                }
             };
-            
+
             // Make available globally
             window.MEAUX_ENV = ENV;
-            
+
             // Helper function for API calls
             window.meauxAPI = {
                 async call(endpoint, options = {}) {
-                    const url = endpoint.startsWith('http') 
-                        ? endpoint 
+                    const url = endpoint.startsWith('http')
+                        ? endpoint
                         : `${ENV.apiBase}${endpoint}`;
-                    
+
                     const response = await fetch(url, {
                         ...options,
                         headers: {
@@ -913,28 +913,28 @@
                         },
                         credentials: 'include'
                     });
-                    
+
                     if (!response.ok) {
                         throw new Error(`API Error: ${response.status}`);
                     }
-                    
+
                     return response.json();
                 },
-                
+
                 // Dashboard API
                 async getDashboardStats() {
                     return this.call(ENV.endpoints.dashboard);
                 },
-                
+
                 // OAuth
                 async initiateGoogleAuth() {
                     window.location.href = `${ENV.apiBase}${ENV.oauth.google.auth}`;
                 },
-                
+
                 async initiateGitHubAuth() {
                     window.location.href = `${ENV.apiBase}${ENV.oauth.github.auth}`;
                 },
-                
+
                 // MeshyAI
                 async generate3D(data) {
                     return this.call(ENV.endpoints.meshy, {
@@ -942,7 +942,7 @@
                         body: JSON.stringify(data)
                     });
                 },
-                
+
                 // CloudConvert
                 async createJob(data) {
                     return this.call(ENV.endpoints.cloudconvert, {
@@ -950,7 +950,7 @@
                         body: JSON.stringify(data)
                     });
                 },
-                
+
                 // Resend Email
                 async sendEmail(data) {
                     return this.call(ENV.endpoints.resend, {
@@ -958,12 +958,12 @@
                         body: JSON.stringify(data)
                     });
                 },
-                
+
                 // Cloudflare Images
                 async listImages() {
                     return this.call(ENV.endpoints.cloudflare.images);
                 },
-                
+
                 // SQL Execution
                 async executeSQL(query) {
                     return this.call(ENV.endpoints.sql, {
@@ -971,12 +971,12 @@
                         body: JSON.stringify({ query })
                     });
                 },
-                
+
                 // Chat
                 async getMessages() {
                     return this.call(ENV.endpoints.chat.messages);
                 },
-                
+
                 async sendMessage(data) {
                     return this.call(ENV.endpoints.chat.send, {
                         method: 'POST',
@@ -984,7 +984,7 @@
                     });
                 }
             };
-            
+
             console.log('✅ MeauxCLOUD API initialized for', ENV.isDev ? 'DEV' : 'PRODUCTION');
         })();
     </script>
@@ -1428,7 +1428,7 @@
                 console.log('Track:', type, data);
                 return Promise.resolve();
             },
-            
+
             // Group Call / Video (SFU)
             async createCallSession() {
                 try {
@@ -1443,7 +1443,7 @@
                     throw error;
                 }
             },
-            
+
             async getTURNCredentials() {
                 try {
                     const response = await fetch(`${CONFIG.apiBaseUrl}/api/turn/credentials`);
@@ -1454,7 +1454,7 @@
                     throw error;
                 }
             },
-            
+
             // Google AI Assistant
             async callGoogleAI(prompt, systemContext = 'default') {
                 try {
@@ -1466,12 +1466,12 @@
                             method: 'POST',
                             body: {
                                 contents: [{ parts: [{ text: prompt }] }],
-                                systemInstruction: { 
-                                    parts: [{ 
-                                        text: systemContext === 'assistant' 
+                                systemInstruction: {
+                                    parts: [{
+                                        text: systemContext === 'assistant'
                                             ? 'You are MeauxAI, an advanced AI assistant for MeauxCLOUD. Help users with their questions about the platform, provide technical support, and assist with tasks.'
-                                            : 'You are a helpful assistant.' 
-                                    }] 
+                                            : 'You are a helpful assistant.'
+                                    }]
                                 }
                             }
                         })
@@ -1484,7 +1484,7 @@
                     return 'Error: AI assistant unavailable.';
                 }
             },
-            
+
             // AutoRAG (Advanced AI with context)
             async queryAI(query) {
                 try {
@@ -1512,8 +1512,11 @@
                 // Add other route handlers if needed
             },
 
-            navigate(path) {
-                // Simple router logic for dashboard demo
+            navigate(path, replace = false) {
+                // Normalize path
+                if (!path.startsWith('/')) path = '/' + path;
+                
+                // Simple router logic
                 if (this.routes[path]) {
                     this.routes[path]();
                 } else {
@@ -1522,8 +1525,17 @@
                     renderPlaceholder(path);
                 }
 
-                // Update URL
-                window.history.pushState({}, '', '#' + path);
+                // Update URL using History API (no hash!)
+                const basePath = window.location.pathname.includes('/dashboard.html') 
+                    ? '/meauxCLOUD/dashboard.html' 
+                    : '/dashboard';
+                const fullPath = path === '/dashboard' ? basePath : `${basePath}${path}`;
+                
+                if (replace) {
+                    window.history.replaceState({ path }, '', fullPath);
+                } else {
+                    window.history.pushState({ path }, '', fullPath);
+                }
 
                 // Update Nav Active State
                 document.querySelectorAll('.nav-item').forEach(item => {
@@ -1536,6 +1548,7 @@
                 // Handler for nav clicks
                 document.querySelectorAll('.nav-item').forEach(item => {
                     item.addEventListener('click', (e) => {
+                        e.preventDefault();
                         const route = item.dataset.route;
                         if (route) {
                             this.navigate(route);
@@ -1543,9 +1556,30 @@
                     });
                 });
 
-                // Initial load
-                const path = window.location.hash.slice(1) || '/dashboard';
-                this.navigate(path);
+                // Handle browser back/forward
+                window.addEventListener('popstate', (e) => {
+                    const path = e.state?.path || this.getCurrentPath();
+                    this.navigate(path, true);
+                });
+
+                // Initial load - use actual path, not hash
+                const path = this.getCurrentPath();
+                this.navigate(path, true);
+            },
+            
+            getCurrentPath() {
+                // Get path from URL (no hash)
+                const fullPath = window.location.pathname;
+                if (fullPath.includes('/dashboard.html')) {
+                    // GitHub Pages: /meauxCLOUD/dashboard.html or /dashboard.html
+                    const match = fullPath.match(/dashboard\.html(.*)$/);
+                    return match && match[1] ? match[1] : '/dashboard';
+                } else if (fullPath === '/dashboard' || fullPath.endsWith('/dashboard')) {
+                    return '/dashboard';
+                } else if (fullPath.startsWith('/dashboard/')) {
+                    return fullPath.replace(/^\/dashboard/, '') || '/dashboard';
+                }
+                return '/dashboard';
             }
         };
 
@@ -1703,26 +1737,26 @@
         // =========================================================
         // GROUP CALL FUNCTIONALITY
         // =========================================================
-        
+
         let localStream = null;
         let peerConnections = new Map();
         let callActive = false;
-        
+
         async function startGroupCall() {
             try {
                 // Get TURN credentials
                 const turnCreds = await api.getTURNCredentials();
-                
+
                 // Create SFU session
                 const session = await api.createCallSession();
                 console.log('SFU Session created:', session);
-                
+
                 // Get user media
-                localStream = await navigator.mediaDevices.getUserMedia({ 
-                    video: true, 
-                    audio: true 
+                localStream = await navigator.mediaDevices.getUserMedia({
+                    video: true,
+                    audio: true
                 });
-                
+
                 // Show local video
                 const localVideoEl = document.getElementById('localVideo');
                 if (localVideoEl) {
@@ -1736,23 +1770,23 @@
                     localVideoEl.innerHTML = '';
                     localVideoEl.appendChild(video);
                 }
-                
+
                 // Show call UI
                 document.getElementById('callContainer').style.display = 'block';
                 document.getElementById('callControls').style.display = 'flex';
                 document.getElementById('startCallBtn').style.display = 'none';
                 callActive = true;
-                
+
                 // Initialize WebRTC with TURN servers
                 const pc = new RTCPeerConnection({
                     iceServers: turnCreds.iceServers
                 });
-                
+
                 // Add local stream tracks
                 localStream.getTracks().forEach(track => {
                     pc.addTrack(track, localStream);
                 });
-                
+
                 // Handle remote stream
                 pc.ontrack = (event) => {
                     const remoteVideo = document.createElement('video');
@@ -1763,14 +1797,14 @@
                     remoteVideo.style.borderRadius = '8px';
                     document.getElementById('remoteVideos').appendChild(remoteVideo);
                 };
-                
+
                 console.log('Group call started successfully');
             } catch (error) {
                 console.error('Failed to start call:', error);
                 alert('Failed to start call: ' + error.message);
             }
         }
-        
+
         function endCall() {
             if (localStream) {
                 localStream.getTracks().forEach(track => track.stop());
@@ -1778,7 +1812,7 @@
             }
             peerConnections.forEach(pc => pc.close());
             peerConnections.clear();
-            
+
             document.getElementById('callContainer').style.display = 'none';
             document.getElementById('callControls').style.display = 'none';
             document.getElementById('startCallBtn').style.display = 'block';
@@ -1786,25 +1820,25 @@
             document.getElementById('remoteVideos').innerHTML = '';
             callActive = false;
         }
-        
+
         // =========================================================
         // AI ASSISTANT FUNCTIONALITY
         // =========================================================
-        
+
         async function sendAIMessage() {
             const input = document.getElementById('aiInput');
             const chat = document.getElementById('aiChat');
             const message = input.value.trim();
-            
+
             if (!message) return;
-            
+
             // Add user message
             const userMsg = document.createElement('div');
             userMsg.style.cssText = 'color: var(--text-primary); font-size: 14px; margin-bottom: 12px; text-align: right;';
             userMsg.innerHTML = `<strong>You:</strong> ${message}`;
             chat.appendChild(userMsg);
             input.value = '';
-            
+
             // Show loading
             const loadingMsg = document.createElement('div');
             loadingMsg.id = 'aiLoading';
@@ -1812,11 +1846,11 @@
             loadingMsg.innerHTML = '<strong>MeauxAI:</strong> Thinking...';
             chat.appendChild(loadingMsg);
             chat.scrollTop = chat.scrollHeight;
-            
+
             try {
                 // Call Google AI
                 const response = await api.callGoogleAI(message, 'assistant');
-                
+
                 // Remove loading, add response
                 loadingMsg.remove();
                 const aiMsg = document.createElement('div');
@@ -1832,21 +1866,21 @@
                 chat.appendChild(errorMsg);
             }
         }
-        
+
         // =========================================================
         // EVENT LISTENERS
         // =========================================================
-        
+
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             router.init();
-            
+
             // Group Call handlers
             const startCallBtn = document.getElementById('startCallBtn');
             const endCallBtn = document.getElementById('endCallBtn');
             const muteBtn = document.getElementById('muteBtn');
             const videoBtn = document.getElementById('videoBtn');
-            
+
             if (startCallBtn) {
                 startCallBtn.addEventListener('click', startGroupCall);
             }
@@ -1875,11 +1909,11 @@
                     }
                 });
             }
-            
+
             // AI Assistant handlers
             const aiSendBtn = document.getElementById('aiSendBtn');
             const aiInput = document.getElementById('aiInput');
-            
+
             if (aiSendBtn) {
                 aiSendBtn.addEventListener('click', sendAIMessage);
             }
@@ -1896,7 +1930,7 @@
 
     <script>
         // Global error handler for API calls
-        window.addEventListener('unhandledrejection', function(event) {
+        window.addEventListener('unhandledrejection', function (event) {
             console.error('Unhandled API Error:', event.reason);
             // You can add user-facing error notifications here
         });

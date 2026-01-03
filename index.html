@@ -344,6 +344,184 @@
             opacity: 1;
         }
     </style>
+
+    <script>
+        // Environment Detection & API Configuration
+        (function() {
+            const ENV = {
+                isDev: false,
+                isProduction: true,
+                baseUrl: 'https://meauxcloud.org',
+                apiBase: 'https://meauxcloud.org',
+                endpoints: {
+  "dashboard": "/api/dashboard/stats",
+  "meshy": "/api/meshy/generate",
+  "cloudconvert": "/api/cloudconvert/jobs",
+  "resend": "/api/email/send",
+  "cloudflare": {
+    "gateways": "/api/cloudflare/gateways",
+    "images": "/api/images/list"
+  },
+  "sql": "/api/sql/execute",
+  "chat": {
+    "messages": "/api/chat/messages",
+    "send": "/api/chat/send",
+    "ws": "/api/chat/ws"
+  },
+  "sfu": {
+    "session": "/api/sfu/session",
+    "turn": "/api/turn/credentials"
+  },
+  "google": {
+    "proxy": "/api/google/proxy",
+    "ai": "/api/ai/rag"
+  }
+},
+                oauth: {
+  "google": {
+    "auth": "/api/auth/google",
+    "callback": "/api/auth/google/callback"
+  },
+  "github": {
+    "auth": "/api/auth/github",
+    "callback": "/api/auth/github/callback"
+  }
+}
+            };
+            
+            // Make available globally
+            window.MEAUX_ENV = ENV;
+            
+            // Helper function for API calls
+            window.meauxAPI = {
+                async call(endpoint, options = {}) {
+                    const url = endpoint.startsWith('http') 
+                        ? endpoint 
+                        : `${ENV.apiBase}${endpoint}`;
+                    
+                    const response = await fetch(url, {
+                        ...options,
+                        headers: {
+                            'Content-Type': 'application/json',
+                            ...options.headers
+                        },
+                        credentials: 'include'
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`API Error: ${response.status}`);
+                    }
+                    
+                    return response.json();
+                },
+                
+                // Dashboard API
+                async getDashboardStats() {
+                    return this.call(ENV.endpoints.dashboard);
+                },
+                
+                // OAuth
+                async initiateGoogleAuth() {
+                    window.location.href = `${ENV.apiBase}${ENV.oauth.google.auth}`;
+                },
+                
+                async initiateGitHubAuth() {
+                    window.location.href = `${ENV.apiBase}${ENV.oauth.github.auth}`;
+                },
+                
+                // MeshyAI
+                async generate3D(data) {
+                    return this.call(ENV.endpoints.meshy, {
+                        method: 'POST',
+                        body: JSON.stringify(data)
+                    });
+                },
+                
+                // CloudConvert
+                async createJob(data) {
+                    return this.call(ENV.endpoints.cloudconvert, {
+                        method: 'POST',
+                        body: JSON.stringify(data)
+                    });
+                },
+                
+                // Resend Email
+                async sendEmail(data) {
+                    return this.call(ENV.endpoints.resend, {
+                        method: 'POST',
+                        body: JSON.stringify(data)
+                    });
+                },
+                
+                // Cloudflare Images
+                async listImages() {
+                    return this.call(ENV.endpoints.cloudflare.images);
+                },
+                
+                // SQL Execution
+                async executeSQL(query) {
+                    return this.call(ENV.endpoints.sql, {
+                        method: 'POST',
+                        body: JSON.stringify({ query })
+                    });
+                },
+                
+                // Chat
+                async getMessages() {
+                    return this.call(ENV.endpoints.chat.messages);
+                },
+                
+                async sendMessage(data) {
+                    return this.call(ENV.endpoints.chat.send, {
+                        method: 'POST',
+                        body: JSON.stringify(data)
+                    });
+                },
+                
+                // Group Call / Video (SFU)
+                async createCallSession() {
+                    return this.call(ENV.endpoints.sfu.session, {
+                        method: 'POST'
+                    });
+                },
+                
+                async getTURNCredentials() {
+                    return this.call(ENV.endpoints.sfu.turn);
+                },
+                
+                // Google AI Assistant
+                async callGoogleAI(prompt, systemContext = 'default') {
+                    return this.call(ENV.endpoints.google.proxy, {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            endpoint: 'v1beta/models/gemini-2.0-flash-exp:generateContent',
+                            method: 'POST',
+                            body: {
+                                contents: [{ parts: [{ text: prompt }] }],
+                                systemInstruction: { 
+                                    parts: [{ 
+                                        text: systemContext === 'assistant' 
+                                            ? 'You are MeauxAI, an advanced AI assistant for MeauxCLOUD.'
+                                            : 'You are a helpful assistant.' 
+                                    }] 
+                                }
+                            }
+                        })
+                    });
+                },
+                
+                // AutoRAG (Advanced AI)
+                async queryAI(query) {
+                    return this.call(ENV.endpoints.google.ai, {
+                        method: 'POST',
+                        body: JSON.stringify({ query })
+                    });
+                }
+            };
+            
+            console.log('✅ MeauxCLOUD API initialized for', ENV.isDev ? 'DEV' : 'PRODUCTION');
+        })();
+    </script>
 </head>
 
 <body class="antialiased selection:bg-meaux-cyan/30 selection:text-white overflow-x-hidden">
@@ -374,7 +552,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
                         </svg>
                     </button>
-                    <a href="/dashboard" class="px-4 py-2 rounded-xl bg-gradient-to-r from-meaux-cyan to-meaux-blue text-white text-sm font-semibold shadow-lg shadow-meaux-cyan/25 hover:shadow-meaux-cyan/40 transition-all">
+                    <a href="/meauxCLOUD/dashboard.html" class="px-4 py-2 rounded-xl bg-gradient-to-r from-meaux-cyan to-meaux-blue text-white text-sm font-semibold shadow-lg shadow-meaux-cyan/25 hover:shadow-meaux-cyan/40 transition-all">
                         Launch Dashboard
                     </a>
                 </div>
@@ -411,7 +589,7 @@
                 <a href="#modules" class="px-8 py-4 rounded-2xl bg-gradient-to-r from-meaux-cyan to-meaux-blue text-white font-bold shadow-lg shadow-meaux-cyan/30 hover:shadow-meaux-cyan/50 hover:scale-105 transition-all">
                     Explore Platform
                 </a>
-                <a href="/dashboard" class="px-8 py-4 rounded-2xl hero-glass border border-white/10 text-white font-bold hover:border-meaux-cyan/30 hover:bg-meaux-cyan/5 transition-all">
+                <a href="/meauxCLOUD/dashboard.html" class="px-8 py-4 rounded-2xl hero-glass border border-white/10 text-white font-bold hover:border-meaux-cyan/30 hover:bg-meaux-cyan/5 transition-all">
                     View Dashboard →
                 </a>
             </div>
@@ -663,7 +841,7 @@
                     <span class="text-sm text-slate-400">© 2025 Meauxbility Foundation</span>
                 </div>
                 <div class="flex items-center gap-6">
-                    <a href="/dashboard" class="text-sm text-slate-400 hover:text-meaux-cyan transition-colors">Dashboard</a>
+                    <a href="/meauxCLOUD/dashboard.html" class="text-sm text-slate-400 hover:text-meaux-cyan transition-colors">Dashboard</a>
                     <a href="https://github.com/SamPrimeaux/ecosystem" class="text-sm text-slate-400 hover:text-meaux-cyan transition-colors">GitHub</a>
                     <a href="#" class="text-sm text-slate-400 hover:text-meaux-cyan transition-colors">Documentation</a>
                 </div>
@@ -1001,6 +1179,14 @@
                     target.scrollIntoView({ behavior: 'smooth' });
                 }
             });
+        });
+    </script>
+
+    <script>
+        // Global error handler for API calls
+        window.addEventListener('unhandledrejection', function(event) {
+            console.error('Unhandled API Error:', event.reason);
+            // You can add user-facing error notifications here
         });
     </script>
 </body>
