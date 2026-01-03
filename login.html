@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MeauxCLOUD | Secure Access</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <!-- Config -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        meaux: {
+                            cyan: '#22d3ee',
+                            blue: '#3b82f6',
+                            purple: '#a78bfa',
+                            pink: '#f472b6',
+                            indigo: '#818cf8',
+                            dark: '#050505'
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'fade-in': 'fadeIn 1s ease-out forwards',
+                        'spin-slow': 'spin 12s linear infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #050505;
+            color: #e2e8f0;
+            overflow: hidden;
+            margin: 0;
+        }
+
+        .glass-card {
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow:
+                0 25px 50px -12px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .glass-input {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            transition: all 0.2s;
+        }
+
+        .glass-input:focus {
+            border-color: #22d3ee;
+            box-shadow: 0 0 0 2px rgba(34, 211, 238, 0.2);
+            background: rgba(0, 0, 0, 0.5);
+            outline: none;
+        }
+
+        #galaxy-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        #ui-layer {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .warp-active {
+            animation: warpSpeed 2s forwards ease-in;
+        }
+
+        @keyframes warpSpeed {
+            0% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            100% {
+                opacity: 0;
+                transform: scale(5);
+            }
+        }
+    </style>
+</head>
+
+<body class="selection:bg-meaux-cyan selection:text-black">
+
+    <!-- Galaxy Background -->
+    <div id="galaxy-canvas"></div>
+
+    <!-- Login UI -->
+    <div id="ui-layer">
+        <div id="login-card"
+            class="glass-card w-full max-w-md p-8 rounded-3xl mx-4 animate-fade-in relative overflow-hidden group">
+
+            <!-- Ambient Glow Effect -->
+            <div
+                class="absolute -top-24 -right-24 w-48 h-48 bg-meaux-cyan/20 rounded-full blur-3xl pointer-events-none group-hover:bg-meaux-cyan/30 transition-colors duration-1000">
+            </div>
+            <div
+                class="absolute -bottom-24 -left-24 w-48 h-48 bg-meaux-purple/20 rounded-full blur-3xl pointer-events-none group-hover:bg-meaux-purple/30 transition-colors duration-1000">
+            </div>
+
+            <!-- Logo & Header -->
+            <div class="text-center mb-8 relative z-10">
+                <div
+                    class="w-24 h-24 bg-white/5 rounded-2xl mx-auto flex items-center justify-center shadow-lg shadow-meaux-cyan/10 mb-6 animate-float backdrop-blur-sm border border-white/10 p-3">
+                    <img src="https://imagedelivery.net/g7wf09fCONpnidkRnR_5vw/9b3d799f-67df-4f96-e5ca-bde2688f2700/thumbnail"
+                        alt="MeauxCLOUD Logo" class="w-full h-full object-contain drop-shadow-2xl">
+                </div>
+                <h1 class="text-3xl font-bold text-white tracking-tight">Meaux<span class="text-meaux-cyan">CLOUD</span>
+                </h1>
+                <p class="text-sm text-slate-400 mt-2 font-medium">Secure Enterprise Cloud Storage</p>
+            </div>
+
+            <!-- Login Form -->
+            <form id="loginForm" class="space-y-5 relative z-10">
+
+                <!-- Google OAuth Button -->
+                <button type="button" onclick="handleGoogleLogin()"
+                    class="w-full flex items-center justify-center gap-3 bg-white text-slate-900 font-bold py-3 px-4 rounded-xl hover:bg-slate-100 transition-all transform active:scale-95 shadow-lg">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24">
+                        <path
+                            d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                            fill="#4285F4" />
+                        <path
+                            d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                            fill="#34A853" />
+                        <path
+                            d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                            fill="#FBBC05" />
+                        <path
+                            d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                            fill="#EA4335" />
+                    </svg>
+                    Continue with Google
+                </button>
+
+                <div class="relative flex items-center py-2">
+                    <div class="flex-grow border-t border-white/10"></div>
+                    <span class="flex-shrink-0 mx-4 text-[10px] text-slate-500 uppercase font-mono tracking-wider">or
+                        sign in with credentials</span>
+                    <div class="flex-grow border-t border-white/10"></div>
+                </div>
+
+                <div class="space-y-4">
+                    <div>
+                        <label for="email" class="block text-xs font-medium text-slate-400 mb-1 ml-1">Email
+                            Address</label>
+                        <input type="email" id="email"
+                            class="glass-input w-full px-4 py-3 rounded-xl placeholder-slate-600 focus:text-white"
+                            placeholder="your@email.com" autocomplete="off">
+                    </div>
+                    <div>
+                        <label for="password"
+                            class="block text-xs font-medium text-slate-400 mb-1 ml-1">Password</label>
+                        <input type="password" id="password"
+                            class="glass-input w-full px-4 py-3 rounded-xl placeholder-slate-600 focus:text-white"
+                            placeholder="••••••••">
+                    </div>
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-gradient-to-r from-meaux-cyan to-meaux-blue text-white font-bold py-3 px-4 rounded-xl hover:opacity-90 transition-all transform active:scale-95 shadow-lg shadow-meaux-cyan/20">
+                    Sign In
+                </button>
+            </form>
+
+            <div class="mt-6 text-center">
+                <a href="/reset-password" class="text-xs text-slate-500 hover:text-meaux-cyan transition-colors">Forgot
+                    your password?</a>
+            </div>
+
+            <!-- Deployment Status -->
+            <div class="absolute bottom-3 right-5 flex items-center gap-2 opacity-60">
+                <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]">
+                </div>
+                <span class="text-[10px] font-mono text-slate-400 font-bold tracking-wider">SYSTEM: ONLINE</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Galaxy Background Engine
+        const initGalaxy = () => {
+            const canvas = document.getElementById('galaxy-canvas');
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            canvas.appendChild(renderer.domElement);
+
+            const parameters = {
+                count: 15000,
+                size: 0.02,
+                radius: 5,
+                branches: 3,
+                spin: 1,
+                randomness: 0.2,
+                randomnessPower: 3,
+                insideColor: '#22d3ee',
+                outsideColor: '#a78bfa',
+            };
+
+            let geometry = null;
+            let material = null;
+            let points = null;
+
+            const generateGalaxy = () => {
+                if (points !== null) {
+                    geometry.dispose();
+                    material.dispose();
+                    scene.remove(points);
+                }
+
+                geometry = new THREE.BufferGeometry();
+                const positions = new Float32Array(parameters.count * 3);
+                const colors = new Float32Array(parameters.count * 3);
+
+                const colorInside = new THREE.Color(parameters.insideColor);
+                const colorOutside = new THREE.Color(parameters.outsideColor);
+
+                for (let i = 0; i < parameters.count; i++) {
+                    const i3 = i * 3;
+                    const radius = Math.random() * parameters.radius;
+                    const spinAngle = radius * parameters.spin;
+                    const branchAngle = (i % parameters.branches) / parameters.branches * Math.PI * 2;
+
+                    const randomX = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * radius;
+                    const randomY = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * radius;
+                    const randomZ = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * radius;
+
+                    positions[i3] = Math.cos(branchAngle + spinAngle) * radius + randomX;
+                    positions[i3 + 1] = randomY;
+                    positions[i3 + 2] = Math.sin(branchAngle + spinAngle) * radius + randomZ;
+
+                    const mixedColor = colorInside.clone();
+                    mixedColor.lerp(colorOutside, radius / parameters.radius);
+
+                    colors[i3] = mixedColor.r;
+                    colors[i3 + 1] = mixedColor.g;
+                    colors[i3 + 2] = mixedColor.b;
+                }
+
+                geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+                geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+                material = new THREE.PointsMaterial({
+                    size: parameters.size,
+                    sizeAttenuation: true,
+                    depthWrite: false,
+                    blending: THREE.AdditiveBlending,
+                    vertexColors: true
+                });
+
+                points = new THREE.Points(geometry, material);
+                scene.add(points);
+            };
+
+            generateGalaxy();
+
+            const starsGeo = new THREE.BufferGeometry();
+            const starsCount = 2000;
+            const starsPos = new Float32Array(starsCount * 3);
+            for (let i = 0; i < starsCount * 3; i++) {
+                starsPos[i] = (Math.random() - 0.5) * 50;
+            }
+            starsGeo.setAttribute('position', new THREE.BufferAttribute(starsPos, 3));
+            const starsMat = new THREE.PointsMaterial({ color: 0xffffff, size: 0.05, transparent: true, opacity: 0.5 });
+            const stars = new THREE.Points(starsGeo, starsMat);
+            scene.add(stars);
+
+            const ambient = new THREE.AmbientLight(0xffffff, 0.5);
+            scene.add(ambient);
+
+            camera.position.x = 0;
+            camera.position.y = 4;
+            camera.position.z = 4;
+            camera.lookAt(0, 0, 0);
+
+            const clock = new THREE.Clock();
+            let mouseX = 0;
+            let mouseY = 0;
+
+            document.addEventListener('mousemove', (event) => {
+                mouseX = event.clientX / window.innerWidth - 0.5;
+                mouseY = event.clientY / window.innerHeight - 0.5;
+            });
+
+            const animate = () => {
+                const elapsedTime = clock.getElapsedTime();
+                points.rotation.y = elapsedTime * 0.05;
+                stars.rotation.y = elapsedTime * 0.01;
+
+                camera.position.x += (mouseX * 2 - camera.position.x) * 0.05;
+                camera.position.y += (-mouseY * 2 + 4 - camera.position.y) * 0.05;
+                camera.lookAt(0, 0, 0);
+
+                renderer.render(scene, camera);
+                requestAnimationFrame(animate);
+            };
+
+            animate();
+
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            });
+        };
+
+        // Auth Logic
+        function handleGoogleLogin() {
+            const btn = event.target;
+            const originalContent = btn.innerHTML;
+            btn.innerHTML = `<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-slate-900" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Connecting...`;
+
+            document.getElementById('login-card').classList.add('warp-active');
+
+            setTimeout(() => {
+                window.location.href = "/api/auth/google";
+            }, 1500);
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalContent = btn.innerHTML;
+            btn.innerHTML = `<span class="animate-pulse">Authenticating...</span>`;
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                if (response.ok) {
+                    document.getElementById('login-card').classList.add('warp-active');
+                    setTimeout(() => {
+                        window.location.href = "/dashboard";
+                    }, 1500);
+                } else {
+                    btn.innerHTML = originalContent;
+                    alert('Invalid credentials');
+                }
+            } catch (error) {
+                btn.innerHTML = originalContent;
+                alert('Login failed. Please try again.');
+            }
+        });
+
+        window.addEventListener('DOMContentLoaded', initGalaxy);
+    </script>
+
+</body>
+
+</html>

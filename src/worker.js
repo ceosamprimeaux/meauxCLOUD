@@ -31,6 +31,40 @@ async function getAsset(c, key) {
     }
 }
 
+// --- Login Page Route ---
+app.get('/login', async (c) => {
+    return getAsset(c, 'login.html')
+})
+
+// --- Dashboard Route ---
+app.get('/dashboard', async (c) => {
+    return getAsset(c, 'dashboard.html')
+})
+
+// --- Dashboard Stats API ---
+app.get('/api/dashboard/stats', async (c) => {
+    try {
+        const db = c.env.DB;
+
+        const [users, projects, tasks, deployments] = await Promise.all([
+            db.prepare('SELECT COUNT(*) as count FROM users').first(),
+            db.prepare('SELECT COUNT(*) as count FROM projects').first(),
+            db.prepare('SELECT COUNT(*) as count FROM tasks').first(),
+            db.prepare('SELECT COUNT(*) as count FROM deployments').first(),
+        ]);
+
+        return c.json({
+            users: users?.count || 0,
+            projects: projects?.count || 0,
+            tasks: tasks?.count || 0,
+            deployments: deployments?.count || 0,
+        });
+    } catch (error) {
+        console.error('Dashboard stats error:', error);
+        return c.json({ error: 'Failed to fetch stats' }, 500);
+    }
+})
+
 // Resend Email Endpoint
 app.post('/api/email/send', async (c) => {
     try {
@@ -106,7 +140,7 @@ app.post('/api/google/proxy', async (c) => {
 // --- Authentication Endpoints (Google OAuth) ---
 app.get('/api/auth/google', (c) => {
     const clientId = c.env.GOOGLE_CLIENT_ID;
-    const redirectUri = 'https://meauxcloud.org/api/auth/callback/google';
+    const redirectUri = 'https://meauxcloud.org/api/auth/google/callback';
     const scope = 'openid email profile';
     const responseType = 'code';
 
@@ -115,13 +149,14 @@ app.get('/api/auth/google', (c) => {
     return c.redirect(authUrl);
 });
 
-app.get('/api/auth/callback/google', async (c) => {
+
+app.get('/api/auth/google/callback', async (c) => {
     const code = c.req.query('code');
     if (!code) return c.json({ error: 'No code provided' }, 400);
 
     const clientId = c.env.GOOGLE_CLIENT_ID;
     const clientSecret = c.env.GOOGLE_CLIENT_SECRET;
-    const redirectUri = 'https://meauxcloud.org/api/auth/callback/google';
+    const redirectUri = 'https://meauxcloud.org/api/auth/google/callback';
 
     try {
         // Exchange code for token

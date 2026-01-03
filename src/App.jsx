@@ -2,11 +2,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import {
     Terminal, Cpu, Activity, X, Maximize2, Minimize2, Command, Send,
     Zap, Globe, Shield, Server, Sparkles, Layout, Database, MessageSquare,
-    Mail, Users, Image, Settings, LogOut, Search, Menu, ChevronDown,
+    Mail, Users, Image, Settings, LogOut, Search, Menu, ChevronDown, ChevronLeft,
     Plus, MoreHorizontal, Filter, Play, Save, FileText, Camera, Video, AppWindow, Wrench
 } from 'lucide-react';
 import { BrowserRouter, Routes, Route, useNavigate, useLocation, Navigate } from 'react-router-dom';
 import AgentSam from './components/AgentSam';
+import DashboardOverview from './components/DashboardOverview';
 
 /* MEAUXOS - COMPLETE SAAS WORKSPACE (React Remaster)
   Integrated with Agent_Sam AI
@@ -809,10 +810,19 @@ const AppLayout = () => {
 
             <div className="relative z-10 flex h-screen">
                 {/* Sidebar */}
-                <aside className={`${isSidebarOpen ? 'w-[280px]' : 'w-0'} bg-[#f0f9ff]/75 backdrop-blur-2xl border-r border-blue-200/30 text-slate-800 transition-all duration-300 flex flex-col fixed md:relative h-full z-50 overflow-hidden`}>
-                    <div className="p-6 border-b border-blue-200/30 flex items-center gap-3">
-                        <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-cyan-500 to-violet-500 flex items-center justify-center text-white font-bold text-lg shadow-lg">MX</div>
-                        <h1 className="font-extrabold text-xl bg-clip-text text-transparent bg-gradient-to-r from-cyan-600 to-violet-600">MeauxOS</h1>
+                <aside className={`${isSidebarOpen ? 'w-[280px]' : 'w-[72px]'} bg-[#f0f9ff]/75 backdrop-blur-2xl border-r border-blue-200/30 text-slate-800 transition-all duration-300 flex flex-col fixed md:relative h-full z-50 overflow-hidden`}>
+                    <div className="p-6 border-b border-blue-200/30 flex items-center justify-between gap-3">
+                        <div className="flex items-center gap-3">
+                            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-cyan-500 to-violet-500 flex items-center justify-center text-white font-bold text-lg shadow-lg">MX</div>
+                            {isSidebarOpen && <h1 className="font-extrabold text-xl bg-clip-text text-transparent bg-gradient-to-r from-cyan-600 to-violet-600">MeauxOS</h1>}
+                        </div>
+                        <button
+                            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                            className="p-2 hover:bg-blue-100 rounded-lg transition-colors"
+                            title={isSidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
+                        >
+                            <ChevronLeft size={20} className={`transition-transform ${!isSidebarOpen ? 'rotate-180' : ''}`} />
+                        </button>
                     </div>
 
                     <nav className="flex-1 overflow-y-auto p-4 space-y-8">
@@ -837,16 +847,6 @@ const AppLayout = () => {
                                 <NavButton active={location.pathname.includes('automeaux')} icon={Wrench} label="AutoMeaux" onClick={() => navigate('/dashboard/automeaux')} />
                             </div>
                         </div>
-
-                        <div className="mt-8 pt-6 border-t border-blue-200/30">
-                            <button
-                                onClick={() => window.location.href = '/api/auth/google'}
-                                className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-white text-slate-700 hover:bg-slate-50 border border-slate-200 rounded-xl font-bold shadow-sm transition-all active:scale-95"
-                            >
-                                <img src="https://www.google.com/favicon.ico" className="w-4 h-4" alt="" />
-                                Sign in with Google
-                            </button>
-                        </div>
                     </nav>
                 </aside>
 
@@ -869,7 +869,7 @@ const AppLayout = () => {
 
                     <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
                         <Routes>
-                            <Route path="/dashboard" element={<PlaceholderView title="Dashboard Overview" icon={Layout} />} />
+                            <Route path="/dashboard" element={<DashboardOverview />} />
                             <Route path="/dashboard/meauxwork" element={<MeauxWork />} />
                             <Route path="/dashboard/meauxsql" element={<MeauxSQL />} />
                             <Route path="/dashboard/meauxtalk" element={<MeauxTalk />} />
