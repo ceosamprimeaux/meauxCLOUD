@@ -1,46 +1,53 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MeauxCLOUD | Unified Operations Hub - Enterprise Dashboard Platform</title>
-    
+
     <!-- SEO Meta Tags -->
-    <meta name="description" content="MeauxCLOUD is an enterprise-grade unified operations hub for projects, analytics, team management, and infrastructure. Built on Cloudflare's edge network with 99.9% uptime.">
-    <meta name="keywords" content="MeauxCLOUD, operations hub, dashboard, Cloudflare, enterprise platform, project management, analytics, team collaboration, Meauxbility">
+    <meta name="description"
+        content="MeauxCLOUD is an enterprise-grade unified operations hub for projects, analytics, team management, and infrastructure. Built on Cloudflare's edge network with 99.9% uptime.">
+    <meta name="keywords"
+        content="MeauxCLOUD, operations hub, dashboard, Cloudflare, enterprise platform, project management, analytics, team collaboration, Meauxbility">
     <meta name="author" content="Meauxbility Foundation">
     <meta name="robots" content="index, follow">
     <meta name="language" content="English">
     <meta name="revisit-after" content="7 days">
-    
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://meauxcloud.org/">
     <meta property="og:title" content="MeauxCLOUD | Unified Operations Hub">
-    <meta property="og:description" content="Enterprise dashboard for projects, analytics, team management, and infrastructure. Built on Cloudflare's edge network.">
+    <meta property="og:description"
+        content="Enterprise dashboard for projects, analytics, team management, and infrastructure. Built on Cloudflare's edge network.">
     <meta property="og:image" content="https://meauxcloud.org/og-image.png">
     <meta property="og:site_name" content="MeauxCLOUD">
     <meta property="og:locale" content="en_US">
-    
+
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://meauxcloud.org/">
     <meta name="twitter:title" content="MeauxCLOUD | Unified Operations Hub">
-    <meta name="twitter:description" content="Enterprise dashboard for projects, analytics, team management, and infrastructure.">
+    <meta name="twitter:description"
+        content="Enterprise dashboard for projects, analytics, team management, and infrastructure.">
     <meta name="twitter:image" content="https://meauxcloud.org/og-image.png">
     <meta name="twitter:creator" content="@meauxbility">
-    
+
     <!-- Canonical URL -->
     <link rel="canonical" href="https://meauxcloud.org/">
-    
+
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23020617' width='100' height='100' rx='20'/><text x='50' y='70' font-size='60' font-weight='900' font-family='system-ui' text-anchor='middle' fill='%2300D4FF'>M</text></svg>">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23020617' width='100' height='100' rx='20'/><text x='50' y='70' font-size='60' font-weight='900' font-family='system-ui' text-anchor='middle' fill='%2300D4FF'>M</text></svg>">
-    
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23020617' width='100' height='100' rx='20'/><text x='50' y='70' font-size='60' font-weight='900' font-family='system-ui' text-anchor='middle' fill='%2300D4FF'>M</text></svg>">
+    <link rel="apple-touch-icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23020617' width='100' height='100' rx='20'/><text x='50' y='70' font-size='60' font-weight='900' font-family='system-ui' text-anchor='middle' fill='%2300D4FF'>M</text></svg>">
+
     <!-- Theme Color -->
     <meta name="theme-color" content="#020617">
     <meta name="msapplication-TileColor" content="#020617">
-    
+
     <!-- Schema.org JSON-LD -->
     <script type="application/ld+json">
     {
@@ -86,7 +93,7 @@
         ]
     }
     </script>
-    
+
     <!-- Organization Schema -->
     <script type="application/ld+json">
     {
@@ -106,18 +113,20 @@
         }
     }
     </script>
-    
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- Three.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    
+
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -162,7 +171,7 @@
             }
         }
     </script>
-    
+
     <style>
         :root {
             --bg-primary: #020617;
@@ -173,7 +182,7 @@
             --glass-border: rgba(0, 212, 255, 0.15);
             --accent: #00D4FF;
         }
-        
+
         [data-theme="light"] {
             --bg-primary: #FFFFFF;
             --bg-secondary: #F8FAFC;
@@ -182,13 +191,13 @@
             --glass-bg: rgba(255, 255, 255, 0.8);
             --glass-border: rgba(0, 212, 255, 0.3);
         }
-        
+
         body {
             background: var(--bg-primary);
             color: var(--text-secondary);
             font-family: 'Inter', sans-serif;
         }
-        
+
         /* Frosted Glass */
         .glass-card {
             background: var(--glass-bg);
@@ -198,21 +207,21 @@
             border-radius: 20px;
             transition: all 0.3s ease;
         }
-        
+
         .glass-card:hover {
             background: rgba(0, 212, 255, 0.08);
             transform: translateY(-4px);
             box-shadow: 0 20px 40px rgba(0, 212, 255, 0.15);
             border-color: rgba(0, 212, 255, 0.4);
         }
-        
+
         /* Hero Glass */
         .hero-glass {
             background: rgba(15, 23, 42, 0.6);
             backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
-        
+
         /* Gradient Text */
         .gradient-text {
             background: linear-gradient(135deg, #00D4FF 0%, #0077FF 50%, #8b5cf6 100%);
@@ -220,23 +229,26 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        
+
         /* Scrollbar */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
         }
+
         ::-webkit-scrollbar-track {
             background: rgba(0, 212, 255, 0.02);
         }
+
         ::-webkit-scrollbar-thumb {
             background: rgba(0, 212, 255, 0.2);
             border-radius: 3px;
         }
+
         ::-webkit-scrollbar-thumb:hover {
             background: rgba(0, 212, 255, 0.4);
         }
-        
+
         /* Agent Sam Button */
         .agent-sam-btn {
             position: fixed;
@@ -255,12 +267,12 @@
             z-index: 1001;
             border: 2px solid rgba(255, 255, 255, 0.2);
         }
-        
+
         .agent-sam-btn:hover {
             transform: scale(1.1);
             box-shadow: 0 12px 40px rgba(0, 212, 255, 0.6);
         }
-        
+
         .agent-sam-btn.pulsing::before {
             content: '';
             position: absolute;
@@ -270,12 +282,19 @@
             opacity: 0.3;
             animation: pulse-ring 2s ease-out infinite;
         }
-        
+
         @keyframes pulse-ring {
-            0% { transform: scale(1); opacity: 0.3; }
-            100% { transform: scale(1.5); opacity: 0; }
+            0% {
+                transform: scale(1);
+                opacity: 0.3;
+            }
+
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
         }
-        
+
         /* Agent Sam Panel */
         .agent-sam-panel {
             position: fixed;
@@ -298,13 +317,13 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 1002;
         }
-        
+
         .agent-sam-panel.active {
             opacity: 1;
             transform: translateY(0) scale(1);
             pointer-events: all;
         }
-        
+
         /* Navigation */
         .nav-link {
             position: relative;
@@ -312,22 +331,22 @@
             border-radius: 12px;
             transition: all 0.3s ease;
         }
-        
+
         .nav-link:hover {
             background: rgba(0, 212, 255, 0.1);
         }
-        
+
         .nav-link.active {
             background: rgba(0, 212, 255, 0.15);
             color: #00D4FF;
         }
-        
+
         /* Module Cards */
         .module-card {
             position: relative;
             overflow: hidden;
         }
-        
+
         .module-card::before {
             content: '';
             position: absolute;
@@ -339,261 +358,273 @@
             opacity: 0;
             transition: opacity 0.3s ease;
         }
-        
+
         .module-card:hover::before {
             opacity: 1;
         }
     </style>
 
     <script>
-        // Environment Detection & API Configuration
-        (function() {
-            const ENV = {
-                isDev: false,
-                isProduction: true,
-                baseUrl: 'https://meauxcloud.org',
-                apiBase: 'https://meauxcloud.org',
-                endpoints: {
-  "dashboard": "/api/dashboard/stats",
-  "meshy": "/api/meshy/generate",
-  "cloudconvert": "/api/cloudconvert/jobs",
-  "resend": "/api/email/send",
-  "cloudflare": {
-    "gateways": "/api/cloudflare/gateways",
-    "images": "/api/images/list"
-  },
-  "sql": "/api/sql/execute",
-  "chat": {
-    "messages": "/api/chat/messages",
-    "send": "/api/chat/send",
-    "ws": "/api/chat/ws"
-  },
-  "sfu": {
-    "session": "/api/sfu/session",
-    "turn": "/api/turn/credentials"
-  },
-  "google": {
-    "proxy": "/api/google/proxy",
-    "ai": "/api/ai/rag"
-  }
-},
-                oauth: {
-  "google": {
-    "auth": "/api/auth/google",
-    "callback": "/api/auth/google/callback"
-  },
-  "github": {
-    "auth": "/api/auth/github",
-    "callback": "/api/auth/github/callback"
-  }
-}
-            };
-            
-            // Make available globally
-            window.MEAUX_ENV = ENV;
-            
-            // Helper function for API calls
-            window.meauxAPI = {
-                async call(endpoint, options = {}) {
-                    const url = endpoint.startsWith('http') 
-                        ? endpoint 
-                        : `${ENV.apiBase}${endpoint}`;
-                    
-                    const response = await fetch(url, {
-                        ...options,
-                        headers: {
-                            'Content-Type': 'application/json',
-                            ...options.headers
+            // Environment Detection & API Configuration
+            (function () {
+                const ENV = {
+                    isDev: false,
+                    isProduction: true,
+                    baseUrl: 'https://meauxcloud.org',
+                    apiBase: 'https://meauxcloud.org',
+                    endpoints: {
+                        "dashboard": "/api/dashboard/stats",
+                        "meshy": "/api/meshy/generate",
+                        "cloudconvert": "/api/cloudconvert/jobs",
+                        "resend": "/api/email/send",
+                        "cloudflare": {
+                            "gateways": "/api/cloudflare/gateways",
+                            "images": "/api/images/list"
                         },
-                        credentials: 'include'
-                    });
-                    
-                    if (!response.ok) {
-                        throw new Error(`API Error: ${response.status}`);
+                        "sql": "/api/sql/execute",
+                        "chat": {
+                            "messages": "/api/chat/messages",
+                            "send": "/api/chat/send",
+                            "ws": "/api/chat/ws"
+                        },
+                        "sfu": {
+                            "session": "/api/sfu/session",
+                            "turn": "/api/turn/credentials"
+                        },
+                        "google": {
+                            "proxy": "/api/google/proxy",
+                            "ai": "/api/ai/rag"
+                        }
+                    },
+                    oauth: {
+                        "google": {
+                            "auth": "/api/auth/google",
+                            "callback": "/api/auth/google/callback"
+                        },
+                        "github": {
+                            "auth": "/api/auth/github",
+                            "callback": "/api/auth/github/callback"
+                        }
                     }
-                    
-                    return response.json();
-                },
-                
-                // Dashboard API
-                async getDashboardStats() {
-                    return this.call(ENV.endpoints.dashboard);
-                },
-                
-                // OAuth
-                async initiateGoogleAuth() {
-                    window.location.href = `${ENV.apiBase}${ENV.oauth.google.auth}`;
-                },
-                
-                async initiateGitHubAuth() {
-                    window.location.href = `${ENV.apiBase}${ENV.oauth.github.auth}`;
-                },
-                
-                // MeshyAI
-                async generate3D(data) {
-                    return this.call(ENV.endpoints.meshy, {
-                        method: 'POST',
-                        body: JSON.stringify(data)
-                    });
-                },
-                
-                // CloudConvert
-                async createJob(data) {
-                    return this.call(ENV.endpoints.cloudconvert, {
-                        method: 'POST',
-                        body: JSON.stringify(data)
-                    });
-                },
-                
-                // Resend Email
-                async sendEmail(data) {
-                    return this.call(ENV.endpoints.resend, {
-                        method: 'POST',
-                        body: JSON.stringify(data)
-                    });
-                },
-                
-                // Cloudflare Images
-                async listImages() {
-                    return this.call(ENV.endpoints.cloudflare.images);
-                },
-                
-                // SQL Execution
-                async executeSQL(query) {
-                    return this.call(ENV.endpoints.sql, {
-                        method: 'POST',
-                        body: JSON.stringify({ query })
-                    });
-                },
-                
-                // Chat
-                async getMessages() {
-                    return this.call(ENV.endpoints.chat.messages);
-                },
-                
-                async sendMessage(data) {
-                    return this.call(ENV.endpoints.chat.send, {
-                        method: 'POST',
-                        body: JSON.stringify(data)
-                    });
-                },
-                
-                // Group Call / Video (SFU)
-                async createCallSession() {
-                    return this.call(ENV.endpoints.sfu.session, {
-                        method: 'POST'
-                    });
-                },
-                
-                async getTURNCredentials() {
-                    return this.call(ENV.endpoints.sfu.turn);
-                },
-                
-                // Google AI Assistant
-                async callGoogleAI(prompt, systemContext = 'default') {
-                    return this.call(ENV.endpoints.google.proxy, {
-                        method: 'POST',
-                        body: JSON.stringify({
-                            endpoint: 'v1beta/models/gemini-2.0-flash-exp:generateContent',
+                };
+
+                // Make available globally
+                window.MEAUX_ENV = ENV;
+
+                // Helper function for API calls
+                window.meauxAPI = {
+                    async call(endpoint, options = {}) {
+                        const url = endpoint.startsWith('http')
+                            ? endpoint
+                            : `${ENV.apiBase}${endpoint}`;
+
+                        const response = await fetch(url, {
+                            ...options,
+                            headers: {
+                                'Content-Type': 'application/json',
+                                ...options.headers
+                            },
+                            credentials: 'include'
+                        });
+
+                        if (!response.ok) {
+                            throw new Error(`API Error: ${response.status}`);
+                        }
+
+                        return response.json();
+                    },
+
+                    // Dashboard API
+                    async getDashboardStats() {
+                        return this.call(ENV.endpoints.dashboard);
+                    },
+
+                    // OAuth
+                    async initiateGoogleAuth() {
+                        window.location.href = `${ENV.apiBase}${ENV.oauth.google.auth}`;
+                    },
+
+                    async initiateGitHubAuth() {
+                        window.location.href = `${ENV.apiBase}${ENV.oauth.github.auth}`;
+                    },
+
+                    // MeshyAI
+                    async generate3D(data) {
+                        return this.call(ENV.endpoints.meshy, {
                             method: 'POST',
-                            body: {
-                                contents: [{ parts: [{ text: prompt }] }],
-                                systemInstruction: { 
-                                    parts: [{ 
-                                        text: systemContext === 'assistant' 
-                                            ? 'You are MeauxAI, an advanced AI assistant for MeauxCLOUD.'
-                                            : 'You are a helpful assistant.' 
-                                    }] 
+                            body: JSON.stringify(data)
+                        });
+                    },
+
+                    // CloudConvert
+                    async createJob(data) {
+                        return this.call(ENV.endpoints.cloudconvert, {
+                            method: 'POST',
+                            body: JSON.stringify(data)
+                        });
+                    },
+
+                    // Resend Email
+                    async sendEmail(data) {
+                        return this.call(ENV.endpoints.resend, {
+                            method: 'POST',
+                            body: JSON.stringify(data)
+                        });
+                    },
+
+                    // Cloudflare Images
+                    async listImages() {
+                        return this.call(ENV.endpoints.cloudflare.images);
+                    },
+
+                    // SQL Execution
+                    async executeSQL(query) {
+                        return this.call(ENV.endpoints.sql, {
+                            method: 'POST',
+                            body: JSON.stringify({ query })
+                        });
+                    },
+
+                    // Chat
+                    async getMessages() {
+                        return this.call(ENV.endpoints.chat.messages);
+                    },
+
+                    async sendMessage(data) {
+                        return this.call(ENV.endpoints.chat.send, {
+                            method: 'POST',
+                            body: JSON.stringify(data)
+                        });
+                    },
+
+                    // Group Call / Video (SFU)
+                    async createCallSession() {
+                        return this.call(ENV.endpoints.sfu.session, {
+                            method: 'POST'
+                        });
+                    },
+
+                    async getTURNCredentials() {
+                        return this.call(ENV.endpoints.sfu.turn);
+                    },
+
+                    // Google AI Assistant
+                    async callGoogleAI(prompt, systemContext = 'default') {
+                        return this.call(ENV.endpoints.google.proxy, {
+                            method: 'POST',
+                            body: JSON.stringify({
+                                endpoint: 'v1beta/models/gemini-2.0-flash-exp:generateContent',
+                                method: 'POST',
+                                body: {
+                                    contents: [{ parts: [{ text: prompt }] }],
+                                    systemInstruction: {
+                                        parts: [{
+                                            text: systemContext === 'assistant'
+                                                ? 'You are MeauxAI, an advanced AI assistant for MeauxCLOUD.'
+                                                : 'You are a helpful assistant.'
+                                        }]
+                                    }
                                 }
-                            }
-                        })
-                    });
-                },
-                
-                // AutoRAG (Advanced AI)
-                async queryAI(query) {
-                    return this.call(ENV.endpoints.google.ai, {
-                        method: 'POST',
-                        body: JSON.stringify({ query })
-                    });
-                }
-            };
-            
-            console.log('✅ MeauxCLOUD API initialized for', ENV.isDev ? 'DEV' : 'PRODUCTION');
-        })();
+                            })
+                        });
+                    },
+
+                    // AutoRAG (Advanced AI)
+                    async queryAI(query) {
+                        return this.call(ENV.endpoints.google.ai, {
+                            method: 'POST',
+                            body: JSON.stringify({ query })
+                        });
+                    }
+                };
+
+                console.log('✅ MeauxCLOUD API initialized for', ENV.isDev ? 'DEV' : 'PRODUCTION');
+            })();
     </script>
 </head>
 
 <body class="antialiased selection:bg-meaux-cyan/30 selection:text-white overflow-x-hidden">
     <!-- Navigation -->
-    <nav class="fixed top-0 left-0 right-0 z-50 border-b border-white/5" style="background: rgba(2, 6, 23, 0.8); backdrop-filter: blur(24px);">
+    <nav class="fixed top-0 left-0 right-0 z-50 border-b border-white/5"
+        style="background: rgba(2, 6, 23, 0.8); backdrop-filter: blur(24px);">
         <div class="max-w-7xl mx-auto px-6">
             <div class="flex items-center justify-between h-16">
                 <!-- Logo -->
                 <a href="/" class="flex items-center gap-3 group">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-meaux-cyan to-meaux-blue flex items-center justify-center shadow-lg shadow-meaux-cyan/30 group-hover:shadow-meaux-cyan/50 transition-all">
+                    <div
+                        class="w-10 h-10 rounded-xl bg-gradient-to-br from-meaux-cyan to-meaux-blue flex items-center justify-center shadow-lg shadow-meaux-cyan/30 group-hover:shadow-meaux-cyan/50 transition-all">
                         <span class="text-white font-black text-lg">M</span>
                     </div>
                     <span class="font-bold text-lg text-white">Meaux<span class="text-meaux-cyan">OS</span></span>
                 </a>
-                
+
                 <!-- Nav Links -->
                 <div class="hidden md:flex items-center gap-2">
-                    <a href="#features" class="nav-link text-sm font-medium text-slate-300 hover:text-white">Features</a>
+                    <a href="#features"
+                        class="nav-link text-sm font-medium text-slate-300 hover:text-white">Features</a>
                     <a href="#modules" class="nav-link text-sm font-medium text-slate-300 hover:text-white">Modules</a>
-                    <a href="#analytics" class="nav-link text-sm font-medium text-slate-300 hover:text-white">Analytics</a>
+                    <a href="#analytics"
+                        class="nav-link text-sm font-medium text-slate-300 hover:text-white">Analytics</a>
                     <a href="#brands" class="nav-link text-sm font-medium text-slate-300 hover:text-white">Brands</a>
                 </div>
-                
+
                 <!-- Actions -->
                 <div class="flex items-center gap-3">
-                    <button onclick="toggleTheme()" class="w-10 h-10 rounded-lg hover:bg-white/5 flex items-center justify-center transition-colors">
-                        <svg class="w-5 h-5 text-slate-400 hover:text-meaux-cyan transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                    <button onclick="toggleTheme()"
+                        class="w-10 h-10 rounded-lg hover:bg-white/5 flex items-center justify-center transition-colors">
+                        <svg class="w-5 h-5 text-slate-400 hover:text-meaux-cyan transition-colors" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z">
+                            </path>
                         </svg>
                     </button>
-                    <a href="/meauxCLOUD/dashboard.html" class="px-4 py-2 rounded-xl bg-gradient-to-r from-meaux-cyan to-meaux-blue text-white text-sm font-semibold shadow-lg shadow-meaux-cyan/25 hover:shadow-meaux-cyan/40 transition-all">
+                    <a href="/meauxCLOUD/dashboard.html"
+                        class="px-4 py-2 rounded-xl bg-gradient-to-r from-meaux-cyan to-meaux-blue text-white text-sm font-semibold shadow-lg shadow-meaux-cyan/25 hover:shadow-meaux-cyan/40 transition-all">
                         Launch Dashboard
                     </a>
                 </div>
             </div>
         </div>
     </nav>
-    
+
     <!-- Hero Section with Interdimensional Planet -->
     <section class="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
         <!-- Three.js Globe Container -->
         <div id="globeContainer" class="absolute inset-0 z-0"></div>
-        
+
         <!-- Hero Content -->
         <div class="relative z-10 max-w-5xl mx-auto px-6 text-center py-20">
             <!-- Status Badge -->
-            <div class="inline-flex items-center gap-2 mb-8 px-4 py-2 rounded-full hero-glass border border-meaux-cyan/20">
+            <div
+                class="inline-flex items-center gap-2 mb-8 px-4 py-2 rounded-full hero-glass border border-meaux-cyan/20">
                 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                 <span class="text-sm font-medium text-slate-300">All Systems Operational</span>
                 <span class="text-xs text-meaux-cyan font-mono">v3.0</span>
             </div>
-            
+
             <h1 class="text-5xl md:text-7xl lg:text-8xl font-black mb-6 leading-tight text-white">
                 Unified<br>
                 <span class="gradient-text">Operations Hub</span>
             </h1>
-            
+
             <p class="text-xl md:text-2xl mb-12 max-w-3xl mx-auto leading-relaxed text-slate-400">
-                Enterprise dashboard for projects, analytics, team management, and infrastructure. 
+                Enterprise dashboard for projects, analytics, team management, and infrastructure.
                 <span class="text-meaux-cyan">Built on Cloudflare's edge network.</span>
             </p>
-            
+
             <!-- CTA Buttons -->
             <div class="flex gap-4 justify-center flex-wrap mb-16">
-                <a href="#modules" class="px-8 py-4 rounded-2xl bg-gradient-to-r from-meaux-cyan to-meaux-blue text-white font-bold shadow-lg shadow-meaux-cyan/30 hover:shadow-meaux-cyan/50 hover:scale-105 transition-all">
+                <a href="#modules"
+                    class="px-8 py-4 rounded-2xl bg-gradient-to-r from-meaux-cyan to-meaux-blue text-white font-bold shadow-lg shadow-meaux-cyan/30 hover:shadow-meaux-cyan/50 hover:scale-105 transition-all">
                     Explore Platform
                 </a>
-                <a href="/meauxCLOUD/dashboard.html" class="px-8 py-4 rounded-2xl hero-glass border border-white/10 text-white font-bold hover:border-meaux-cyan/30 hover:bg-meaux-cyan/5 transition-all">
+                <a href="/meauxCLOUD/dashboard.html"
+                    class="px-8 py-4 rounded-2xl hero-glass border border-white/10 text-white font-bold hover:border-meaux-cyan/30 hover:bg-meaux-cyan/5 transition-all">
                     View Dashboard →
                 </a>
             </div>
-            
+
             <!-- Stats -->
             <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
                 <div class="hero-glass rounded-2xl p-6 border border-white/5">
@@ -614,15 +645,16 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Scroll Indicator -->
         <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
             <svg class="w-6 h-6 text-meaux-cyan/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3">
+                </path>
             </svg>
         </div>
     </section>
-    
+
     <!-- Modules Section -->
     <section id="modules" class="py-32 px-6 relative">
         <div class="max-w-7xl mx-auto">
@@ -630,101 +662,117 @@
                 <h2 class="text-4xl md:text-5xl font-black text-white mb-4">Platform Modules</h2>
                 <p class="text-xl text-slate-400">Complete operational suite for your organization</p>
             </div>
-            
+
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6" id="modulesGrid"></div>
         </div>
     </section>
-    
+
     <!-- Brands Section -->
-    <section id="brands" class="py-32 px-6 relative" style="background: linear-gradient(180deg, transparent 0%, rgba(0, 212, 255, 0.02) 50%, transparent 100%);">
+    <section id="brands" class="py-32 px-6 relative"
+        style="background: linear-gradient(180deg, transparent 0%, rgba(0, 212, 255, 0.02) 50%, transparent 100%);">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-16">
                 <h2 class="text-4xl md:text-5xl font-black text-white mb-4">Our Brands</h2>
                 <p class="text-xl text-slate-400">Powering innovation across multiple ventures</p>
             </div>
-            
+
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <!-- Meauxbility -->
                 <div class="glass-card module-card p-8 group cursor-pointer">
-                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-meaux-cyan to-meaux-blue flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <div
+                        class="w-16 h-16 rounded-2xl bg-gradient-to-br from-meaux-cyan to-meaux-blue flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                         <span class="text-2xl font-black text-white">M</span>
                     </div>
                     <h3 class="text-2xl font-bold text-white mb-2">Meauxbility</h3>
                     <p class="text-slate-400 mb-4">Parent organization • Tech & Innovation Hub</p>
                     <div class="flex flex-wrap gap-2">
-                        <span class="px-3 py-1 rounded-full bg-meaux-cyan/10 text-meaux-cyan text-xs font-medium">Core</span>
-                        <span class="px-3 py-1 rounded-full bg-white/5 text-slate-400 text-xs font-medium">Foundation</span>
+                        <span
+                            class="px-3 py-1 rounded-full bg-meaux-cyan/10 text-meaux-cyan text-xs font-medium">Core</span>
+                        <span
+                            class="px-3 py-1 rounded-full bg-white/5 text-slate-400 text-xs font-medium">Foundation</span>
                     </div>
                 </div>
-                
+
                 <!-- Inner Animal -->
                 <div class="glass-card module-card p-8 group cursor-pointer">
-                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <div
+                        class="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                         <span class="text-2xl">🐾</span>
                     </div>
                     <h3 class="text-2xl font-bold text-white mb-2">Inner Animal</h3>
                     <p class="text-slate-400 mb-4">Pet accessories & apparel brand</p>
                     <div class="flex flex-wrap gap-2">
-                        <span class="px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 text-xs font-medium">E-commerce</span>
+                        <span
+                            class="px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 text-xs font-medium">E-commerce</span>
                         <span class="px-3 py-1 rounded-full bg-white/5 text-slate-400 text-xs font-medium">Retail</span>
                     </div>
                 </div>
-                
+
                 <!-- SolarSpec -->
                 <div class="glass-card module-card p-8 group cursor-pointer">
-                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <div
+                        class="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                         <span class="text-2xl">☀️</span>
                     </div>
                     <h3 class="text-2xl font-bold text-white mb-2">SolarSpec</h3>
                     <p class="text-slate-400 mb-4">Solar energy solutions</p>
                     <div class="flex flex-wrap gap-2">
-                        <span class="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-medium">Energy</span>
+                        <span
+                            class="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-medium">Energy</span>
                         <span class="px-3 py-1 rounded-full bg-white/5 text-slate-400 text-xs font-medium">Green</span>
                     </div>
                 </div>
-                
+
                 <!-- Krewe of Jesters -->
                 <div class="glass-card module-card p-8 group cursor-pointer">
-                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <div
+                        class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                         <span class="text-2xl">🎭</span>
                     </div>
                     <h3 class="text-2xl font-bold text-white mb-2">Krewe of Jesters</h3>
                     <p class="text-slate-400 mb-4">Events & entertainment</p>
                     <div class="flex flex-wrap gap-2">
-                        <span class="px-3 py-1 rounded-full bg-purple-500/10 text-purple-400 text-xs font-medium">Events</span>
+                        <span
+                            class="px-3 py-1 rounded-full bg-purple-500/10 text-purple-400 text-xs font-medium">Events</span>
                         <span class="px-3 py-1 rounded-full bg-white/5 text-slate-400 text-xs font-medium">NOLA</span>
                     </div>
                 </div>
-                
+
                 <!-- SamPrimeaux.com -->
                 <div class="glass-card module-card p-8 group cursor-pointer">
-                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-pink-400 to-rose-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <div
+                        class="w-16 h-16 rounded-2xl bg-gradient-to-br from-pink-400 to-rose-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                         <span class="text-2xl font-black text-white">SP</span>
                     </div>
                     <h3 class="text-2xl font-bold text-white mb-2">SamPrimeaux.com</h3>
                     <p class="text-slate-400 mb-4">Personal portfolio & consultancy</p>
                     <div class="flex flex-wrap gap-2">
-                        <span class="px-3 py-1 rounded-full bg-pink-500/10 text-pink-400 text-xs font-medium">Portfolio</span>
-                        <span class="px-3 py-1 rounded-full bg-white/5 text-slate-400 text-xs font-medium">Personal</span>
+                        <span
+                            class="px-3 py-1 rounded-full bg-pink-500/10 text-pink-400 text-xs font-medium">Portfolio</span>
+                        <span
+                            class="px-3 py-1 rounded-full bg-white/5 text-slate-400 text-xs font-medium">Personal</span>
                     </div>
                 </div>
-                
+
                 <!-- Client Projects -->
                 <div class="glass-card module-card p-8 group cursor-pointer">
-                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-slate-400 to-slate-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <div
+                        class="w-16 h-16 rounded-2xl bg-gradient-to-br from-slate-400 to-slate-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                         <span class="text-2xl">🏢</span>
                     </div>
                     <h3 class="text-2xl font-bold text-white mb-2">Client Projects</h3>
                     <p class="text-slate-400 mb-4">Enterprise solutions & consulting</p>
                     <div class="flex flex-wrap gap-2">
-                        <span class="px-3 py-1 rounded-full bg-slate-500/10 text-slate-300 text-xs font-medium">B2B</span>
-                        <span class="px-3 py-1 rounded-full bg-white/5 text-slate-400 text-xs font-medium">Consulting</span>
+                        <span
+                            class="px-3 py-1 rounded-full bg-slate-500/10 text-slate-300 text-xs font-medium">B2B</span>
+                        <span
+                            class="px-3 py-1 rounded-full bg-white/5 text-slate-400 text-xs font-medium">Consulting</span>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    
+
     <!-- Infrastructure Section -->
     <section id="analytics" class="py-32 px-6">
         <div class="max-w-7xl mx-auto">
@@ -732,49 +780,61 @@
                 <h2 class="text-4xl md:text-5xl font-black text-white mb-4">Infrastructure</h2>
                 <p class="text-xl text-slate-400">Powered by Cloudflare's global edge network</p>
             </div>
-            
+
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
                 <div class="hero-glass rounded-2xl p-6 border border-white/5">
-                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-meaux-cyan/20 to-meaux-blue/20 flex items-center justify-center mb-4">
+                    <div
+                        class="w-12 h-12 rounded-xl bg-gradient-to-br from-meaux-cyan/20 to-meaux-blue/20 flex items-center justify-center mb-4">
                         <svg class="w-6 h-6 text-meaux-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2">
+                            </path>
                         </svg>
                     </div>
                     <div class="text-3xl font-black text-white mb-1">114</div>
                     <div class="text-sm text-slate-400">Workers</div>
                 </div>
-                
+
                 <div class="hero-glass rounded-2xl p-6 border border-white/5">
-                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-400/20 to-violet-600/20 flex items-center justify-center mb-4">
+                    <div
+                        class="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-400/20 to-violet-600/20 flex items-center justify-center mb-4">
                         <svg class="w-6 h-6 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10">
+                            </path>
                         </svg>
                     </div>
                     <div class="text-3xl font-black text-white mb-1">10</div>
                     <div class="text-sm text-slate-400">Pages</div>
                 </div>
-                
+
                 <div class="hero-glass rounded-2xl p-6 border border-white/5">
-                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-400/20 to-amber-600/20 flex items-center justify-center mb-4">
+                    <div
+                        class="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-400/20 to-amber-600/20 flex items-center justify-center mb-4">
                         <svg class="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4">
+                            </path>
                         </svg>
                     </div>
                     <div class="text-3xl font-black text-white mb-1">20</div>
                     <div class="text-sm text-slate-400">D1 Databases</div>
                 </div>
-                
+
                 <div class="hero-glass rounded-2xl p-6 border border-white/5">
-                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-400/20 to-emerald-600/20 flex items-center justify-center mb-4">
+                    <div
+                        class="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-400/20 to-emerald-600/20 flex items-center justify-center mb-4">
                         <svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z">
+                            </path>
                         </svg>
                     </div>
                     <div class="text-3xl font-black text-white mb-1">77</div>
                     <div class="text-sm text-slate-400">R2 Buckets</div>
                 </div>
             </div>
-            
+
             <!-- Architecture Visual -->
             <div class="hero-glass rounded-3xl p-8 border border-white/5">
                 <div class="grid lg:grid-cols-3 gap-8">
@@ -793,7 +853,7 @@
                             <p>• Global CDN</p>
                         </div>
                     </div>
-                    
+
                     <div class="space-y-4 lg:border-x lg:border-white/5 lg:px-8">
                         <div class="flex items-center gap-3 mb-4">
                             <div class="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center">
@@ -809,7 +869,7 @@
                             <p>• Edge functions</p>
                         </div>
                     </div>
-                    
+
                     <div class="space-y-4">
                         <div class="flex items-center gap-3 mb-4">
                             <div class="w-10 h-10 rounded-xl bg-slate-500/20 flex items-center justify-center">
@@ -829,38 +889,42 @@
             </div>
         </div>
     </section>
-    
+
     <!-- Footer -->
     <footer class="py-12 px-6 border-t border-white/5">
         <div class="max-w-7xl mx-auto">
             <div class="flex flex-col md:flex-row items-center justify-between gap-4">
                 <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-meaux-cyan to-meaux-blue flex items-center justify-center">
+                    <div
+                        class="w-8 h-8 rounded-lg bg-gradient-to-br from-meaux-cyan to-meaux-blue flex items-center justify-center">
                         <span class="text-white font-bold text-sm">M</span>
                     </div>
                     <span class="text-sm text-slate-400">© 2025 Meauxbility Foundation</span>
                 </div>
                 <div class="flex items-center gap-6">
-                    <a href="/dashboard" class="text-sm text-slate-400 hover:text-meaux-cyan transition-colors">Dashboard</a>
-                    <a href="https://github.com/SamPrimeaux/ecosystem" class="text-sm text-slate-400 hover:text-meaux-cyan transition-colors">GitHub</a>
+                    <a href="/meauxCLOUD/dashboard.html"
+                        class="text-sm text-slate-400 hover:text-meaux-cyan transition-colors">Dashboard</a>
+                    <a href="https://github.com/SamPrimeaux/ecosystem"
+                        class="text-sm text-slate-400 hover:text-meaux-cyan transition-colors">GitHub</a>
                     <a href="#" class="text-sm text-slate-400 hover:text-meaux-cyan transition-colors">Documentation</a>
                 </div>
             </div>
         </div>
     </footer>
-    
+
     <!-- Agent Sam Button -->
     <button class="agent-sam-btn pulsing" id="agentSamBtn" onclick="toggleAgentSam()">
         <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
         </svg>
     </button>
-    
+
     <!-- Agent Sam Panel -->
     <div class="agent-sam-panel" id="agentSamPanel">
         <div class="p-6 border-b border-white/5 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-meaux-cyan to-meaux-blue flex items-center justify-center text-white font-bold shadow-lg shadow-meaux-cyan/30">
+                <div
+                    class="w-12 h-12 rounded-full bg-gradient-to-br from-meaux-cyan to-meaux-blue flex items-center justify-center text-white font-bold shadow-lg shadow-meaux-cyan/30">
                     AS
                 </div>
                 <div>
@@ -868,20 +932,24 @@
                     <p class="text-xs text-slate-400">AI DevOps Assistant</p>
                 </div>
             </div>
-            <button onclick="toggleAgentSam()" class="w-8 h-8 rounded-lg hover:bg-white/5 flex items-center justify-center transition-colors">
+            <button onclick="toggleAgentSam()"
+                class="w-8 h-8 rounded-lg hover:bg-white/5 flex items-center justify-center transition-colors">
                 <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
                 </svg>
             </button>
         </div>
-        
+
         <div class="flex-1 overflow-y-auto p-6 space-y-4" id="agentSamMessages">
             <div class="flex gap-3">
-                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-meaux-cyan to-meaux-blue flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                <div
+                    class="w-8 h-8 rounded-full bg-gradient-to-br from-meaux-cyan to-meaux-blue flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
                     AS
                 </div>
                 <div class="flex-1 p-4 rounded-2xl hero-glass border border-white/5">
-                    <p class="text-sm text-white mb-3"><strong class="text-meaux-cyan">Agent Sam:</strong> Hello! I'm your DevOps AI assistant. I can help with:</p>
+                    <p class="text-sm text-white mb-3"><strong class="text-meaux-cyan">Agent Sam:</strong> Hello! I'm
+                        your DevOps AI assistant. I can help with:</p>
                     <ul class="text-sm space-y-1 text-slate-400">
                         <li>• Deploy & manage Workers</li>
                         <li>• Query D1 databases</li>
@@ -892,63 +960,64 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="p-4 border-t border-white/5">
             <div class="flex gap-2">
-                <input type="text" id="agentSamInput" placeholder="Ask Agent Sam..." 
+                <input type="text" id="agentSamInput" placeholder="Ask Agent Sam..."
                     class="flex-1 px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-meaux-cyan/50 transition-colors"
                     onkeypress="if(event.key==='Enter') sendAgentSamMessage()">
-                <button onclick="sendAgentSamMessage()" class="px-5 py-3 rounded-xl bg-gradient-to-r from-meaux-cyan to-meaux-blue text-white font-semibold hover:shadow-lg hover:shadow-meaux-cyan/30 transition-all">
+                <button onclick="sendAgentSamMessage()"
+                    class="px-5 py-3 rounded-xl bg-gradient-to-r from-meaux-cyan to-meaux-blue text-white font-semibold hover:shadow-lg hover:shadow-meaux-cyan/30 transition-all">
                     Send
                 </button>
             </div>
         </div>
     </div>
-    
+
     <script>
         // ========================================
         // Three.js Interdimensional Planet
         // ========================================
         const container = document.getElementById('globeContainer');
         const scene = new THREE.Scene();
-        
+
         const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
         camera.position.z = 30;
-        
+
         const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         container.appendChild(renderer.domElement);
-        
+
         // Create star field
         const starsGeo = new THREE.BufferGeometry();
         const starsCount = 8000;
         const starsPos = new Float32Array(starsCount * 3);
         const starsColors = new Float32Array(starsCount * 3);
-        
+
         for (let i = 0; i < starsCount; i++) {
             starsPos[i * 3] = (Math.random() - 0.5) * 250;
             starsPos[i * 3 + 1] = (Math.random() - 0.5) * 250;
             starsPos[i * 3 + 2] = (Math.random() - 0.5) * 250;
-            
+
             // Cyan/white color mix
             const isCyan = Math.random() > 0.6;
             starsColors[i * 3] = isCyan ? 0 : 1;
             starsColors[i * 3 + 1] = isCyan ? 0.83 : 1;
             starsColors[i * 3 + 2] = 1;
         }
-        
+
         starsGeo.setAttribute('position', new THREE.BufferAttribute(starsPos, 3));
         starsGeo.setAttribute('color', new THREE.BufferAttribute(starsColors, 3));
-        
-        const stars = new THREE.Points(starsGeo, new THREE.PointsMaterial({ 
-            size: 0.3, 
+
+        const stars = new THREE.Points(starsGeo, new THREE.PointsMaterial({
+            size: 0.3,
             vertexColors: true,
             transparent: true,
             opacity: 0.9
         }));
         scene.add(stars);
-        
+
         // Outer planet wireframe
         const planetGeo = new THREE.IcosahedronGeometry(8, 2);
         const planetMat = new THREE.MeshBasicMaterial({
@@ -959,7 +1028,7 @@
         });
         const planet = new THREE.Mesh(planetGeo, planetMat);
         scene.add(planet);
-        
+
         // Inner core
         const coreGeo = new THREE.IcosahedronGeometry(6, 1);
         const coreMat = new THREE.MeshBasicMaterial({
@@ -970,7 +1039,7 @@
         });
         const core = new THREE.Mesh(coreGeo, coreMat);
         scene.add(core);
-        
+
         // Deep core
         const deepCoreGeo = new THREE.IcosahedronGeometry(3, 0);
         const deepCoreMat = new THREE.MeshBasicMaterial({
@@ -981,7 +1050,7 @@
         });
         const deepCore = new THREE.Mesh(deepCoreGeo, deepCoreMat);
         scene.add(deepCore);
-        
+
         // Rings
         const ring1 = new THREE.Mesh(
             new THREE.TorusGeometry(11, 0.12, 16, 100),
@@ -989,7 +1058,7 @@
         );
         ring1.rotation.x = Math.PI / 3;
         scene.add(ring1);
-        
+
         const ring2 = new THREE.Mesh(
             new THREE.TorusGeometry(13, 0.08, 16, 100),
             new THREE.MeshBasicMaterial({ color: 0x0077FF, transparent: true, opacity: 0.15 })
@@ -997,7 +1066,7 @@
         ring2.rotation.x = Math.PI / 2.5;
         ring2.rotation.y = Math.PI / 6;
         scene.add(ring2);
-        
+
         const ring3 = new THREE.Mesh(
             new THREE.TorusGeometry(15, 0.05, 16, 100),
             new THREE.MeshBasicMaterial({ color: 0x8b5cf6, transparent: true, opacity: 0.1 })
@@ -1005,12 +1074,12 @@
         ring3.rotation.x = Math.PI / 4;
         ring3.rotation.z = Math.PI / 8;
         scene.add(ring3);
-        
+
         // Orbiting particles
         const orbitParticlesGeo = new THREE.BufferGeometry();
         const orbitCount = 200;
         const orbitPos = new Float32Array(orbitCount * 3);
-        
+
         for (let i = 0; i < orbitCount; i++) {
             const angle = (i / orbitCount) * Math.PI * 2;
             const radius = 10 + Math.random() * 5;
@@ -1018,7 +1087,7 @@
             orbitPos[i * 3 + 1] = (Math.random() - 0.5) * 4;
             orbitPos[i * 3 + 2] = Math.sin(angle) * radius;
         }
-        
+
         orbitParticlesGeo.setAttribute('position', new THREE.BufferAttribute(orbitPos, 3));
         const orbitParticles = new THREE.Points(orbitParticlesGeo, new THREE.PointsMaterial({
             size: 0.15,
@@ -1027,66 +1096,66 @@
             opacity: 0.6
         }));
         scene.add(orbitParticles);
-        
+
         let mouseX = 0, mouseY = 0, scrollY = 0;
-        
+
         window.addEventListener('mousemove', (e) => {
             mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
             mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
         });
-        
+
         window.addEventListener('scroll', () => {
             scrollY = window.scrollY * 0.001;
         });
-        
+
         function animate() {
             requestAnimationFrame(animate);
-            
+
             const time = Date.now() * 0.0003;
-            
+
             // Rotate stars slowly
             stars.rotation.y += 0.00008;
             stars.rotation.x += 0.00003;
-            
+
             // Planet rotation with scroll influence
             planet.rotation.y += 0.002 + scrollY * 0.008;
             planet.rotation.x = Math.sin(time * 0.5) * 0.1 + mouseY * 0.1;
-            
+
             // Core counter-rotation
             core.rotation.y -= 0.003;
             core.rotation.x = Math.cos(time * 0.3) * 0.15;
-            
+
             // Deep core
             deepCore.rotation.y += 0.005;
             deepCore.rotation.z = Math.sin(time) * 0.2;
-            
+
             // Ring animations
             ring1.rotation.z += 0.001;
             ring2.rotation.z -= 0.0015;
             ring3.rotation.z += 0.0008;
-            
+
             // Orbit particles
             orbitParticles.rotation.y += 0.002;
-            
+
             // Interdimensional scale effect on scroll
             const scalePulse = 1 + Math.sin(scrollY * 2) * 0.03;
             planet.scale.setScalar(scalePulse);
-            
+
             // Camera follows mouse
             camera.position.x += (mouseX * 4 - camera.position.x) * 0.03;
             camera.position.y += (-mouseY * 3 - camera.position.y) * 0.03;
             camera.lookAt(scene.position);
-            
+
             renderer.render(scene, camera);
         }
         animate();
-        
+
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
-        
+
         // ========================================
         // Modules Grid
         // ========================================
@@ -1100,7 +1169,7 @@
             { name: 'MeauxCloud', code: 'MX-CL', icon: '☁️', desc: 'Unified Storage', color: 'from-cyan-400 to-cyan-600' },
             { name: 'MeauxCAD', code: 'MX-CD', icon: '🎨', desc: '3D Design', color: 'from-orange-400 to-orange-600' },
         ];
-        
+
         document.getElementById('modulesGrid').innerHTML = modules.map(m => `
             <a href="/dashboard#${m.name.toLowerCase()}" class="glass-card module-card p-6 cursor-pointer group block">
                 <div class="w-14 h-14 rounded-2xl bg-gradient-to-br ${m.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg">
@@ -1111,7 +1180,7 @@
                 <span class="text-xs font-mono text-meaux-cyan/70">/${m.code}</span>
             </a>
         `).join('');
-        
+
         // ========================================
         // Theme Toggle
         // ========================================
@@ -1120,11 +1189,11 @@
             html.dataset.theme = html.dataset.theme === 'dark' ? 'light' : 'dark';
             localStorage.setItem('theme', html.dataset.theme);
         }
-        
+
         // Load saved theme
         const savedTheme = localStorage.getItem('theme') || 'dark';
         document.documentElement.dataset.theme = savedTheme;
-        
+
         // ========================================
         // Agent Sam
         // ========================================
@@ -1134,14 +1203,14 @@
             panel.classList.toggle('active');
             btn.classList.toggle('pulsing');
         }
-        
+
         async function sendAgentSamMessage() {
             const input = document.getElementById('agentSamInput');
             const messages = document.getElementById('agentSamMessages');
             const message = input.value.trim();
-            
+
             if (!message) return;
-            
+
             // Add user message
             messages.innerHTML += `
                 <div class="flex gap-3 justify-end">
@@ -1150,10 +1219,10 @@
                     </div>
                 </div>
             `;
-            
+
             input.value = '';
             messages.scrollTop = messages.scrollHeight;
-            
+
             // Simulate AI response
             setTimeout(() => {
                 messages.innerHTML += `
@@ -1169,10 +1238,10 @@
                 messages.scrollTop = messages.scrollHeight;
             }, 500);
         }
-        
+
         // Smooth scroll for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
+            anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
@@ -1184,10 +1253,11 @@
 
     <script>
         // Global error handler for API calls
-        window.addEventListener('unhandledrejection', function(event) {
+        window.addEventListener('unhandledrejection', function (event) {
             console.error('Unhandled API Error:', event.reason);
             // You can add user-facing error notifications here
         });
     </script>
 </body>
+
 </html>

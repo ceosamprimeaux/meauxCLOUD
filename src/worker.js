@@ -64,11 +64,14 @@ app.get('/api/dashboard/stats', async (c) => {
     try {
         const db = c.env.DB;
 
+        // Ensure tables exist (self-healing)
+        await ensureTablesExist(db);
+
         const [users, projects, tasks, deployments] = await Promise.all([
-            db.prepare('SELECT COUNT(*) as count FROM users').first(),
-            db.prepare('SELECT COUNT(*) as count FROM projects').first(),
-            db.prepare('SELECT COUNT(*) as count FROM tasks').first(),
-            db.prepare('SELECT COUNT(*) as count FROM deployments').first(),
+            db.prepare('SELECT COUNT(*) as count FROM users').first().catch(() => ({ count: 0 })),
+            db.prepare('SELECT COUNT(*) as count FROM projects').first().catch(() => ({ count: 0 })),
+            db.prepare('SELECT COUNT(*) as count FROM tasks').first().catch(() => ({ count: 0 })),
+            db.prepare('SELECT COUNT(*) as count FROM deployments').first().catch(() => ({ count: 0 })),
         ]);
 
         return c.json({
@@ -80,6 +83,246 @@ app.get('/api/dashboard/stats', async (c) => {
     } catch (error) {
         console.error('Dashboard stats error:', error);
         return c.json({ error: 'Failed to fetch stats' }, 500);
+    }
+})
+
+// Helper to ensure tables exist
+async function ensureTablesExist(db) {
+    try {
+        // Create projects table if it doesn't exist
+        await db.prepare(`
+            CREATE TABLE IF NOT EXISTS projects (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                description TEXT,
+                status TEXT DEFAULT 'active',
+                owner_id INTEGER,
+                created_at INTEGER DEFAULT (unixepoch()),
+                updated_at INTEGER DEFAULT (unixepoch())
+            )
+        `).run();
+
+        // Create tasks table if it doesn't exist
+        await db.prepare(`
+            CREATE TABLE IF NOT EXISTS tasks (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                title TEXT NOT NULL,
+                description TEXT,
+                project_id INTEGER,
+                status TEXT DEFAULT 'todo',
+                priority TEXT DEFAULT 'medium',
+                assigned_to INTEGER,
+                due_date INTEGER,
+                created_at INTEGER DEFAULT (unixepoch()),
+                updated_at INTEGER DEFAULT (unixepoch())
+            )
+        `).run();
+
+        // Create deployments table if it doesn't exist
+        await db.prepare(`
+            CREATE TABLE IF NOT EXISTS deployments (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                project_id INTEGER,
+                environment TEXT DEFAULT 'production',
+                status TEXT DEFAULT 'pending',
+                version TEXT,
+                created_at INTEGER DEFAULT (unixepoch())
+            )
+        `).run();
+    } catch (e) {
+        console.error('Error ensuring tables exist:', e);
+    }
+}
+
+// --- Projects CRUD API ---
+app.get('/api/projects', async (c) => {
+    try {
+        const db = c.env.DB;
+        await ensureTablesExist(db);
+        const projects = await db.prepare('SELECT * FROM projects ORDER BY created_at DESC LIMIT 50').all();
+        return c.json(projects.results || []);
+    } catch (error) {
+        console.error('Projects fetch error:', error);
+        return c.json({ error: 'Failed to fetch projects' }, 500);
+    }
+})
+
+app.post('/api/projects', async (c) => {
+    try {
+        const db = c.env.DB;
+        await ensureTablesExist(db);
+        const { name, description, status } = await c.req.json();
+        
+        if (!name) {
+            return c.json({ error: 'Project name is required' }, 400);
+        }
+
+        const result = await db.prepare(`
+            INSERT INTO projects (name, description, status, created_at, updated_at)
+            VALUES (?, ?, ?, unixepoch(), unixepoch())
+        `).bind(name, description || '', status || 'active').run();
+
+        const project = await db.prepare('SELECT * FROM projects WHERE id = ?').bind(result.meta.last_row_id).first();
+        return c.json(project);
+    } catch (error) {
+        console.error('Project create error:', error);
+        return c.json({ error: 'Failed to create project' }, 500);
+    }
+})
+
+app.put('/api/projects/:id', async (c) => {
+    try {
+        const db = c.env.DB;
+        const id = c.req.param('id');
+        const { name, description, status } = await c.req.json();
+
+        await db.prepare(`
+            UPDATE projects 
+            SET name = COALESCE(?, name),
+                description = COALESCE(?, description),
+                status = COALESCE(?, status),
+                updated_at = unixepoch()
+            WHERE id = ?
+        `).bind(name, description, status, id).run();
+
+        const project = await db.prepare('SELECT * FROM projects WHERE id = ?').bind(id).first();
+        return c.json(project);
+    } catch (error) {
+        console.error('Project update error:', error);
+        return c.json({ error: 'Failed to update project' }, 500);
+    }
+})
+
+app.delete('/api/projects/:id', async (c) => {
+    try {
+        const db = c.env.DB;
+        const id = c.req.param('id');
+        await db.prepare('DELETE FROM projects WHERE id = ?').bind(id).run();
+        return c.json({ success: true });
+    } catch (error) {
+        console.error('Project delete error:', error);
+        return c.json({ error: 'Failed to delete project' }, 500);
+    }
+})
+
+// --- Tasks CRUD API ---
+app.get('/api/tasks', async (c) => {
+    try {
+        const db = c.env.DB;
+        await ensureTablesExist(db);
+        const projectId = c.req.query('project_id');
+        
+        let query = 'SELECT * FROM tasks ORDER BY created_at DESC LIMIT 100';
+        let tasks;
+        
+        if (projectId) {
+            tasks = await db.prepare('SELECT * FROM tasks WHERE project_id = ? ORDER BY created_at DESC').bind(projectId).all();
+        } else {
+            tasks = await db.prepare(query).all();
+        }
+        
+        return c.json(tasks.results || []);
+    } catch (error) {
+        console.error('Tasks fetch error:', error);
+        return c.json({ error: 'Failed to fetch tasks' }, 500);
+    }
+})
+
+app.post('/api/tasks', async (c) => {
+    try {
+        const db = c.env.DB;
+        await ensureTablesExist(db);
+        const { title, description, project_id, status, priority, due_date } = await c.req.json();
+        
+        if (!title) {
+            return c.json({ error: 'Task title is required' }, 400);
+        }
+
+        const result = await db.prepare(`
+            INSERT INTO tasks (title, description, project_id, status, priority, due_date, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?, unixepoch(), unixepoch())
+        `).bind(title, description || '', project_id || null, status || 'todo', priority || 'medium', due_date || null).run();
+
+        const task = await db.prepare('SELECT * FROM tasks WHERE id = ?').bind(result.meta.last_row_id).first();
+        return c.json(task);
+    } catch (error) {
+        console.error('Task create error:', error);
+        return c.json({ error: 'Failed to create task' }, 500);
+    }
+})
+
+app.put('/api/tasks/:id', async (c) => {
+    try {
+        const db = c.env.DB;
+        const id = c.req.param('id');
+        const { title, description, status, priority, due_date } = await c.req.json();
+
+        await db.prepare(`
+            UPDATE tasks 
+            SET title = COALESCE(?, title),
+                description = COALESCE(?, description),
+                status = COALESCE(?, status),
+                priority = COALESCE(?, priority),
+                due_date = COALESCE(?, due_date),
+                updated_at = unixepoch()
+            WHERE id = ?
+        `).bind(title, description, status, priority, due_date, id).run();
+
+        const task = await db.prepare('SELECT * FROM tasks WHERE id = ?').bind(id).first();
+        return c.json(task);
+    } catch (error) {
+        console.error('Task update error:', error);
+        return c.json({ error: 'Failed to update task' }, 500);
+    }
+})
+
+app.delete('/api/tasks/:id', async (c) => {
+    try {
+        const db = c.env.DB;
+        const id = c.req.param('id');
+        await db.prepare('DELETE FROM tasks WHERE id = ?').bind(id).run();
+        return c.json({ success: true });
+    } catch (error) {
+        console.error('Task delete error:', error);
+        return c.json({ error: 'Failed to delete task' }, 500);
+    }
+})
+
+// --- Users API ---
+app.get('/api/users', async (c) => {
+    try {
+        const db = c.env.DB;
+        const users = await db.prepare('SELECT id, email, name, avatar_url, role, status, created_at FROM users ORDER BY created_at DESC LIMIT 50').all();
+        return c.json(users.results || []);
+    } catch (error) {
+        console.error('Users fetch error:', error);
+        return c.json({ error: 'Failed to fetch users' }, 500);
+    }
+})
+
+// --- Activities/Recent Activity API ---
+app.get('/api/dashboard/activities', async (c) => {
+    try {
+        const db = c.env.DB;
+        await ensureTablesExist(db);
+        
+        // Get recent projects, tasks, and deployments
+        const [recentProjects, recentTasks, recentDeployments] = await Promise.all([
+            db.prepare('SELECT id, name, created_at, "project" as type FROM projects ORDER BY created_at DESC LIMIT 5').all().catch(() => ({ results: [] })),
+            db.prepare('SELECT id, title as name, created_at, "task" as type FROM tasks ORDER BY created_at DESC LIMIT 5').all().catch(() => ({ results: [] })),
+            db.prepare('SELECT id, version as name, created_at, "deployment" as type FROM deployments ORDER BY created_at DESC LIMIT 5').all().catch(() => ({ results: [] }))
+        ]);
+
+        const activities = [
+            ...(recentProjects.results || []),
+            ...(recentTasks.results || []),
+            ...(recentDeployments.results || [])
+        ].sort((a, b) => (b.created_at || 0) - (a.created_at || 0)).slice(0, 10);
+
+        return c.json({ activities });
+    } catch (error) {
+        console.error('Activities fetch error:', error);
+        return c.json({ activities: [] });
     }
 })
 
