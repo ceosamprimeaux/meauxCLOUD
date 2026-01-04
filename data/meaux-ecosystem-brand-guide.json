@@ -1,0 +1,182 @@
+{
+  "source": "Meaux Ecosystem Brand Guide.pdf",
+  "version": "1.1",
+  "status": "Canonical / Enforced",
+  "audience": "Internal teams, agents, partners, auditors",
+  "purpose": "Long-term brand integrity, system coherence, and execution discipline",
+  
+  "masterBrand": {
+    "name": "Meaux",
+    "slug": "meaux",
+    "description": "An operating system for organizations. Provides clarity, control, and continuity for organizations that must operate responsibly, transparently, and sustainably over long periods of time.",
+    "category": "core",
+    "philosophy": {
+      "whatItIs": "Meaux is an operating system for organizations",
+      "whatItIsNot": [
+        "A marketplace of tools",
+        "A design experiment",
+        "A hype-driven SaaS brand"
+      ],
+      "coreAttributes": [
+        "Calm authority – confidence without noise",
+        "Intentional restraint – nothing decorative without purpose",
+        "Operational clarity – users always know where they are",
+        "Durability – systems feel long-lived",
+        "Human respect – reduced cognitive load"
+      ],
+      "brandPromise": "Meaux provides organizations with systems to operate, communicate, design, automate, and grow—without fragmentation."
+    },
+    "architecture": {
+      "hierarchy": {
+        "master": "Meaux",
+        "platform": {
+          "internal": "MeauxStack (foundational systems, not marketed)",
+          "public": "MeauxCloud (primary public platform, central access point, tenant control plane)"
+        },
+        "modules": [
+          "MeauxTalk",
+          "MeauxWork",
+          "MeauxSQL",
+          "MeauxCAD",
+          "MeauxMedia",
+          "MeauxIDE",
+          "MeauxOS"
+        ]
+      },
+      "inheritance": "All sub-brands inherit: Tone, Visual language, Ethical posture, Quality bar. No sub-brand may contradict or compete with Meaux."
+    },
+    "visualIdentity": {
+      "philosophy": "Prioritizes legibility over expression. Design exists to support understanding, not impress.",
+      "rules": [
+        "Neutral backgrounds first",
+        "Glass/clay effects only for hierarchy",
+        "No overpowering imagery",
+        "Motion is minimal and purposeful"
+      ],
+      "color": {
+        "base": "Neutral backgrounds dominate",
+        "accent": "Used sparingly, never more than one accent per surface"
+      },
+      "typography": {
+        "style": "Modern sans-serif",
+        "hierarchy": "Clear hierarchy",
+        "density": "Comfortable reading density"
+      }
+    }
+  },
+  
+  "modules": [
+    {
+      "name": "MeauxTalk",
+      "slug": "meauxtalk",
+      "purpose": "Organizational communication",
+      "positioning": "Structured communication for real work",
+      "supports": ["Channels", "Rooms", "Events", "Contextual collaboration"],
+      "doDont": {
+        "do": ["Emphasize clarity", "Use calm UI", "Support events"],
+        "dont": ["Add social gimmicks", "Use gaming aesthetics", "Encourage noise"]
+      }
+    },
+    {
+      "name": "MeauxWork",
+      "slug": "meauxwork",
+      "purpose": "Execution clarity",
+      "positioning": "Clear execution without operational noise",
+      "supports": ["Boards", "Tasks", "Ownership"],
+      "doDont": {
+        "do": ["Focus on execution", "Keep boards simple"],
+        "dont": ["Overbuild analytics", "Mix chat into tasks"]
+      }
+    },
+    {
+      "name": "MeauxSQL",
+      "slug": "meauxsql",
+      "purpose": "Controlled data access",
+      "positioning": "Structured access to organizational data",
+      "supports": ["Querying", "Auditing", "Transparency"],
+      "doDont": {
+        "do": ["Enforce safety", "Surface audit logs"],
+        "dont": ["Allow unrestricted queries", "Hide system behavior"]
+      }
+    },
+    {
+      "name": "MeauxCAD",
+      "slug": "meauxcad",
+      "purpose": "Design & engineering workflows",
+      "positioning": "Design systems connected to execution",
+      "supports": ["Schematics", "Modeling", "Rendering pipelines"],
+      "doDont": {
+        "do": ["Focus on lifecycle", "Support pipelines"],
+        "dont": ["Build art tools first", "Isolate design from execution"]
+      }
+    },
+    {
+      "name": "MeauxMedia",
+      "slug": "meauxmedia",
+      "purpose": "Content systems",
+      "positioning": "Content built for consistency",
+      "supports": ["Editing workflows", "Distribution pipelines"],
+      "doDont": {
+        "do": ["Optimize workflows", "Automate repetition"],
+        "dont": ["Promote hype culture", "Encourage manual chaos"]
+      }
+    },
+    {
+      "name": "MeauxIDE",
+      "slug": "meauxide",
+      "purpose": "System interaction",
+      "positioning": "Professional environment for system control",
+      "supports": ["Configuration", "Scripting", "Inspection"],
+      "doDont": {
+        "do": ["Be explicit", "Remain deterministic"],
+        "dont": ["Hide system logic", "Add playful UX"]
+      }
+    },
+    {
+      "name": "MeauxOS",
+      "slug": "meauxos",
+      "purpose": "Organizational operating models",
+      "positioning": "Operating systems for organizations",
+      "supports": ["Templates", "Frameworks", "Courses"]
+    }
+  ],
+  
+  "brandAlignment": {
+    "matrix": {
+      "brand": "Calm, inevitable, restrained",
+      "ui": "OS-like, predictable, minimal",
+      "copy": "Clear, factual, minimal",
+      "seo": "Semantic, index-ready, schema-complete"
+    }
+  },
+  
+  "governance": {
+    "checklist": {
+      "brand": [
+        "Aligns with Meaux purpose",
+        "Does not compete with existing modules"
+      ],
+      "visual": [
+        "Uses tokens only",
+        "No decorative noise"
+      ],
+      "copy": [
+        "Public vs internal separation enforced",
+        "No hype or buzzwords"
+      ],
+      "seo": [
+        "Unique title & description",
+        "JSON-LD schema present",
+        "Canonical URL defined"
+      ],
+      "architecture": [
+        "Fits OS shell",
+        "Respects tenant boundaries"
+      ]
+    },
+    "enforcement": "This Brand Book is enforceable. Deviation requires explicit approval. Meaux is built to last."
+  },
+  
+  "fullText": "Meaux Ecosystem Brand Guide - Edition: Formal Brand Book, Version: 1.1, Status: Canonical / Enforced. Meaux is an operating system for organizations. It exists to provide clarity, control, and continuity for organizations that must operate responsibly, transparently, and sustainably over long periods of time. Core brand attributes: Calm authority, Intentional restraint, Operational clarity, Durability, Human respect. Brand promise: Meaux provides organizations with systems to operate, communicate, design, automate, and grow—without fragmentation. Brand architecture: Meaux (master) → MeauxStack (internal) → MeauxCloud (public platform) → Modules (MeauxTalk, MeauxWork, MeauxSQL, MeauxCAD, MeauxMedia, MeauxIDE, MeauxOS). Visual identity prioritizes legibility over expression. Design exists to support understanding, not impress. Neutral backgrounds first, glass/clay effects only for hierarchy, no overpowering imagery, motion is minimal and purposeful. All Meaux applications are modules inside one OS. They do not exist independently. Brand governance checklist must pass for every new page, module, or domain. This Brand Book is enforceable. Deviation requires explicit approval. Meaux is built to last."
+}
+

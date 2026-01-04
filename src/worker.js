@@ -1632,7 +1632,7 @@ app.post('/api/brands', async (c) => {
         const db = c.env.DB;
         await ensureBrandTablesExist(db);
         const { name, slug, description, category, website_url, parent_brand_id } = await c.req.json();
-        
+
         if (!name || !slug) {
             return c.json({ error: 'Name and slug are required' }, 400);
         }
@@ -1656,10 +1656,10 @@ app.get('/api/urls', async (c) => {
         const db = c.env.DB;
         await ensureBrandTablesExist(db);
         const { brand_id, status, url_type } = c.req.query();
-        
+
         let query = 'SELECT * FROM urls WHERE 1=1';
         const params = [];
-        
+
         if (brand_id) {
             query += ' AND brand_id = ?';
             params.push(brand_id);
@@ -1672,7 +1672,7 @@ app.get('/api/urls', async (c) => {
             query += ' AND url_type = ?';
             params.push(url_type);
         }
-        
+
         query += ' ORDER BY url';
         const urls = await db.prepare(query).bind(...params).all();
         return c.json(urls.results || []);
@@ -1687,7 +1687,7 @@ app.post('/api/urls', async (c) => {
         const db = c.env.DB;
         await ensureBrandTablesExist(db);
         const { url, url_type, brand_id, cloudflare_zone_id, cloudflare_worker_id, cloudflare_pages_id, plan, notes } = await c.req.json();
-        
+
         if (!url) {
             return c.json({ error: 'URL is required' }, 400);
         }
@@ -1711,10 +1711,10 @@ app.get('/api/resources', async (c) => {
         const db = c.env.DB;
         await ensureBrandTablesExist(db);
         const { resource_type, brand_id, status } = c.req.query();
-        
+
         let query = 'SELECT * FROM cloudflare_resources WHERE 1=1';
         const params = [];
-        
+
         if (resource_type) {
             query += ' AND resource_type = ?';
             params.push(resource_type);
@@ -1727,7 +1727,7 @@ app.get('/api/resources', async (c) => {
             query += ' AND status = ?';
             params.push(status);
         }
-        
+
         query += ' ORDER BY resource_type, resource_name';
         const resources = await db.prepare(query).bind(...params).all();
         return c.json(resources.results || []);
@@ -1742,7 +1742,7 @@ app.get('/api/analysis/duplicates', async (c) => {
     try {
         const db = c.env.DB;
         await ensureBrandTablesExist(db);
-        
+
         // Find duplicate workers (same name pattern)
         const duplicateWorkers = await db.prepare(`
             SELECT resource_name, COUNT(*) as count, GROUP_CONCAT(id) as ids
@@ -1779,7 +1779,7 @@ app.post('/api/analysis/check-urls', async (c) => {
         const db = c.env.DB;
         await ensureBrandTablesExist(db);
         const { limit = 50 } = await c.req.json();
-        
+
         // Get URLs that haven't been checked recently
         const urls = await db.prepare(`
             SELECT * FROM urls 
@@ -1806,9 +1806,9 @@ app.post('/api/analysis/check-urls', async (c) => {
             ).run();
 
             // Update URL status
-            const newStatus = status.status === 404 ? '404' : 
-                            status.status === 'ERROR' ? 'error' : 'active';
-            
+            const newStatus = status.status === 404 ? '404' :
+                status.status === 'ERROR' ? 'error' : 'active';
+
             await db.prepare(`
                 UPDATE urls 
                 SET status = ?, http_status = ?, last_checked = unixepoch(), updated_at = unixepoch()
@@ -1839,13 +1839,13 @@ async function checkURLStatus(url) {
     try {
         const controller = new AbortController();
         const timeout = setTimeout(() => controller.abort(), 5000);
-        
-        const response = await fetch(url, { 
+
+        const response = await fetch(url, {
             method: 'HEAD',
             redirect: 'follow',
             signal: controller.signal
         });
-        
+
         clearTimeout(timeout);
         return {
             status: response.status,
@@ -1865,13 +1865,13 @@ app.post('/api/sync/cloudflare', async (c) => {
     try {
         const db = c.env.DB;
         const token = c.env.CLOUDFLARE_API_TOKEN;
-        
+
         if (!token) {
             return c.json({ error: 'Cloudflare API token not configured' }, 500);
         }
 
         await ensureBrandTablesExist(db);
-        
+
         // Insert default brands
         const defaultBrands = [
             { name: 'MeauxCLOUD', slug: 'meauxcloud', category: 'core', description: 'Primary cloud platform' },
@@ -1895,7 +1895,7 @@ app.post('/api/sync/cloudflare', async (c) => {
         }
 
         const accountId = c.env.CLOUDFLARE_ACCOUNT_ID || 'ede6590ac0d2fb7daf155b35653457b2';
-        
+
         // Fetch and sync Cloudflare data
         const zonesRes = await fetch(
             `https://api.cloudflare.com/client/v4/zones?account.id=${accountId}&per_page=50`,
@@ -1912,12 +1912,12 @@ app.post('/api/sync/cloudflare', async (c) => {
         // Sync zones to URLs table
         for (const zone of zones) {
             const brandSlug = zone.name.includes('meauxcloud') ? 'meauxcloud' :
-                            zone.name.includes('meauxbility') ? 'meauxbility' :
-                            zone.name.includes('inneranimal') ? 'inner-animal' :
-                            zone.name.includes('iautodidact') ? 'iautodidact' :
+                zone.name.includes('meauxbility') ? 'meauxbility' :
+                    zone.name.includes('inneranimal') ? 'inner-animal' :
+                        zone.name.includes('iautodidact') ? 'iautodidact' :
                             zone.name.includes('newiberia') ? 'new-iberia-church' :
-                            zone.name.includes('southernpets') ? 'southern-pets' : 'client-projects';
-            
+                                zone.name.includes('southernpets') ? 'southern-pets' : 'client-projects';
+
             const brand = await db.prepare('SELECT id FROM brands WHERE slug = ?').bind(brandSlug).first();
             const brandId = brand?.id || null;
 
@@ -2025,6 +2025,178 @@ app.get('/api/ecosystem/overview', async (c) => {
         });
     } catch (error) {
         console.error('Ecosystem overview error:', error);
+        return c.json({ error: error.message }, 500);
+    }
+});
+
+// =========================================================
+// DATA INGESTION ENDPOINTS (No Truncation, No Loss)
+// =========================================================
+
+// Ingestion pipeline functions (inlined for Workers compatibility)
+async function storeBrandContextInR2(r2, brandSlug, contextData) {
+    if (!r2) throw new Error('R2 bucket not available');
+    const timestamp = Date.now();
+    const r2Key = `brands/${brandSlug}/context/${timestamp}.json`;
+    await r2.put(r2Key, JSON.stringify({
+        brand: brandSlug,
+        data: contextData,
+        metadata: { receivedAt: new Date().toISOString(), version: '1.0', size: JSON.stringify(contextData).length }
+    }), {
+        httpMetadata: { contentType: 'application/json' },
+        customMetadata: { brand: brandSlug, type: 'brand-context' }
+    });
+    return r2Key;
+}
+
+async function getBrandContextFromR2(r2, r2Key) {
+    if (!r2) throw new Error('R2 bucket not available');
+    const object = await r2.get(r2Key);
+    if (!object) throw new Error(`Context not found: ${r2Key}`);
+    return await object.json();
+}
+
+function extractMetadata(contextData) {
+    return {
+        name: contextData.name || contextData.brand || 'Unknown',
+        slug: contextData.slug || (contextData.name || '').toLowerCase().replace(/\s+/g, '-'),
+        category: contextData.category || 'other',
+        description: contextData.description || contextData.summary || '',
+        website_url: contextData.website || contextData.url || null,
+        short_description: (contextData.description || '').substring(0, 1000)
+    };
+}
+
+async function storeBrandWithContext(db, r2, contextData) {
+    const metadata = extractMetadata(contextData);
+    const r2Key = await storeBrandContextInR2(r2, metadata.slug, contextData);
+
+    await db.prepare(`
+        CREATE TABLE IF NOT EXISTS brands (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL UNIQUE,
+            slug TEXT NOT NULL UNIQUE,
+            description TEXT,
+            category TEXT,
+            status TEXT DEFAULT 'active',
+            website_url TEXT,
+            parent_brand_id INTEGER,
+            r2_context_path TEXT,
+            created_at INTEGER DEFAULT (unixepoch()),
+            updated_at INTEGER DEFAULT (unixepoch())
+        )
+    `).run();
+
+    const result = await db.prepare(`
+        INSERT INTO brands (name, slug, description, category, website_url, r2_context_path, created_at, updated_at)
+        VALUES (?, ?, ?, ?, ?, ?, unixepoch(), unixepoch())
+        ON CONFLICT(slug) DO UPDATE SET
+            name = excluded.name,
+            description = excluded.description,
+            category = excluded.category,
+            website_url = excluded.website_url,
+            r2_context_path = excluded.r2_context_path,
+            updated_at = unixepoch()
+    `).bind(metadata.name, metadata.slug, metadata.short_description, metadata.category, metadata.website_url, r2Key).run();
+
+    const brand = await db.prepare('SELECT * FROM brands WHERE id = ?').bind(result.meta.last_row_id).first();
+    return { brand, r2Key };
+}
+
+async function ingestBrandData(env, contextData) {
+    const { DB, R2_ASSETS } = env;
+    const { brand, r2Key } = await storeBrandWithContext(DB, R2_ASSETS, contextData);
+    return { success: true, brand, storage: { r2: r2Key, d1: brand.id }, message: 'Brand data ingested successfully' };
+}
+
+// Ingest brand data with full context (stores in R2, metadata in D1)
+app.post('/api/ingest/brand', async (c) => {
+    try {
+        const contextData = await c.req.json();
+
+        if (!contextData || (!contextData.name && !contextData.brand)) {
+            return c.json({ error: 'Brand name or data required' }, 400);
+        }
+
+        const result = await ingestBrandData(c.env, contextData);
+
+        return c.json({
+            success: true,
+            ...result,
+            message: 'Brand data ingested successfully. Full context stored in R2, metadata in D1.'
+        });
+    } catch (error) {
+        console.error('Brand ingestion error:', error);
+        return c.json({ error: error.message }, 500);
+    }
+});
+
+// Get full brand context from R2
+app.get('/api/brands/:slug/context', async (c) => {
+    try {
+        const { slug } = c.req.param();
+        const db = c.env.DB;
+        const r2 = c.env.R2_ASSETS;
+
+        // Get brand from D1 to find R2 path
+        const brand = await db.prepare('SELECT * FROM brands WHERE slug = ?').bind(slug).first();
+
+        if (!brand || !brand.r2_context_path) {
+            return c.json({ error: 'Brand context not found' }, 404);
+        }
+
+        // Retrieve full context from R2
+        const context = await getBrandContextFromR2(r2, brand.r2_context_path);
+
+        return c.json({
+            success: true,
+            brand: {
+                id: brand.id,
+                name: brand.name,
+                slug: brand.slug
+            },
+            context: context.data,
+            metadata: context.metadata
+        });
+    } catch (error) {
+        console.error('Context retrieval error:', error);
+        return c.json({ error: error.message }, 500);
+    }
+});
+
+// Batch ingest multiple brands
+app.post('/api/ingest/brands/batch', async (c) => {
+    try {
+        const { brands } = await c.req.json();
+
+        if (!Array.isArray(brands) || brands.length === 0) {
+            return c.json({ error: 'Array of brands required' }, 400);
+        }
+
+        const results = [];
+        const errors = [];
+
+        for (const brandData of brands) {
+            try {
+                const result = await ingestBrandData(c.env, brandData);
+                results.push(result);
+            } catch (error) {
+                errors.push({
+                    brand: brandData.name || brandData.brand || 'Unknown',
+                    error: error.message
+                });
+            }
+        }
+
+        return c.json({
+            success: true,
+            ingested: results.length,
+            failed: errors.length,
+            results,
+            errors: errors.length > 0 ? errors : undefined
+        });
+    } catch (error) {
+        console.error('Batch ingestion error:', error);
         return c.json({ error: error.message }, 500);
     }
 });
