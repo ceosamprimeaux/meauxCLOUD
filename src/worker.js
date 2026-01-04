@@ -1506,6 +1506,529 @@ app.get('/api/sync/events', async (c) => {
     }
 });
 
+// =========================================================
+// BRAND & RESOURCE MANAGEMENT ENDPOINTS
+// =========================================================
+
+// Ensure brand/resource tables exist
+async function ensureBrandTablesExist(db) {
+    try {
+        // Brands table
+        await db.prepare(`
+            CREATE TABLE IF NOT EXISTS brands (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL UNIQUE,
+                slug TEXT NOT NULL UNIQUE,
+                description TEXT,
+                category TEXT,
+                status TEXT DEFAULT 'active',
+                website_url TEXT,
+                parent_brand_id INTEGER,
+                created_at INTEGER DEFAULT (unixepoch()),
+                updated_at INTEGER DEFAULT (unixepoch())
+            )
+        `).run();
+
+        // URLs table
+        await db.prepare(`
+            CREATE TABLE IF NOT EXISTS urls (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                brand_id INTEGER,
+                url TEXT NOT NULL UNIQUE,
+                url_type TEXT,
+                cloudflare_zone_id TEXT,
+                cloudflare_worker_id TEXT,
+                cloudflare_pages_id TEXT,
+                status TEXT DEFAULT 'active',
+                plan TEXT,
+                last_checked INTEGER,
+                http_status INTEGER,
+                notes TEXT,
+                created_at INTEGER DEFAULT (unixepoch()),
+                updated_at INTEGER DEFAULT (unixepoch())
+            )
+        `).run();
+
+        // Apps table
+        await db.prepare(`
+            CREATE TABLE IF NOT EXISTS apps (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                brand_id INTEGER,
+                name TEXT NOT NULL,
+                slug TEXT NOT NULL,
+                description TEXT,
+                app_type TEXT,
+                status TEXT DEFAULT 'active',
+                github_repo TEXT,
+                cloudflare_worker_name TEXT,
+                cloudflare_pages_project TEXT,
+                primary_url TEXT,
+                created_at INTEGER DEFAULT (unixepoch()),
+                updated_at INTEGER DEFAULT (unixepoch())
+            )
+        `).run();
+
+        // Cloudflare resources table
+        await db.prepare(`
+            CREATE TABLE IF NOT EXISTS cloudflare_resources (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                resource_type TEXT NOT NULL,
+                resource_name TEXT NOT NULL,
+                resource_id TEXT,
+                brand_id INTEGER,
+                app_id INTEGER,
+                status TEXT DEFAULT 'active',
+                metadata TEXT,
+                created_at INTEGER DEFAULT (unixepoch()),
+                updated_at INTEGER DEFAULT (unixepoch()),
+                UNIQUE(resource_type, resource_name)
+            )
+        `).run();
+
+        // URL health checks table
+        await db.prepare(`
+            CREATE TABLE IF NOT EXISTS url_health_checks (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                url_id INTEGER NOT NULL,
+                http_status INTEGER,
+                response_time_ms INTEGER,
+                error_message TEXT,
+                checked_at INTEGER DEFAULT (unixepoch())
+            )
+        `).run();
+
+        // Duplicates tracking table
+        await db.prepare(`
+            CREATE TABLE IF NOT EXISTS duplicate_resources (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                resource_type TEXT NOT NULL,
+                resource_name TEXT NOT NULL,
+                duplicate_of_id INTEGER,
+                status TEXT DEFAULT 'pending',
+                notes TEXT,
+                created_at INTEGER DEFAULT (unixepoch())
+            )
+        `).run();
+    } catch (e) {
+        console.error('Error ensuring brand tables exist:', e);
+    }
+}
+
+// Brands API
+app.get('/api/brands', async (c) => {
+    try {
+        const db = c.env.DB;
+        await ensureBrandTablesExist(db);
+        const brands = await db.prepare('SELECT * FROM brands ORDER BY name').all();
+        return c.json(brands.results || []);
+    } catch (error) {
+        console.error('Brands fetch error:', error);
+        return c.json({ error: error.message }, 500);
+    }
+});
+
+app.post('/api/brands', async (c) => {
+    try {
+        const db = c.env.DB;
+        await ensureBrandTablesExist(db);
+        const { name, slug, description, category, website_url, parent_brand_id } = await c.req.json();
+        
+        if (!name || !slug) {
+            return c.json({ error: 'Name and slug are required' }, 400);
+        }
+
+        const result = await db.prepare(`
+            INSERT INTO brands (name, slug, description, category, website_url, parent_brand_id, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?, unixepoch(), unixepoch())
+        `).bind(name, slug, description || null, category || null, website_url || null, parent_brand_id || null).run();
+
+        const brand = await db.prepare('SELECT * FROM brands WHERE id = ?').bind(result.meta.last_row_id).first();
+        return c.json(brand);
+    } catch (error) {
+        console.error('Brand create error:', error);
+        return c.json({ error: error.message }, 500);
+    }
+});
+
+// URLs API
+app.get('/api/urls', async (c) => {
+    try {
+        const db = c.env.DB;
+        await ensureBrandTablesExist(db);
+        const { brand_id, status, url_type } = c.req.query();
+        
+        let query = 'SELECT * FROM urls WHERE 1=1';
+        const params = [];
+        
+        if (brand_id) {
+            query += ' AND brand_id = ?';
+            params.push(brand_id);
+        }
+        if (status) {
+            query += ' AND status = ?';
+            params.push(status);
+        }
+        if (url_type) {
+            query += ' AND url_type = ?';
+            params.push(url_type);
+        }
+        
+        query += ' ORDER BY url';
+        const urls = await db.prepare(query).bind(...params).all();
+        return c.json(urls.results || []);
+    } catch (error) {
+        console.error('URLs fetch error:', error);
+        return c.json({ error: error.message }, 500);
+    }
+});
+
+app.post('/api/urls', async (c) => {
+    try {
+        const db = c.env.DB;
+        await ensureBrandTablesExist(db);
+        const { url, url_type, brand_id, cloudflare_zone_id, cloudflare_worker_id, cloudflare_pages_id, plan, notes } = await c.req.json();
+        
+        if (!url) {
+            return c.json({ error: 'URL is required' }, 400);
+        }
+
+        const result = await db.prepare(`
+            INSERT INTO urls (url, url_type, brand_id, cloudflare_zone_id, cloudflare_worker_id, cloudflare_pages_id, plan, notes, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, unixepoch(), unixepoch())
+        `).bind(url, url_type || null, brand_id || null, cloudflare_zone_id || null, cloudflare_worker_id || null, cloudflare_pages_id || null, plan || null, notes || null).run();
+
+        const urlRecord = await db.prepare('SELECT * FROM urls WHERE id = ?').bind(result.meta.last_row_id).first();
+        return c.json(urlRecord);
+    } catch (error) {
+        console.error('URL create error:', error);
+        return c.json({ error: error.message }, 500);
+    }
+});
+
+// Resources API
+app.get('/api/resources', async (c) => {
+    try {
+        const db = c.env.DB;
+        await ensureBrandTablesExist(db);
+        const { resource_type, brand_id, status } = c.req.query();
+        
+        let query = 'SELECT * FROM cloudflare_resources WHERE 1=1';
+        const params = [];
+        
+        if (resource_type) {
+            query += ' AND resource_type = ?';
+            params.push(resource_type);
+        }
+        if (brand_id) {
+            query += ' AND brand_id = ?';
+            params.push(brand_id);
+        }
+        if (status) {
+            query += ' AND status = ?';
+            params.push(status);
+        }
+        
+        query += ' ORDER BY resource_type, resource_name';
+        const resources = await db.prepare(query).bind(...params).all();
+        return c.json(resources.results || []);
+    } catch (error) {
+        console.error('Resources fetch error:', error);
+        return c.json({ error: error.message }, 500);
+    }
+});
+
+// Analysis: Find Duplicates
+app.get('/api/analysis/duplicates', async (c) => {
+    try {
+        const db = c.env.DB;
+        await ensureBrandTablesExist(db);
+        
+        // Find duplicate workers (same name pattern)
+        const duplicateWorkers = await db.prepare(`
+            SELECT resource_name, COUNT(*) as count, GROUP_CONCAT(id) as ids
+            FROM cloudflare_resources
+            WHERE resource_type = 'worker'
+            GROUP BY resource_name
+            HAVING count > 1
+        `).all();
+
+        // Find duplicate URLs
+        const duplicateURLs = await db.prepare(`
+            SELECT url, COUNT(*) as count, GROUP_CONCAT(id) as ids
+            FROM urls
+            GROUP BY url
+            HAVING count > 1
+        `).all();
+
+        return c.json({
+            success: true,
+            duplicates: {
+                workers: duplicateWorkers.results || [],
+                urls: duplicateURLs.results || []
+            }
+        });
+    } catch (error) {
+        console.error('Duplicate analysis error:', error);
+        return c.json({ error: error.message }, 500);
+    }
+});
+
+// Analysis: Check URL Health (404s)
+app.post('/api/analysis/check-urls', async (c) => {
+    try {
+        const db = c.env.DB;
+        await ensureBrandTablesExist(db);
+        const { limit = 50 } = await c.req.json();
+        
+        // Get URLs that haven't been checked recently
+        const urls = await db.prepare(`
+            SELECT * FROM urls 
+            WHERE status = 'active' 
+            ORDER BY last_checked ASC NULLS FIRST
+            LIMIT ?
+        `).bind(limit).all();
+
+        const results = [];
+        for (const urlRecord of urls.results || []) {
+            const startTime = Date.now();
+            const status = await checkURLStatus(urlRecord.url);
+            const responseTime = Date.now() - startTime;
+
+            // Record health check
+            await db.prepare(`
+                INSERT INTO url_health_checks (url_id, http_status, response_time_ms, error_message)
+                VALUES (?, ?, ?, ?)
+            `).bind(
+                urlRecord.id,
+                status.status === 'ERROR' ? null : status.status,
+                responseTime,
+                status.error || null
+            ).run();
+
+            // Update URL status
+            const newStatus = status.status === 404 ? '404' : 
+                            status.status === 'ERROR' ? 'error' : 'active';
+            
+            await db.prepare(`
+                UPDATE urls 
+                SET status = ?, http_status = ?, last_checked = unixepoch(), updated_at = unixepoch()
+                WHERE id = ?
+            `).bind(newStatus, status.status === 'ERROR' ? null : status.status, urlRecord.id).run();
+
+            results.push({
+                url: urlRecord.url,
+                status: status.status,
+                responseTime,
+                error: status.error
+            });
+        }
+
+        return c.json({
+            success: true,
+            checked: results.length,
+            results
+        });
+    } catch (error) {
+        console.error('URL health check error:', error);
+        return c.json({ error: error.message }, 500);
+    }
+});
+
+// Helper function to check URL status
+async function checkURLStatus(url) {
+    try {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 5000);
+        
+        const response = await fetch(url, { 
+            method: 'HEAD',
+            redirect: 'follow',
+            signal: controller.signal
+        });
+        
+        clearTimeout(timeout);
+        return {
+            status: response.status,
+            ok: response.ok
+        };
+    } catch (error) {
+        return {
+            status: 'ERROR',
+            ok: false,
+            error: error.message
+        };
+    }
+}
+
+// Sync Cloudflare data to D1
+app.post('/api/sync/cloudflare', async (c) => {
+    try {
+        const db = c.env.DB;
+        const token = c.env.CLOUDFLARE_API_TOKEN;
+        
+        if (!token) {
+            return c.json({ error: 'Cloudflare API token not configured' }, 500);
+        }
+
+        await ensureBrandTablesExist(db);
+        
+        // Insert default brands
+        const defaultBrands = [
+            { name: 'MeauxCLOUD', slug: 'meauxcloud', category: 'core', description: 'Primary cloud platform' },
+            { name: 'MeauxOS', slug: 'meauxos', category: 'core', description: 'Operating system layer' },
+            { name: 'Meauxbility', slug: 'meauxbility', category: 'core', description: 'Parent organization • Tech & Innovation Hub' },
+            { name: 'Inner Animal', slug: 'inner-animal', category: 'ecommerce', description: 'Pet accessories & apparel brand' },
+            { name: 'SolarSpec', slug: 'solarspec', category: 'energy', description: 'Solar energy solutions' },
+            { name: 'Krewe of Jesters', slug: 'krewe-of-jesters', category: 'events', description: 'Events & entertainment' },
+            { name: 'SamPrimeaux.com', slug: 'samprimeaux', category: 'portfolio', description: 'Personal portfolio & consultancy' },
+            { name: 'Client Projects', slug: 'client-projects', category: 'client', description: 'Enterprise solutions & consulting' },
+            { name: 'New Iberia Church of Christ', slug: 'new-iberia-church', category: 'client', description: 'Church website and services' },
+            { name: 'Southern Pets Animal Rescue', slug: 'southern-pets', category: 'client', description: 'Animal rescue organization' },
+            { name: 'iAutodidact', slug: 'iautodidact', category: 'core', description: 'Education platform' },
+        ];
+
+        for (const brand of defaultBrands) {
+            await db.prepare(`
+                INSERT OR IGNORE INTO brands (name, slug, category, description)
+                VALUES (?, ?, ?, ?)
+            `).bind(brand.name, brand.slug, brand.category, brand.description).run();
+        }
+
+        const accountId = c.env.CLOUDFLARE_ACCOUNT_ID || 'ede6590ac0d2fb7daf155b35653457b2';
+        
+        // Fetch and sync Cloudflare data
+        const zonesRes = await fetch(
+            `https://api.cloudflare.com/client/v4/zones?account.id=${accountId}&per_page=50`,
+            {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            }
+        );
+        const zonesData = await zonesRes.json();
+        const zones = zonesData.success ? zonesData.result : [];
+
+        // Sync zones to URLs table
+        for (const zone of zones) {
+            const brandSlug = zone.name.includes('meauxcloud') ? 'meauxcloud' :
+                            zone.name.includes('meauxbility') ? 'meauxbility' :
+                            zone.name.includes('inneranimal') ? 'inner-animal' :
+                            zone.name.includes('iautodidact') ? 'iautodidact' :
+                            zone.name.includes('newiberia') ? 'new-iberia-church' :
+                            zone.name.includes('southernpets') ? 'southern-pets' : 'client-projects';
+            
+            const brand = await db.prepare('SELECT id FROM brands WHERE slug = ?').bind(brandSlug).first();
+            const brandId = brand?.id || null;
+
+            await db.prepare(`
+                INSERT OR IGNORE INTO urls (url, url_type, cloudflare_zone_id, brand_id, plan, status)
+                VALUES (?, 'domain', ?, ?, ?, 'active')
+            `).bind(`https://${zone.name}`, zone.id, brandId, zone.plan?.name?.toLowerCase() || 'free').run();
+        }
+
+        // Fetch workers
+        const workersRes = await fetch(
+            `https://api.cloudflare.com/client/v4/accounts/${accountId}/workers/scripts`,
+            {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            }
+        );
+        const workersData = await workersRes.json();
+        const workers = workersData.success ? workersData.result : [];
+
+        // Sync workers
+        for (const worker of workers) {
+            await db.prepare(`
+                INSERT OR IGNORE INTO cloudflare_resources (resource_type, resource_name, resource_id, status)
+                VALUES ('worker', ?, ?, 'active')
+            `).bind(worker.id, worker.id).run();
+        }
+
+        return c.json({
+            success: true,
+            synced: {
+                brands: defaultBrands.length,
+                zones: zones.length,
+                workers: workers.length
+            }
+        });
+    } catch (error) {
+        console.error('Cloudflare sync error:', error);
+        return c.json({ error: error.message }, 500);
+    }
+});
+
+// Get comprehensive ecosystem overview
+app.get('/api/ecosystem/overview', async (c) => {
+    try {
+        const db = c.env.DB;
+        await ensureBrandTablesExist(db);
+
+        const [brands, urls, resources, duplicates] = await Promise.all([
+            db.prepare('SELECT * FROM brands ORDER BY category, name').all(),
+            db.prepare('SELECT * FROM urls ORDER BY url').all(),
+            db.prepare('SELECT * FROM cloudflare_resources ORDER BY resource_type, resource_name').all(),
+            db.prepare('SELECT * FROM duplicate_resources WHERE status = "pending"').all()
+        ]);
+
+        // Count by status
+        const urlStatusCounts = await db.prepare(`
+            SELECT status, COUNT(*) as count 
+            FROM urls 
+            GROUP BY status
+        `).all();
+
+        const resourceTypeCounts = await db.prepare(`
+            SELECT resource_type, COUNT(*) as count 
+            FROM cloudflare_resources 
+            GROUP BY resource_type
+        `).all();
+
+        return c.json({
+            success: true,
+            overview: {
+                brands: {
+                    total: brands.results?.length || 0,
+                    byCategory: brands.results?.reduce((acc, b) => {
+                        acc[b.category] = (acc[b.category] || 0) + 1;
+                        return acc;
+                    }, {}) || {}
+                },
+                urls: {
+                    total: urls.results?.length || 0,
+                    byStatus: urlStatusCounts.results?.reduce((acc, u) => {
+                        acc[u.status] = u.count;
+                        return acc;
+                    }, {}) || {}
+                },
+                resources: {
+                    total: resources.results?.length || 0,
+                    byType: resourceTypeCounts.results?.reduce((acc, r) => {
+                        acc[r.resource_type] = r.count;
+                        return acc;
+                    }, {}) || {}
+                },
+                duplicates: {
+                    pending: duplicates.results?.length || 0
+                }
+            },
+            data: {
+                brands: brands.results || [],
+                urls: urls.results || [],
+                resources: resources.results || [],
+                duplicates: duplicates.results || []
+            }
+        });
+    } catch (error) {
+        console.error('Ecosystem overview error:', error);
+        return c.json({ error: error.message }, 500);
+    }
+});
+
 export default app
 
 // --- Durable Object Class ---
