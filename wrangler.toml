@@ -63,6 +63,10 @@ binding = "AI"
 binding = "DB"
 database_name = "meauxos"
 database_id = "d8261777-9384-44f7-924d-c92247d55b46"
+
+[[hyperdrive]]
+binding = "HYPERDRIVE"
+id = "9108dd6499bb44c286e4eb298c6ffafb"
 [durable_objects]
 bindings = [
   { name = "CHAT_ROOM", class_name = "ChatRoom" }

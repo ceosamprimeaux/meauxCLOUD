@@ -1,0 +1,942 @@
+═══════════════════════════════════════════════════════════════════════════
+                    CLOUDFLARE ACCOUNT ORGANIZATION
+═══════════════════════════════════════════════════════════════════════════
+
+Account Name: Info@inneranimals.com's Account
+Account ID: ede6590ac0d2fb7daf155b35653457b2
+Account Type: standard
+Created: 10/29/2025
+
+═══════════════════════════════════════════════════════════════════════════
+🌐 ZONES (DOMAINS) - Total: 11
+═══════════════════════════════════════════════════════════════════════════
+
+📊 Plan Breakdown:
+   Pro Plans: 1
+   Free Plans: 10
+
+1. httpsiautodidact.com
+   Zone ID: e6c1aaa33528455e1744e14297465ab9
+   Status: active
+   Plan: Free Website
+   URLs:
+      • https://httpsiautodidact.com
+      • https://www.httpsiautodidact.com
+   Name Servers: jessica.ns.cloudflare.com, mike.ns.cloudflare.com
+
+2. iautodidact.app
+   Zone ID: 8af8b20619901b98901828527fdf42a0
+   Status: active
+   Plan: Free Website
+   URLs:
+      • https://iautodidact.app
+      • https://www.iautodidact.app
+   Name Servers: jessica.ns.cloudflare.com, mike.ns.cloudflare.com
+
+3. iautodidact.org
+   Zone ID: d05007596109131a95e6ce4d91365cf8
+   Status: active
+   Plan: Free Website
+   URLs:
+      • https://iautodidact.org
+      • https://www.iautodidact.org
+   Name Servers: jessica.ns.cloudflare.com, mike.ns.cloudflare.com
+
+4. inneranimal.app
+   Zone ID: 5dfe6ed9a663b50d26a66f15a2693211
+   Status: active
+   Plan: Free Website
+   URLs:
+      • https://inneranimal.app
+      • https://www.inneranimal.app
+   Name Servers: dave.ns.cloudflare.com, ingrid.ns.cloudflare.com
+
+5. inneranimalmedia.com
+   Zone ID: 0bab48636c1bea4be4ea61c0c7787c3e
+   Status: active
+   Plan: Free Website
+   URLs:
+      • https://inneranimalmedia.com
+      • https://www.inneranimalmedia.com
+   Name Servers: jessica.ns.cloudflare.com, mike.ns.cloudflare.com
+
+6. innerautodidact.com
+   Zone ID: eb19eae9f3c5c67086815ab6f6d6cabb
+   Status: active
+   Plan: Free Website
+   URLs:
+      • https://innerautodidact.com
+      • https://www.innerautodidact.com
+   Name Servers: jessica.ns.cloudflare.com, mike.ns.cloudflare.com
+
+7. meauxbility.org
+   Zone ID: 2f420b6c582e4ba8d7b1f6ebaf91438b
+   Status: active
+   Plan: Free Website
+   URLs:
+      • https://meauxbility.org
+      • https://www.meauxbility.org
+   Name Servers: jessica.ns.cloudflare.com, mike.ns.cloudflare.com
+
+8. meauxcloud.org
+   Zone ID: e5e1a89175623885537cd6572823fe16
+   Status: active
+   Plan: Free Website
+   URLs:
+      • https://meauxcloud.org
+      • https://www.meauxcloud.org
+   Name Servers: jessica.ns.cloudflare.com, mike.ns.cloudflare.com
+
+9. meauxxx.com
+   Zone ID: 8da67086b56daac0393e9f59015351d4
+   Status: active
+   Plan: Free Website
+   URLs:
+      • https://meauxxx.com
+      • https://www.meauxxx.com
+   Name Servers: dave.ns.cloudflare.com, ingrid.ns.cloudflare.com
+
+10. newiberiachurchofchrist.com
+   Zone ID: e75c2160f16a66e66dd22b948751f112
+   Status: active
+   Plan: Pro Website
+   URLs:
+      • https://newiberiachurchofchrist.com
+      • https://www.newiberiachurchofchrist.com
+   Name Servers: jessica.ns.cloudflare.com, mike.ns.cloudflare.com
+
+11. southernpetsanimalrescue.com
+   Zone ID: 841846658f1ae77907f5d35485927060
+   Status: active
+   Plan: Free Website
+   URLs:
+      • https://southernpetsanimalrescue.com
+      • https://www.southernpetsanimalrescue.com
+   Name Servers: jessica.ns.cloudflare.com, mike.ns.cloudflare.com
+
+═══════════════════════════════════════════════════════════════════════════
+⚙️  WORKERS - Total: 136
+═══════════════════════════════════════════════════════════════════════════
+
+1. acemedical
+   Created: 12/8/2025
+   Modified: 12/8/2025
+
+2. automeauxcad
+   Created: 11/16/2025
+   Modified: 11/16/2025
+
+3. automeauxemail
+   Created: 12/3/2025
+   Modified: 12/4/2025
+
+4. autonomous-coding-agent
+   Created: 12/10/2025
+   Modified: 12/18/2025
+
+5. autonomous-coding-agent-dev
+   Created: 12/18/2025
+   Modified: 12/19/2025
+
+6. blairmannentp
+   Created: 11/27/2025
+   Modified: 11/27/2025
+
+7. ceosamprimeaux
+   Created: 1/3/2026
+   Modified: 1/3/2026
+
+8. connor-iautodidact
+   Created: 12/4/2025
+   Modified: 12/4/2025
+
+9. connor-mcneely
+   Created: 12/6/2025
+   Modified: 12/6/2025
+
+10. connormcneelyengineer
+   Created: 11/24/2025
+   Modified: 11/24/2025
+
+11. d1-check-temp
+   Created: 12/25/2025
+   Modified: 12/25/2025
+
+12. d1-rest
+   Created: 1/2/2026
+   Modified: 1/2/2026
+
+13. damnsam
+   Created: 11/26/2025
+   Modified: 12/19/2025
+
+14. damnsam-dev
+   Created: 12/8/2025
+   Modified: 12/8/2025
+
+15. damnsam-production
+   Created: 12/9/2025
+   Modified: 12/11/2025
+
+16. decentdashboardversion
+   Created: 12/5/2025
+   Modified: 12/6/2025
+
+17. email-system-test
+   Created: 12/25/2025
+   Modified: 12/25/2025
+
+18. email-worker-sam
+   Created: 12/7/2025
+   Modified: 12/7/2025
+
+19. evergreen-landscaping
+   Created: 11/30/2025
+   Modified: 11/30/2025
+
+20. evergreen-landscaping-okc
+   Created: 11/21/2025
+   Modified: 11/21/2025
+
+21. evergrowlandscaping
+   Created: 12/2/2025
+   Modified: 12/2/2025
+
+22. flat-cherry-b4b0
+   Created: 12/4/2025
+   Modified: 12/4/2025
+
+23. fred-instantaccess
+   Created: 12/4/2025
+   Modified: 12/5/2025
+
+24. fuelnfreetime
+   Created: 12/19/2025
+   Modified: 12/19/2025
+
+25. gcloudretry
+   Created: 12/25/2025
+   Modified: 12/26/2025
+
+26. gcloudv1
+   Created: 12/7/2025
+   Modified: 12/21/2025
+
+27. gcloudv2
+   Created: 12/20/2025
+   Modified: 12/21/2025
+
+28. gcloudv3
+   Created: 12/10/2025
+   Modified: 12/23/2025
+
+29. grantwriting
+   Created: 12/5/2025
+   Modified: 12/5/2025
+
+30. hybridprosaas-dashboard
+   Created: 11/23/2025
+   Modified: 12/18/2025
+
+31. hybridprosaas-dashboard-production
+   Created: 12/17/2025
+   Modified: 12/19/2025
+
+32. iaccess-ai-gateway-dev
+   Created: 12/11/2025
+   Modified: 12/12/2025
+
+33. iaccess-api
+   Created: 12/7/2025
+   Modified: 12/7/2025
+
+34. iaccess-browser-rendering-dev
+   Created: 12/11/2025
+   Modified: 12/12/2025
+
+35. iaccess-dashboard-dev
+   Created: 12/11/2025
+   Modified: 12/12/2025
+
+36. iaccess-platform
+   Created: 12/24/2025
+   Modified: 12/24/2025
+
+37. iaccess-platform-dev
+   Created: 12/11/2025
+   Modified: 12/24/2025
+
+38. iaccess-router
+   Created: 12/7/2025
+   Modified: 12/7/2025
+
+39. iacess
+   Created: 12/7/2025
+   Modified: 12/7/2025
+
+40. iacess-production
+   Created: 12/7/2025
+   Modified: 12/9/2025
+
+41. iautodidactapp
+   Created: 11/27/2025
+   Modified: 12/17/2025
+
+42. inline-commands-explained
+   Created: 11/23/2025
+   Modified: 11/23/2025
+
+43. inneranimalmedia
+   Created: 11/22/2025
+   Modified: 12/19/2025
+
+44. inneranimalmedia-iamsam
+   Created: 11/23/2025
+   Modified: 11/23/2025
+
+45. inneranimalmedia-mcp
+   Created: 12/7/2025
+   Modified: 12/12/2025
+
+46. inneranimalmedia-mcp-production
+   Created: 12/7/2025
+   Modified: 12/12/2025
+
+47. inneranimalmedia-production
+   Created: 12/9/2025
+   Modified: 12/12/2025
+
+48. inneranimalmedia-router
+   Created: 12/19/2025
+   Modified: 12/19/2025
+
+49. inneranimalmedia-router-production
+   Created: 12/9/2025
+   Modified: 12/9/2025
+
+50. inneranimalmediav1
+   Created: 12/22/2025
+   Modified: 12/22/2025
+
+51. inneranimals-com
+   Created: 11/23/2025
+   Modified: 11/23/2025
+
+52. inneranimalv2
+   Created: 11/23/2025
+   Modified: 12/3/2025
+
+53. innerautodidact-com
+   Created: 11/24/2025
+   Modified: 11/25/2025
+
+54. instantaccess-worker
+   Created: 12/1/2025
+   Modified: 12/10/2025
+
+55. jolly-hill-6e86
+   Created: 11/24/2025
+   Modified: 11/24/2025
+
+56. lg3inddetailing
+   Created: 12/25/2025
+   Modified: 12/25/2025
+
+57. lg3industries
+   Created: 12/25/2025
+   Modified: 12/25/2025
+
+58. lively-king-8672
+   Created: 10/30/2025
+   Modified: 11/14/2025
+
+59. long-moon-7da2
+   Created: 11/16/2025
+   Modified: 11/16/2025
+
+60. meaux-ai-worker
+   Created: 11/15/2025
+   Modified: 11/15/2025
+
+61. meaux-asset-manager
+   Created: 11/23/2025
+   Modified: 11/23/2025
+
+62. meaux-deploy-vault
+   Created: 12/10/2025
+   Modified: 12/10/2025
+
+63. meaux-options-dev
+   Created: 12/11/2025
+   Modified: 12/11/2025
+
+64. meaux-secrets-dashboard
+   Created: 11/23/2025
+   Modified: 11/24/2025
+
+65. meaux-storage
+   Created: 11/14/2025
+   Modified: 11/14/2025
+
+66. meaux-work
+   Created: 11/14/2025
+   Modified: 11/14/2025
+
+67. meauxaccess-api
+   Created: 11/24/2025
+   Modified: 11/24/2025
+
+68. meauxaccess-dashboard
+   Created: 11/24/2025
+   Modified: 12/25/2025
+
+69. meauxaccess-dashboard-dev
+   Created: 12/16/2025
+   Modified: 12/26/2025
+
+70. meauxaccess-dashboard-production
+   Created: 12/7/2025
+   Modified: 12/21/2025
+
+71. meauxaccess-dashboard-staging
+   Created: 12/8/2025
+   Modified: 12/8/2025
+
+72. meauxaccess-ios
+   Created: 12/22/2025
+   Modified: 12/22/2025
+
+73. meauxaccess-ios-v22
+   Created: 12/23/2025
+   Modified: 12/24/2025
+
+74. meauxaccess20
+   Created: 12/9/2025
+   Modified: 12/9/2025
+
+75. meauxaccessmvp
+   Created: 12/16/2025
+   Modified: 12/19/2025
+
+76. meauxapp
+   Created: 11/14/2025
+   Modified: 11/15/2025
+
+77. meauxappmeauxtry
+   Created: 11/22/2025
+   Modified: 11/23/2025
+
+78. meauxbasic
+   Created: 12/11/2025
+   Modified: 12/11/2025
+
+79. meauxbility-api
+   Created: 10/30/2025
+   Modified: 11/23/2025
+
+80. meauxbility-app-library
+   Created: 12/5/2025
+   Modified: 12/5/2025
+
+81. meauxbility-app-library-preview
+   Created: 12/5/2025
+   Modified: 12/5/2025
+
+82. meauxbility-dev
+   Created: 11/21/2025
+   Modified: 12/11/2025
+
+83. meauxbility-ecosystem
+   Created: 10/30/2025
+   Modified: 10/31/2025
+
+84. meauxbility-homepage-remastered-dev
+   Created: 12/8/2025
+   Modified: 12/9/2025
+
+85. meauxbility-migrator
+   Created: 12/26/2025
+   Modified: 1/2/2026
+
+86. meauxbility-org-clean
+   Created: 11/23/2025
+   Modified: 12/15/2025
+
+87. meauxbility-org-dec6
+   Created: 12/6/2025
+   Modified: 12/6/2025
+
+88. meauxbilityfinalversion
+   Created: 11/16/2025
+   Modified: 11/16/2025
+
+89. meauxbilityorganization
+   Created: 11/15/2025
+   Modified: 11/15/2025
+
+90. meauxbilityv2
+   Created: 12/16/2025
+   Modified: 12/16/2025
+
+91. meauxcadconnorworkzone
+   Created: 11/16/2025
+   Modified: 11/16/2025
+
+92. meauxchat
+   Created: 12/25/2025
+   Modified: 12/26/2025
+
+93. meauxcloud
+   Created: 12/28/2025
+   Modified: 1/3/2026
+
+94. meauxcomplexprotocol
+   Created: 12/22/2025
+   Modified: 1/2/2026
+
+95. meauxcontainer
+   Created: 1/1/2026
+   Modified: 1/2/2026
+
+96. meauxide
+   Created: 12/25/2025
+   Modified: 12/27/2025
+
+97. meauxios
+   Created: 12/23/2025
+   Modified: 12/23/2025
+
+98. meauxlife-app-library
+   Created: 11/23/2025
+   Modified: 11/23/2025
+
+99. meauxmarkets-dev
+   Created: 12/16/2025
+   Modified: 12/17/2025
+
+100. meauxmcp
+   Created: 12/6/2025
+   Modified: 1/2/2026
+
+101. meauxmcpv4
+   Created: 12/9/2025
+   Modified: 12/21/2025
+
+102. meauxmedia-v2
+   Created: 12/9/2025
+   Modified: 12/9/2025
+
+103. meauxos
+   Created: 12/18/2025
+   Modified: 12/26/2025
+
+104. meauxos-api
+   Created: 12/23/2025
+   Modified: 12/25/2025
+
+105. meauxos-dashboard
+   Created: 12/23/2025
+   Modified: 12/23/2025
+
+106. meauxosgcloud
+   Created: 12/10/2025
+   Modified: 12/20/2025
+
+107. meauxosv2
+   Created: 12/21/2025
+   Modified: 12/23/2025
+
+108. meauxphoto
+   Created: 11/14/2025
+   Modified: 12/4/2025
+
+109. meauxsimplemcp
+   Created: 12/22/2025
+   Modified: 12/22/2025
+
+110. meauxstack-components
+   Created: 11/27/2025
+   Modified: 12/3/2025
+
+111. meauxstack-dashboard
+   Created: 12/9/2025
+   Modified: 12/9/2025
+
+112. meauxstack-os
+   Created: 12/16/2025
+   Modified: 12/19/2025
+
+113. meauxv2
+   Created: 12/19/2025
+   Modified: 12/19/2025
+
+114. meauxxx-com
+   Created: 11/23/2025
+   Modified: 11/23/2025
+
+115. mon24
+   Created: 11/24/2025
+   Modified: 11/24/2025
+
+116. new-iberia-church
+   Created: 1/1/2026
+   Modified: 1/2/2026
+
+117. new-iberia-church-api
+   Created: 1/2/2026
+   Modified: 1/2/2026
+
+118. newiberiachurchofchrist
+   Created: 1/1/2026
+   Modified: 1/1/2026
+
+119. official
+   Created: 11/16/2025
+   Modified: 11/16/2025
+
+120. r2-auto-router
+   Created: 11/24/2025
+   Modified: 11/24/2025
+
+121. rapid-rice-a9a7
+   Created: 11/24/2025
+   Modified: 11/24/2025
+
+122. react-router-app
+   Created: 12/26/2025
+   Modified: 12/26/2025
+
+123. saas-dashboard
+   Created: 12/3/2025
+   Modified: 12/4/2025
+
+124. sam-primeaux-portfolio
+   Created: 11/24/2025
+   Modified: 11/25/2025
+
+125. secrets-manager-api
+   Created: 11/23/2025
+   Modified: 11/23/2025
+
+126. shy-moon-e347
+   Created: 11/24/2025
+   Modified: 11/24/2025
+
+127. southernpetsanimalrescue
+   Created: 11/24/2025
+   Modified: 12/31/2025
+
+128. southernpetsanimalrescue-fix-nav
+   Created: 12/8/2025
+   Modified: 12/8/2025
+
+129. southernpetsanimalrescuecloudflare
+   Created: 11/24/2025
+   Modified: 11/24/2025
+
+130. southernpetsanimalrescuecloudflare-vercel-migration-dev
+   Created: 11/29/2025
+   Modified: 12/6/2025
+
+131. southernpetsemailworker
+   Created: 12/7/2025
+   Modified: 12/29/2025
+
+132. spar-dashboard
+   Created: 12/8/2025
+   Modified: 12/8/2025
+
+133. supabase-d1-gateway
+   Created: 12/25/2025
+   Modified: 12/25/2025
+
+134. truetech-api
+   Created: 11/23/2025
+   Modified: 11/23/2025
+
+135. unified-operations-hub
+   Created: 12/3/2025
+   Modified: 12/19/2025
+
+136. vision-board-dev
+   Created: 12/10/2025
+   Modified: 12/10/2025
+
+═══════════════════════════════════════════════════════════════════════════
+📄 PAGES PROJECTS - Total: 10
+═══════════════════════════════════════════════════════════════════════════
+
+1. new-iberia-church
+   Project ID: d44def23-2855-4426-b596-a63f6bd1b563
+   Production URL: https://new-iberia-church.pages.dev.pages.dev
+   Custom Domains:
+      • https://new-iberia-church.pages.dev
+   Created: 1/1/2026
+   Latest Deployment: 1/2/2026
+
+2. meauxbility-dev
+   Project ID: 00beed03-40b1-42bb-8d1d-dd6073522123
+   Production URL: https://meauxbility-dev.pages.dev.pages.dev
+   Custom Domains:
+      • https://meauxbility-dev.pages.dev
+   Created: 12/19/2025
+   Latest Deployment: 12/24/2025
+
+3. meauxos-dashboard
+   Project ID: d23c6d3d-a128-46d2-b615-9eceba6a3f51
+   Production URL: https://meauxos-dashboard.pages.dev.pages.dev
+   Custom Domains:
+      • https://meauxos-dashboard.pages.dev
+   Created: 12/23/2025
+   Latest Deployment: 12/23/2025
+
+4. meauxapplibrary
+   Project ID: 5cbfc426-00e8-4065-90f2-a198cfd97fb7
+   Production URL: https://meauxapplibrary.pages.dev.pages.dev
+   Custom Domains:
+      • https://meauxapplibrary.pages.dev
+   Created: 11/14/2025
+   Latest Deployment: 12/22/2025
+
+5. meauxbilityv2
+   Project ID: 4e36877b-8521-4bc7-a4c6-4e0d06a138b6
+   Production URL: https://meauxbility-org-clean.pages.dev.pages.dev
+   Custom Domains:
+      • https://meauxbility-org-clean.pages.dev
+   Created: 12/15/2025
+   Latest Deployment: 12/15/2025
+
+6. agent4-vision-board
+   Project ID: 9b8f3835-d5c4-4f87-9b8d-e6af4b63eac1
+   Production URL: https://agent4-vision-board.pages.dev.pages.dev
+   Custom Domains:
+      • https://agent4-vision-board.pages.dev
+   Created: 12/10/2025
+   Latest Deployment: 12/10/2025
+
+7. inner-animal-media
+   Project ID: 4758e11c-c2ee-400a-ae2a-a3f604d4026a
+   Production URL: https://inner-animal-media.pages.dev.pages.dev
+   Custom Domains:
+      • https://inner-animal-media.pages.dev
+   Created: 12/9/2025
+   Latest Deployment: 12/9/2025
+
+8. meauxstack-dashboard
+   Project ID: 308ccaad-95d1-40ee-a07f-281c6fe3d673
+   Production URL: https://meauxstack-dashboard.pages.dev.pages.dev
+   Custom Domains:
+      • https://meauxstack-dashboard.pages.dev
+   Created: 12/9/2025
+   Latest Deployment: N/A
+
+9. reactreadyfastdash
+   Project ID: a9fde993-519c-4acc-8b54-b608ad21d8aa
+   Production URL: https://reactreadyfastdash.pages.dev.pages.dev
+   Custom Domains:
+      • https://reactreadyfastdash.pages.dev
+   Created: 12/3/2025
+   Latest Deployment: N/A
+
+10. madelinemydawg
+   Project ID: 112ef32e-76fb-48c8-9b29-59c6b370537f
+   Production URL: https://madelinemydawg.pages.dev.pages.dev
+   Custom Domains:
+      • https://madelinemydawg.pages.dev
+   Created: 11/26/2025
+   Latest Deployment: 11/27/2025
+
+═══════════════════════════════════════════════════════════════════════════
+🪣 R2 BUCKETS - Total: 0
+═══════════════════════════════════════════════════════════════════════════
+
+No R2 buckets found.
+
+═══════════════════════════════════════════════════════════════════════════
+💾 D1 DATABASES - Total: 21
+═══════════════════════════════════════════════════════════════════════════
+
+1. newiberiachurch
+   Database ID: f9922d1f-79ce-4b85-95f1-b423bbe6413a
+   Created: 1/1/2026
+   Version: production
+
+2. new-iberia-church
+   Database ID: 19e0e12f-1230-4179-af6d-7ce654f4da83
+   Created: 1/1/2026
+   Version: production
+
+3. meauxbility-ide
+   Database ID: 4ace7439-72af-49a1-9200-0e289adf4380
+   Created: 12/26/2025
+   Version: production
+
+4. meauxos
+   Database ID: d8261777-9384-44f7-924d-c92247d55b46
+   Created: 12/18/2025
+   Version: production
+
+5. hybridprosaas-db
+   Database ID: 791e2df7-d5e7-49fe-a222-c122933265ae
+   Created: 12/17/2025
+   Version: production
+
+6. meauxbility-dashboard-db
+   Database ID: 613e4fe1-94f3-4aa1-8dfc-7f321d3bc46f
+   Created: 12/16/2025
+   Version: production
+
+7. meauxmarkets_dev
+   Database ID: df192326-00b4-4d68-ad0d-5dd439dc8898
+   Created: 12/16/2025
+   Version: production
+
+8. vision_board_dev
+   Database ID: 10f59224-68fb-48ec-a3c5-3d987715c419
+   Created: 12/10/2025
+   Version: production
+
+9. inneranimalmedia_app_library
+   Database ID: ff10ed0d-fb18-4f94-8e8a-2d8eb2053bef
+   Created: 12/9/2025
+   Version: production
+
+10. meauxaccess-db
+   Database ID: 1aaf9981-30f9-49f7-833f-462b523e4abb
+   Created: 12/7/2025
+   Version: production
+
+11. connor-iautodidact-db
+   Database ID: aed43e4a-4c02-46c9-8087-b42567326f32
+   Created: 12/4/2025
+   Version: production
+
+12. meauxwork-db
+   Database ID: 7a8dbae8-9c9c-4872-8824-9dc6fbc62fb2
+   Created: 12/3/2025
+   Version: production
+
+13. meauxstack-saas-db
+   Database ID: ee3e3adb-da99-457d-8c2c-390ff19f6435
+   Created: 12/3/2025
+   Version: production
+
+14. southernpetsanimalrescue
+   Database ID: f01e1fbb-01fb-4900-80e9-bbb90db51bbe
+   Created: 11/29/2025
+   Version: production
+
+15. inneranimalmedia-assets
+   Database ID: e0ec00b8-4e3c-422e-abba-70b7548c1f87
+   Created: 11/22/2025
+   Version: production
+
+16. meauxstack-engine
+   Database ID: 7e3ea1bc-edb8-4a99-81a5-a017687fd6c0
+   Created: 11/16/2025
+   Version: production
+
+17. meauxbilityorg
+   Database ID: 011d1629-b5c8-49e7-8f6d-ca311ba936fe
+   Created: 11/15/2025
+   Version: production
+
+18. meauxbility-api-db
+   Database ID: 49b16b7d-ecb9-4cc4-b337-559f94854757
+   Created: 11/14/2025
+   Version: production
+
+19. meaux-work-db
+   Database ID: 2a3a763a-92f1-4633-849e-268ddb31998f
+   Created: 11/14/2025
+   Version: production
+
+20. meauxphoto-db
+   Database ID: f1968266-1017-43f8-8572-caf2b0d63c4c
+   Created: 11/14/2025
+   Version: production
+
+21. inneranimalmedia
+   Database ID: 7a4ba110-b50f-46f8-9e1c-e61e9a5995ac
+   Created: 11/13/2025
+   Version: production
+
+═══════════════════════════════════════════════════════════════════════════
+🗄️  KV NAMESPACES - Total: 20
+═══════════════════════════════════════════════════════════════════════════
+
+1. NEW_IBERIA_CHURCH_CACHE
+   Namespace ID: 0675ac5b903148d4b37bb8e86c3bd2a3
+
+2. SESSIONS
+   Namespace ID: 2711d19aee7c4dd38b92fbc9b6785c3a
+
+3. CACHE
+   Namespace ID: 3098361aaaee4d0ca05a713dc0b70c7d
+
+4. KV_RATE_LIMIT
+   Namespace ID: 30bb5e34cf2044e5ae2d526c8e0122e6
+
+5. production-CACHE
+   Namespace ID: 38d3dbd415f148008aec823bd1b245bb
+
+6. CRAZY_CONNECTED
+   Namespace ID: 3d059794619f4fb89c3ad7c4348dd780
+
+7. KV_USERS
+   Namespace ID: 40cc20516269415daf4c6bac0d9ff43a
+
+8. openai
+   Namespace ID: 44096e435f5546fc8e1681eebbea48ce
+
+9. SUPABASE General settings
+   Namespace ID: 5a156c2799884edd9490c09cedcda117
+
+10. KV_CACHE
+   Namespace ID: 62013f3a1adf4be0a046840836aec3ab
+
+11. KV_NOTIFICATIONS
+   Namespace ID: 6832e03107f2432f97d49de44f670ff5
+
+12. MEAUX_WORK_CACHE
+   Namespace ID: 6888e7c25e674b74b32366b3c0052aed
+
+13. KV_ANALYTICS
+   Namespace ID: 6b362b78a91b406b91381ef91ee11c1b
+
+14. sundaynovember16launch
+   Namespace ID: 999c55c541284c71924340b61c1a6b6f
+
+15. SouthernPetsAnimalRescue
+   Namespace ID: 9b08e386f15b474aa357128ea34f4c22
+
+16. KV_EMAIL_LOGS
+   Namespace ID: 9b768dd6fdf54229995c6f957dc45f6f
+
+17. dev-CACHE
+   Namespace ID: a4f66290e1964bfbbbc239da6855a75c
+
+18. KV_PROJECTS
+   Namespace ID: a883b050e3e04dfca8630f020acbe8bc
+
+19. meauxos_RealtimeServer
+   Namespace ID: b65efed6ef434f5f9ffd77e130ddaf58
+
+20. INTERNALCONTENTDATABASE
+   Namespace ID: d417c269e61b4082bec7167e516576b1
+
+═══════════════════════════════════════════════════════════════════════════
+📊 SUMMARY
+═══════════════════════════════════════════════════════════════════════════
+
+Zones (Domains):        11 (1 Pro, 10 Free)
+Workers:                136
+Pages Projects:         10
+R2 Buckets:            0
+D1 Databases:          21
+KV Namespaces:         20
+Stream Videos:         0
+Images:                0
+Workers Domains:       0
+
+═══════════════════════════════════════════════════════════════════════════

@@ -1422,7 +1422,7 @@
                     return { activities: [] };
                 }
             },
-            
+
             // Projects CRUD
             async getProjects() {
                 try {
@@ -1434,7 +1434,7 @@
                     return [];
                 }
             },
-            
+
             async createProject(data) {
                 try {
                     const response = await fetch(`${CONFIG.apiBaseUrl}/api/projects`, {
@@ -1449,7 +1449,7 @@
                     throw error;
                 }
             },
-            
+
             async updateProject(id, data) {
                 try {
                     const response = await fetch(`${CONFIG.apiBaseUrl}/api/projects/${id}`, {
@@ -1464,7 +1464,7 @@
                     throw error;
                 }
             },
-            
+
             async deleteProject(id) {
                 try {
                     const response = await fetch(`${CONFIG.apiBaseUrl}/api/projects/${id}`, {
@@ -1477,11 +1477,11 @@
                     throw error;
                 }
             },
-            
+
             // Tasks CRUD
             async getTasks(projectId = null) {
                 try {
-                    const url = projectId 
+                    const url = projectId
                         ? `${CONFIG.apiBaseUrl}/api/tasks?project_id=${projectId}`
                         : `${CONFIG.apiBaseUrl}/api/tasks`;
                     const response = await fetch(url);
@@ -1492,7 +1492,7 @@
                     return [];
                 }
             },
-            
+
             async createTask(data) {
                 try {
                     const response = await fetch(`${CONFIG.apiBaseUrl}/api/tasks`, {
@@ -1507,7 +1507,7 @@
                     throw error;
                 }
             },
-            
+
             async updateTask(id, data) {
                 try {
                     const response = await fetch(`${CONFIG.apiBaseUrl}/api/tasks/${id}`, {
@@ -1522,7 +1522,7 @@
                     throw error;
                 }
             },
-            
+
             async deleteTask(id) {
                 try {
                     const response = await fetch(`${CONFIG.apiBaseUrl}/api/tasks/${id}`, {
@@ -1535,7 +1535,7 @@
                     throw error;
                 }
             },
-            
+
             // Users
             async getUsers() {
                 try {
@@ -1733,7 +1733,7 @@
                     api.getProjects(),
                     api.getTasks()
                 ]);
-                
+
                 state.dashboardStats = stats;
                 state.projects = projects;
                 state.tasks = tasks;
@@ -1789,7 +1789,7 @@
             <div style="background: var(--glass-bg); border-radius: 16px; padding: 24px; border: 1px solid var(--border-subtle); margin-bottom: 24px;">
                 <h3 style="font-weight:700; font-size:18px; color: var(--text-primary); margin-bottom: 16px;">Recent Activity</h3>
                 <div id="activitiesList" style="display: flex; flex-direction: column; gap: 12px;">
-                    ${activities.activities && activities.activities.length > 0 
+                    ${activities.activities && activities.activities.length > 0
                         ? activities.activities.map(a => createActivityItem(a)).join('')
                         : '<p style="color: var(--text-muted); text-align: center; padding: 16px;">No recent activity</p>'}
                 </div>
@@ -1905,7 +1905,7 @@
             const i = Math.floor(Math.log(bytes) / Math.log(k));
             return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
         }
-        
+
         function createProjectCard(project) {
             const statusColors = {
                 active: '#10b981',
@@ -1915,7 +1915,7 @@
             };
             const statusColor = statusColors[project.status] || '#6b7280';
             const createdDate = project.created_at ? new Date(project.created_at * 1000).toLocaleDateString() : 'Unknown';
-            
+
             return `
                 <div class="clay-card" style="padding: 20px; background: var(--surface-0); border-radius: 12px; border: 1px solid var(--border-subtle); cursor: pointer; transition: all 0.2s;" data-project-id="${project.id}">
                     <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">
@@ -1935,7 +1935,7 @@
                 </div>
             `;
         }
-        
+
         function createTaskCard(task) {
             const statusColors = {
                 todo: '#6b7280',
@@ -1951,7 +1951,7 @@
             const statusColor = statusColors[task.status] || '#6b7280';
             const priorityColor = priorityColors[task.priority] || '#6b7280';
             const createdDate = task.created_at ? new Date(task.created_at * 1000).toLocaleDateString() : 'Unknown';
-            
+
             return `
                 <div class="clay-card" style="padding: 16px; background: var(--surface-0); border-radius: 12px; border: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center;">
                     <div style="flex: 1;">
@@ -1974,7 +1974,7 @@
                 </div>
             `;
         }
-        
+
         function createActivityItem(activity) {
             const typeIcons = {
                 project: '📁',
@@ -1983,7 +1983,7 @@
             };
             const icon = typeIcons[activity.type] || '•';
             const date = activity.created_at ? new Date(activity.created_at * 1000).toLocaleString() : 'Unknown';
-            
+
             return `
                 <div style="padding: 12px; background: var(--surface-0); border-radius: 8px; border: 1px solid var(--border-subtle); display: flex; align-items: center; gap: 12px;">
                     <span style="font-size: 20px;">${icon}</span>
@@ -1995,14 +1995,14 @@
                 </div>
             `;
         }
-        
+
         function escapeHtml(text) {
             if (!text) return '';
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
         }
-        
+
         function showCreateProjectModal() {
             const modal = document.createElement('div');
             modal.id = 'createProjectModal';
@@ -2036,7 +2036,7 @@
                 </div>
             `;
             document.body.appendChild(modal);
-            
+
             modal.querySelector('#cancelProjectBtn').addEventListener('click', () => modal.remove());
             modal.querySelector('#createProjectForm').addEventListener('submit', async (e) => {
                 e.preventDefault();
@@ -2053,7 +2053,7 @@
                 }
             });
         }
-        
+
         function showCreateTaskModal() {
             const modal = document.createElement('div');
             modal.id = 'createTaskModal';
@@ -2097,7 +2097,7 @@
                 </div>
             `;
             document.body.appendChild(modal);
-            
+
             modal.querySelector('#cancelTaskBtn').addEventListener('click', () => modal.remove());
             modal.querySelector('#createTaskForm').addEventListener('submit', async (e) => {
                 e.preventDefault();
@@ -2295,7 +2295,7 @@
             // AI Assistant handlers
             const aiSendBtn = document.getElementById('aiSendBtn');
             const aiInput = document.getElementById('aiInput');
-            
+
             if (aiSendBtn) {
                 aiSendBtn.addEventListener('click', sendAIMessage);
             }
@@ -2306,19 +2306,19 @@
                     }
                 });
             }
-            
+
             // CRUD handlers (delegated event listeners for dynamically created buttons)
             document.addEventListener('click', async (e) => {
                 // Create Project
                 if (e.target.id === 'createProjectBtn' || e.target.closest('#createProjectBtn')) {
                     showCreateProjectModal();
                 }
-                
+
                 // Create Task
                 if (e.target.id === 'createTaskBtn' || e.target.closest('#createTaskBtn')) {
                     showCreateTaskModal();
                 }
-                
+
                 // Edit Project
                 if (e.target.classList.contains('edit-project-btn')) {
                     const id = e.target.dataset.id;
@@ -2335,7 +2335,7 @@
                         }
                     }
                 }
-                
+
                 // Delete Project
                 if (e.target.classList.contains('delete-project-btn')) {
                     const id = e.target.dataset.id;
@@ -2348,7 +2348,7 @@
                         }
                     }
                 }
-                
+
                 // Edit Task
                 if (e.target.classList.contains('edit-task-btn')) {
                     const id = e.target.dataset.id;
@@ -2365,7 +2365,7 @@
                         }
                     }
                 }
-                
+
                 // Delete Task
                 if (e.target.classList.contains('delete-task-btn')) {
                     const id = e.target.dataset.id;
@@ -2378,7 +2378,7 @@
                         }
                     }
                 }
-                
+
                 // Refresh Data
                 if (e.target.id === 'refreshBtn' || e.target.closest('#refreshBtn')) {
                     router.navigate('/dashboard');

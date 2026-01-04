@@ -54,9 +54,69 @@ app.get('/assets/*', async (c) => {
     return getAsset(c, path)
 })
 
-// --- Dashboard Route (React app) ---
+// --- Clean URL Routes (no .html extension) ---
 app.get('/dashboard', async (c) => {
     return getAsset(c, 'dashboard.html')
+})
+
+app.get('/features', async (c) => {
+    // Serve index.html and scroll to features/modules section
+    const html = await getAsset(c, 'index.html');
+    if (html instanceof Response) {
+        const text = await html.text();
+        const modified = text.replace('</body>', `
+            <script>
+                window.addEventListener('load', () => {
+                    setTimeout(() => {
+                        const section = document.getElementById('modules') || document.querySelector('[id*="feature"]');
+                        if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 100);
+                });
+            </script>
+        </body>`);
+        return new Response(modified, { headers: html.headers });
+    }
+    return html;
+})
+
+app.get('/applibrary', async (c) => {
+    // Serve index.html and scroll to modules section
+    const html = await getAsset(c, 'index.html');
+    if (html instanceof Response) {
+        const text = await html.text();
+        const modified = text.replace('</body>', `
+            <script>
+                window.addEventListener('load', () => {
+                    setTimeout(() => {
+                        const section = document.getElementById('modules');
+                        if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 100);
+                });
+            </script>
+        </body>`);
+        return new Response(modified, { headers: html.headers });
+    }
+    return html;
+})
+
+app.get('/brands', async (c) => {
+    // Serve index.html and scroll to brands section
+    const html = await getAsset(c, 'index.html');
+    if (html instanceof Response) {
+        const text = await html.text();
+        const modified = text.replace('</body>', `
+            <script>
+                window.addEventListener('load', () => {
+                    setTimeout(() => {
+                        const section = document.getElementById('brands');
+                        if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 100);
+                });
+            </script>
+        </body>`);
+        return new Response(modified, { headers: html.headers });
+    }
+    return html;
 })
 
 // --- Dashboard Stats API ---
@@ -152,7 +212,7 @@ app.post('/api/projects', async (c) => {
         const db = c.env.DB;
         await ensureTablesExist(db);
         const { name, description, status } = await c.req.json();
-        
+
         if (!name) {
             return c.json({ error: 'Project name is required' }, 400);
         }
@@ -211,16 +271,16 @@ app.get('/api/tasks', async (c) => {
         const db = c.env.DB;
         await ensureTablesExist(db);
         const projectId = c.req.query('project_id');
-        
+
         let query = 'SELECT * FROM tasks ORDER BY created_at DESC LIMIT 100';
         let tasks;
-        
+
         if (projectId) {
             tasks = await db.prepare('SELECT * FROM tasks WHERE project_id = ? ORDER BY created_at DESC').bind(projectId).all();
         } else {
             tasks = await db.prepare(query).all();
         }
-        
+
         return c.json(tasks.results || []);
     } catch (error) {
         console.error('Tasks fetch error:', error);
@@ -233,7 +293,7 @@ app.post('/api/tasks', async (c) => {
         const db = c.env.DB;
         await ensureTablesExist(db);
         const { title, description, project_id, status, priority, due_date } = await c.req.json();
-        
+
         if (!title) {
             return c.json({ error: 'Task title is required' }, 400);
         }
@@ -305,7 +365,7 @@ app.get('/api/dashboard/activities', async (c) => {
     try {
         const db = c.env.DB;
         await ensureTablesExist(db);
-        
+
         // Get recent projects, tasks, and deployments
         const [recentProjects, recentTasks, recentDeployments] = await Promise.all([
             db.prepare('SELECT id, name, created_at, "project" as type FROM projects ORDER BY created_at DESC LIMIT 5').all().catch(() => ({ results: [] })),
@@ -324,6 +384,63 @@ app.get('/api/dashboard/activities', async (c) => {
         console.error('Activities fetch error:', error);
         return c.json({ activities: [] });
     }
+})
+
+// --- Observability / Telemetry Endpoint (OTLP) for MeauxCLOUD ---
+// Separate endpoint for meauxcloud.org (not meauxbility.org)
+app.post('/api/telemetry/otlp/v1/logs', async (c) => {
+    try {
+        // OTLP (OpenTelemetry Protocol) logs endpoint for Cloudflare Observability
+        const body = await c.req.json();
+
+        // Log the telemetry data
+        console.log('[MeauxCLOUD Telemetry] Logs received:', JSON.stringify(body, null, 2));
+
+        // Store in D1 if needed
+        if (c.env.DB) {
+            try {
+                await c.env.DB.prepare(`
+                    CREATE TABLE IF NOT EXISTS meauxcloud_telemetry_logs (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        resource_attributes TEXT,
+                        scope_logs TEXT,
+                        service TEXT DEFAULT 'meauxcloud',
+                        received_at INTEGER DEFAULT (unixepoch())
+                    )
+                `).run();
+
+                await c.env.DB.prepare(`
+                    INSERT INTO meauxcloud_telemetry_logs (resource_attributes, scope_logs, service)
+                    VALUES (?, ?, 'meauxcloud')
+                `).bind(
+                    JSON.stringify(body.resourceLogs?.[0]?.resource?.attributes || {}),
+                    JSON.stringify(body.resourceLogs?.[0]?.scopeLogs || [])
+                ).run();
+            } catch (dbError) {
+                console.error('Error storing telemetry in D1:', dbError);
+            }
+        }
+
+        return c.json({
+            success: true,
+            message: 'MeauxCLOUD telemetry logs received',
+            service: 'meauxcloud',
+            received: new Date().toISOString()
+        });
+    } catch (error) {
+        console.error('MeauxCLOUD telemetry endpoint error:', error);
+        return c.json({ error: 'Failed to process telemetry' }, 500);
+    }
+})
+
+// Health check for MeauxCLOUD observability
+app.get('/api/telemetry/health', async (c) => {
+    return c.json({
+        status: 'healthy',
+        service: 'meauxcloud-central-analytics',
+        domain: 'meauxcloud.org',
+        timestamp: new Date().toISOString()
+    });
 })
 
 // --- GitHub Marketplace Webhook ---
@@ -570,6 +687,62 @@ app.post('/api/meshy/generate', async (c) => {
         return c.json(data)
     } catch (e) {
         return c.json({ error: e.message }, 500)
+    }
+})
+
+// --- Hyperdrive (Supabase PostgreSQL) Routes ---
+app.get('/api/hyperdrive/health', async (c) => {
+    try {
+        if (!c.env.HYPERDRIVE) {
+            return c.json({ error: 'Hyperdrive not configured' }, 500);
+        }
+
+        const hyperdrive = c.env.HYPERDRIVE;
+        const client = await hyperdrive.connect();
+        const result = await client.query('SELECT NOW() as time, version() as pg_version');
+
+        return c.json({
+            status: 'healthy',
+            hyperdrive: 'connected',
+            timestamp: result.rows[0].time,
+            postgres_version: result.rows[0].pg_version
+        });
+    } catch (error) {
+        console.error('Hyperdrive health check error:', error);
+        return c.json({
+            status: 'error',
+            error: error.message
+        }, 500);
+    }
+})
+
+app.post('/api/hyperdrive/query', async (c) => {
+    try {
+        if (!c.env.HYPERDRIVE) {
+            return c.json({ error: 'Hyperdrive not configured' }, 500);
+        }
+
+        const { sql, params = [] } = await c.req.json();
+
+        if (!sql) {
+            return c.json({ error: 'SQL query required' }, 400);
+        }
+
+        const hyperdrive = c.env.HYPERDRIVE;
+        const client = await hyperdrive.connect();
+        const result = await client.query(sql, params);
+
+        return c.json({
+            success: true,
+            rows: result.rows,
+            rowCount: result.rowCount
+        });
+    } catch (error) {
+        console.error('Hyperdrive query error:', error);
+        return c.json({
+            success: false,
+            error: error.message
+        }, 500);
     }
 })
 
@@ -999,6 +1172,337 @@ app.post('/api/ai/rag', async (c) => {
 
     } catch (e) {
         return c.json({ error: e.message, stack: e.stack }, 500);
+    }
+});
+
+// =========================================================
+// ANALYTICS ENDPOINTS (Cost Tracking & Usage Monitoring)
+// =========================================================
+
+// Get Cloudflare Analytics
+app.get('/api/analytics/cloudflare', async (c) => {
+    try {
+        const token = c.env.CLOUDFLARE_API_TOKEN;
+        if (!token) {
+            return c.json({ error: 'API token not configured' }, 500);
+        }
+
+        const now = new Date();
+        const startDate = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
+        const endDate = now.toISOString();
+
+        // Get Workers usage
+        const workersRes = await fetch(
+            `https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/workers/scripts`,
+            {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            }
+        );
+        const workersData = await workersRes.json();
+        const workers = workersData.success ? workersData.result : [];
+
+        // Get R2 buckets
+        const r2Res = await fetch(
+            `https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/r2/buckets`,
+            {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            }
+        );
+        const r2Data = await r2Res.json();
+        const r2Buckets = r2Data.success ? r2Data.result : [];
+
+        // Get D1 databases
+        const d1Res = await fetch(
+            `https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/d1/database`,
+            {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            }
+        );
+        const d1Data = await d1Res.json();
+        const d1Databases = d1Data.success ? d1Data.result : [];
+
+        return c.json({
+            success: true,
+            period: { start: startDate, end: endDate },
+            cloudflare: {
+                workers: {
+                    total: Array.isArray(workers) ? workers.length : 0,
+                },
+                r2: {
+                    buckets: Array.isArray(r2Buckets) ? r2Buckets.length : 0,
+                },
+                d1: {
+                    databases: Array.isArray(d1Databases) ? d1Databases.length : 0,
+                }
+            }
+        });
+    } catch (error) {
+        console.error('Cloudflare analytics error:', error);
+        return c.json({ error: error.message }, 500);
+    }
+});
+
+// Get GitHub Actions Analytics
+app.get('/api/analytics/github', async (c) => {
+    try {
+        const token = c.env.GITHUB_TOKEN;
+        if (!token) {
+            return c.json({ error: 'GitHub token not configured' }, 500);
+        }
+
+        const repo = 'ceosamprimeaux/meauxCLOUD';
+        const now = new Date();
+        const startDate = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split('T')[0];
+
+        const response = await fetch(
+            `https://api.github.com/repos/${repo}/actions/runs?per_page=100&created=>${startDate}`,
+            {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Accept': 'application/vnd.github.v3+json',
+                },
+            }
+        );
+
+        const data = await response.json();
+        const runs = data.workflow_runs || [];
+
+        const stats = {
+            total: runs.length,
+            success: runs.filter(r => r.conclusion === 'success').length,
+            failure: runs.filter(r => r.conclusion === 'failure').length,
+            cancelled: runs.filter(r => r.conclusion === 'cancelled').length,
+            in_progress: runs.filter(r => r.status === 'in_progress').length,
+            queued: runs.filter(r => r.status === 'queued').length,
+        };
+
+        const totalMinutes = runs.reduce((sum, run) => {
+            const start = new Date(run.created_at);
+            const end = run.updated_at ? new Date(run.updated_at) : new Date();
+            const minutes = Math.ceil((end - start) / 1000 / 60);
+            return sum + minutes;
+        }, 0);
+
+        const freeMinutes = 2000;
+        const usedPercentage = (totalMinutes / freeMinutes) * 100;
+
+        return c.json({
+            success: true,
+            period: { start: startDate, end: now.toISOString() },
+            github: {
+                repository: repo,
+                stats,
+                usage: {
+                    minutes: totalMinutes,
+                    freeMinutes,
+                    usedPercentage: Math.min(usedPercentage, 100),
+                    remaining: Math.max(0, freeMinutes - totalMinutes),
+                    status: usedPercentage > 90 ? 'warning' : usedPercentage > 75 ? 'caution' : 'ok'
+                },
+                recentRuns: runs.slice(0, 10).map(run => ({
+                    id: run.id,
+                    name: run.name,
+                    status: run.status,
+                    conclusion: run.conclusion,
+                    created: run.created_at,
+                    duration: run.updated_at ?
+                        Math.ceil((new Date(run.updated_at) - new Date(run.created_at)) / 1000 / 60) : 0
+                }))
+            }
+        });
+    } catch (error) {
+        console.error('GitHub analytics error:', error);
+        return c.json({ error: error.message }, 500);
+    }
+});
+
+// Get Cost Breakdown
+app.get('/api/analytics/costs', async (c) => {
+    try {
+        const db = c.env.DB;
+
+        await db.prepare(`
+            CREATE TABLE IF NOT EXISTS cost_tracking (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                service TEXT,
+                amount REAL,
+                details TEXT,
+                month TEXT,
+                date INTEGER DEFAULT (unixepoch())
+            )
+        `).run();
+
+        const costData = await db.prepare(`
+            SELECT * FROM cost_tracking 
+            WHERE month = strftime('%Y-%m', 'now')
+            ORDER BY date DESC
+        `).all().catch(() => ({ results: [] }));
+
+        const estimatedCosts = {
+            cloudflare: {
+                workers: { requests: 0, cost: 0 },
+                r2: { storage: 0, operations: 0, cost: 0 },
+                d1: { reads: 0, writes: 0, cost: 0 },
+                pages: { builds: 0, cost: 0 },
+                total: 0
+            },
+            github: {
+                actions: { minutes: 0, cost: 0 },
+                storage: { gb: 0, cost: 0 },
+                total: 0
+            },
+            total: 0
+        };
+
+        return c.json({
+            success: true,
+            costs: estimatedCosts,
+            historical: costData.results || [],
+            note: 'Costs are estimates based on free tier usage. Actual billing may vary.'
+        });
+    } catch (error) {
+        console.error('Cost analytics error:', error);
+        return c.json({ error: error.message }, 500);
+    }
+});
+
+// Get Overview (Combined Analytics)
+app.get('/api/analytics/overview', async (c) => {
+    try {
+        const baseUrl = c.req.url.split('/api/analytics/overview')[0];
+
+        const [cloudflare, github, costs] = await Promise.all([
+            fetch(`${baseUrl}/api/analytics/cloudflare`).then(r => r.json()).catch(() => ({})),
+            fetch(`${baseUrl}/api/analytics/github`).then(r => r.json()).catch(() => ({})),
+            fetch(`${baseUrl}/api/analytics/costs`).then(r => r.json()).catch(() => ({}))
+        ]);
+
+        return c.json({
+            success: true,
+            timestamp: new Date().toISOString(),
+            cloudflare: cloudflare.cloudflare || {},
+            github: github.github || {},
+            costs: costs.costs || {},
+            alerts: [
+                ...(github.github?.usage?.status === 'warning' ? [{
+                    type: 'warning',
+                    message: 'GitHub Actions usage is above 90%',
+                    action: 'Consider optimizing workflows'
+                }] : []),
+                ...(github.github?.usage?.status === 'caution' ? [{
+                    type: 'info',
+                    message: 'GitHub Actions usage is above 75%',
+                    action: 'Monitor usage closely'
+                }] : [])
+            ]
+        });
+    } catch (error) {
+        console.error('Overview analytics error:', error);
+        return c.json({ error: error.message }, 500);
+    }
+});
+
+// =========================================================
+// GITHUB-CLOUDFLARE SYNC ENDPOINTS
+// =========================================================
+
+// Get sync status
+app.get('/api/sync/status', async (c) => {
+    try {
+        const githubToken = c.env.GITHUB_TOKEN;
+        const cfToken = c.env.CLOUDFLARE_API_TOKEN;
+
+        if (!githubToken || !cfToken) {
+            return c.json({ error: 'Tokens not configured' }, 500);
+        }
+
+        const repo = 'ceosamprimeaux/meauxCLOUD';
+
+        const githubRes = await fetch(
+            `https://api.github.com/repos/${repo}/deployments?per_page=1`,
+            {
+                headers: {
+                    'Authorization': `Bearer ${githubToken}`,
+                    'Accept': 'application/vnd.github.v3+json',
+                },
+            }
+        );
+        const githubDeploy = await githubRes.json();
+
+        return c.json({
+            success: true,
+            github: {
+                latestDeployment: githubDeploy[0] || null,
+                repository: repo,
+            },
+            cloudflare: {
+                worker: 'meauxcloud',
+            },
+            synced: true
+        });
+    } catch (error) {
+        console.error('Sync status error:', error);
+        return c.json({ error: error.message }, 500);
+    }
+});
+
+// GitHub webhook handler
+app.post('/api/sync/webhook', async (c) => {
+    try {
+        const body = await c.req.text();
+        const event = JSON.parse(body);
+
+        const db = c.env.DB;
+        await db.prepare(`
+            CREATE TABLE IF NOT EXISTS github_events (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                event_type TEXT,
+                event_data TEXT,
+                received_at INTEGER DEFAULT (unixepoch())
+            )
+        `).run();
+
+        await db.prepare(`
+            INSERT INTO github_events (event_type, event_data)
+            VALUES (?, ?)
+        `).bind(event.action || event.ref_type || 'webhook', body).run();
+
+        return c.json({ success: true, received: event.action || 'webhook' });
+    } catch (error) {
+        console.error('Webhook error:', error);
+        return c.json({ error: error.message }, 500);
+    }
+});
+
+// Get recent GitHub events
+app.get('/api/sync/events', async (c) => {
+    try {
+        const db = c.env.DB;
+        const events = await db.prepare(`
+            SELECT * FROM github_events 
+            ORDER BY received_at DESC 
+            LIMIT 50
+        `).all().catch(() => ({ results: [] }));
+
+        return c.json({
+            success: true,
+            events: events.results.map(e => ({
+                ...e,
+                event_data: JSON.parse(e.event_data || '{}')
+            }))
+        });
+    } catch (error) {
+        console.error('Events fetch error:', error);
+        return c.json({ error: error.message }, 500);
     }
 });
 

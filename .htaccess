@@ -1,0 +1,9 @@
+# GitHub Pages doesn't support .htaccess, but this is for reference
+# Use dashboard/index.html for redirects instead
+
+RewriteEngine On
+RewriteRule ^dashboard$ dashboard.html [L]
+RewriteRule ^features$ index.html#modules [L]
+RewriteRule ^applibrary$ index.html#modules [L]
+RewriteRule ^brands$ index.html#brands [L]
+
