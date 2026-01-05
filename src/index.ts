@@ -21,6 +21,7 @@ import { getPrivacyPage } from './frontend/templates/public/privacy';
 import { getLoginPage } from './frontend/templates/auth/login';
 import { getProjectsPage } from './frontend/templates/dashboard/projects';
 import { getDashboard } from './frontend/templates/dashboard/overview';
+import { getAnalyticsPage } from './frontend/templates/dashboard/analytics';
 import { getSettingsPage } from './frontend/templates/dashboard/settings';
 import { getLayout } from './frontend/templates/layout';
 import type { Env } from './types/env';
@@ -113,6 +114,12 @@ app.get('/dashboard', sessionMiddleware, async (c) => {
 app.get('/projects', sessionMiddleware, (c) => {
   const user = c.get('user' as any);
   return c.html(getProjectsPage(c.env, user));
+});
+
+// Analytics
+app.get('/analytics', sessionMiddleware, (c) => {
+  const user = c.get('user' as any);
+  return c.html(getAnalyticsPage(user));
 });
 
 // Settings Page
