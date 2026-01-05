@@ -17,7 +17,7 @@ export interface SuperadminSession {
 /**
  * Check if user is a superadmin and provision GCP access
  */
-export async function superadminMiddleware(c: Context<{ Bindings: Env }>, next: () => Promise<void>) {
+export async function superadminMiddleware(c: Context<{ Bindings: Env, Variables: { superadmin: any, session: any } }>, next: () => Promise<void>) {
     const session = c.get('session');
 
     if (!session?.user?.email) {

@@ -1,7 +1,7 @@
 import { getLayout } from '../layout';
-import type { Env } from '../../../../types/env';
+import type { Env } from '../../../types/env';
 
-export function getSettingsPage(env: Env, user?: any) {
+export function getSettingsPage(_env: Env, user?: any) {
   const content = `
     <div class="max-w-4xl mx-auto p-8">
       <header class="mb-10 border-b border-gray-100 pb-6">

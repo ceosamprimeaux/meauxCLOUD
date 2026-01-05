@@ -1,7 +1,7 @@
 import { getLayout } from '../layout';
-import type { Env } from '../../../../types/env';
+import type { Env } from '../../../types/env';
 
-export function getDashboard(env: Env, user?: any) {
+export function getDashboard(_env: Env, user?: any) {
     const content = `
     <!-- Stats Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">

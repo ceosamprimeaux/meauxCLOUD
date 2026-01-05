@@ -1,6 +1,6 @@
-import type { Env } from '../../types/env';
+import type { Env } from '../types/env';
 import { Context, Next } from 'hono';
-import { getCookie, setCookie, deleteCookie } from 'hono/cookie';
+import { getCookie, deleteCookie } from 'hono/cookie';
 
 export interface UserSession {
     id: string;

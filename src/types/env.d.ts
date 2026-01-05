@@ -6,9 +6,13 @@ export interface Env {
 
     // R2 Bucket
     R2_ASSETS: R2Bucket;
+    SPLINE_ICONS: R2Bucket;
 
     // Analytics Engine
     ANALYTICS_ENGINE: AnalyticsEngineDataset;
+
+    // Pipelines
+    MEAUXCLOUDPIPELINE_STREAM: { send: (data: any[]) => Promise<void> };
 
     // Workers AI
     AI: any; // Cloudflare AI binding
@@ -47,6 +51,7 @@ export interface Env {
     GITHUB_CLIENT_SECRET?: string;
     GITHUB_MARKETPLACE_WEBHOOK_SECRET?: string;
     GITHUB_PAT?: string;
+    GOOGLE_SERVICE_ACCOUNT_KEY?: string;
     GOOGLE_API_KEY?: string;
     GOOGLE_CLIENT_ID?: string;
     GOOGLE_CLIENT_SECRET?: string;
@@ -72,7 +77,9 @@ export interface Env {
 // Extend Hono context with our environment
 declare module 'hono' {
     interface ContextVariableMap {
-        user?: User;
-        session?: Session;
+        user?: any;
+        session?: any;
+        superadmin?: any;
     }
 }
+```

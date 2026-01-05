@@ -1,8 +1,8 @@
 import { getLayout } from '../layout';
-import type { Env } from '../../../../types/env';
+import type { Env } from '../../../types/env';
 
-export function getProjectsPage(env: Env, user?: any) {
-    const content = `
+export function getProjectsPage(_env: Env, user?: any) {
+  const content = `
       <div class="p-8 h-full overflow-y-auto">
         
         <!-- Header -->
@@ -160,11 +160,11 @@ export function getProjectsPage(env: Env, user?: any) {
     loadProjects();
   </script>`;
 
-    return getLayout({
-        title: 'MeauxCLOUD - Projects',
-        bodyContent: content,
-        activeItem: 'projects',
-        user: user,
-        isPublic: false
-    });
+  return getLayout({
+    title: 'MeauxCLOUD - Projects',
+    bodyContent: content,
+    activeItem: 'projects',
+    user: user,
+    isPublic: false
+  });
 }

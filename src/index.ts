@@ -17,6 +17,9 @@ import { getHomepage } from './frontend/templates/public/home';
 import { getAboutPage } from './frontend/templates/public/about';
 import { getTermsPage } from './frontend/templates/public/terms';
 import { getPrivacyPage } from './frontend/templates/public/privacy';
+import { getServicesPage } from './frontend/templates/public/services';
+import { getProductsPage } from './frontend/templates/public/products';
+import { getContactPage } from './frontend/templates/public/contact';
 
 import { getLoginPage } from './frontend/templates/auth/login';
 import { getProjectsPage } from './frontend/templates/dashboard/projects';
@@ -526,16 +529,6 @@ app.get('/api/assets/serve/:key', async (c) => {
   return new Response(object.body, {
     headers,
   });
-});
-
-// About Page
-import { getAboutPage } from './frontend/templates/public/about';
-import { getServicesPage } from './frontend/templates/public/services';
-import { getProductsPage } from './frontend/templates/public/products';
-import { getContactPage } from './frontend/templates/public/contact';
-
-app.get('/about', async (c) => {
-  return c.html(getAboutPage());
 });
 
 app.get('/services', async (c) => {
