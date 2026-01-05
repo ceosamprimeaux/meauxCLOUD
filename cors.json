@@ -1,0 +1,10 @@
+{
+  "rules": [
+    {
+      "origins": ["https://meauxcloud.org", "https://*.meauxcloud.org", "http://localhost:8787", "https://meauxbility.org"],
+      "methods": ["GET", "HEAD"],
+      "allowedHeaders": ["*"],
+      "maxAgeSeconds": 3000
+    }
+  ]
+}

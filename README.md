@@ -1,4 +1,5 @@
 # MeauxCLOUD 🌩️
+<<<<<<< HEAD
 
 **Enterprise Cloud Platform | Multi-Tenant SaaS Infrastructure**
 
@@ -23,11 +24,34 @@
 - `admin.meauxcloud.org` - Admin portal
 - `fred.meauxcloud.org` - Fred's workspace
 - `connor.meauxcloud.org` - Connor's workspace
+=======
+**Enterprise Cloud Platform | Multi-Tenant SaaS Infrastructure**
+
+*Deploy License*
+
+## 🚀 Live Environments
+
+| Environment | URL |
+| :--- | :--- |
+| **Production** | |
+| Main Platform | [meauxcloud.org](https://meauxcloud.org) |
+| Dashboard | [meauxcloud.org/dashboard](https://meauxcloud.org/dashboard) |
+| API | [meauxcloud.org/api](https://meauxcloud.org/api) |
+| **Development** | |
+| GitHub Pages | [ceosamprimeaux.github.io/meauxCLOUD](https://ceosamprimeaux.github.io/meauxCLOUD) |
+| Dev Dashboard | [ceosamprimeaux.github.io/meauxCLOUD/dashboard.html](https://ceosamprimeaux.github.io/meauxCLOUD/dashboard.html) |
+| **Tenant Subdomains** | |
+| Dev | `dev.meauxcloud.org` |
+| Admin | `admin.meauxcloud.org` |
+| Fred | `fred.meauxcloud.org` |
+| Connor | `connor.meauxcloud.org` |
+>>>>>>> 714d3ee (MeauxCLOUD V1.0: Clay Global + 3D Engine + GitHub OAuth)
 
 ---
 
 ## 🏗️ Architecture
 
+<<<<<<< HEAD
 ```
 MeauxCLOUD Platform
 ├── Frontend
@@ -52,10 +76,29 @@ MeauxCLOUD Platform
 ```
 
 ---
+=======
+```mermaid
+graph TD
+    User --> Cloudflare
+    Cloudflare --> Workers[Frontend/Backend Workers]
+    Workers --> D1[D1 Database (SQLite)]
+    Workers --> R2[R2 Storage (Assets)]
+    Workers --> Hyperdrive
+    Hyperdrive --> Supabase[PostgreSQL]
+    Workers --> AI[AI Gateway (Gemini/OpenAI)]
+    
+    subgraph "CI/CD Pipeline"
+        GitHub[Source Code] --> Actions[GitHub Actions]
+        Actions --> Pages[GitHub Pages (Dev)]
+        Actions --> Workers[Deploy to Prod]
+    end
+```
+>>>>>>> 714d3ee (MeauxCLOUD V1.0: Clay Global + 3D Engine + GitHub OAuth)
 
 ## 🛠️ Tech Stack
 
 ### Frontend
+<<<<<<< HEAD
 - **Framework**: React 19.2
 - **Build Tool**: esbuild (233ms builds!)
 - **Styling**: Tailwind CSS + Custom CSS
@@ -85,6 +128,23 @@ MeauxCLOUD Platform
 - **AI**: Cloudflare AI Gateway (Gemini, OpenAI, Anthropic)
 - **3D**: MeshyAI
 - **File Conversion**: CloudConvert
+=======
+- **Framework:** React 19.2 (via simple templates currently)
+- **Build Tool:** esbuild (233ms builds!)
+- **Styling:** Tailwind CSS + Custom "Clay Global" Aesthetic
+- **3D Engine:** `@google/model-viewer` + MeshyAI assets
+
+### Backend
+- **Runtime:** Cloudflare Workers
+- **Framework:** Hono
+- **Database:** D1 (Primary), Supabase (Complex/History)
+- **Storage:** Cloudflare R2
+
+### Infrastructure
+- **Hosting:** Cloudflare (Workers, Pages, DNS)
+- **CI/CD:** GitHub Actions (Self-Hosted Runners)
+- **Identity:** Google OAuth, GitHub OAuth
+>>>>>>> 714d3ee (MeauxCLOUD V1.0: Clay Global + 3D Engine + GitHub OAuth)
 
 ---
 
@@ -92,9 +152,14 @@ MeauxCLOUD Platform
 
 ### Prerequisites
 - Node.js 20+
+<<<<<<< HEAD
 - npm or yarn
 - Cloudflare account
 - GitHub account
+=======
+- Cloudflare Account
+- Git
+>>>>>>> 714d3ee (MeauxCLOUD V1.0: Clay Global + 3D Engine + GitHub OAuth)
 
 ### Installation
 
@@ -109,6 +174,7 @@ npm install
 # Build project
 npm run build
 
+<<<<<<< HEAD
 # Preview locally
 npm run preview
 ```
@@ -127,12 +193,17 @@ npm run deploy:worker
 
 # Deploy everything (build + R2 + worker)
 npm run deploy
+=======
+# Deploy to Worker
+npm run deploy:worker
+>>>>>>> 714d3ee (MeauxCLOUD V1.0: Clay Global + 3D Engine + GitHub OAuth)
 ```
 
 ---
 
 ## 🔧 Configuration
 
+<<<<<<< HEAD
 ### Environment Variables
 
 See `.env.example` for required environment variables. **Never commit secrets!**
@@ -156,11 +227,20 @@ Worker configuration in `wrangler.toml`:
 - Routes: `meauxcloud.org` and subdomains
 - Bindings: D1, R2, Hyperdrive, AI, KV
 - Observability: Enabled for monitoring
+=======
+**Never commit secrets!** Use `wrangler secret put` for production variables.
+
+### Key Secrets
+- `CLOUDFLARE_API_TOKEN`
+- `GITHUB_CLIENT_ID` / `SECRET`
+- `GOOGLE_CLIENT_ID` / `SECRET`
+>>>>>>> 714d3ee (MeauxCLOUD V1.0: Clay Global + 3D Engine + GitHub OAuth)
 
 ---
 
 ## 📊 Account Resources
 
+<<<<<<< HEAD
 ### Cloudflare Account
 - **Account ID**: `ede6590ac0d2fb7daf155b35653457b2`
 - **Domains**: 11 zones (1 Pro, 10 Free)
@@ -378,11 +458,25 @@ This is a private enterprise platform. For access, contact the team.
 - **Documentation**: See `/docs` folder
 - **Issues**: GitHub Issues (private repo)
 - **Email**: support@meauxcloud.org
+=======
+- **Account ID:** `ede6590ac0d2fb7daf155b35653457b2`
+- **Workers:** 136 Active Workers
+- **Domains:** 11 Zones
+
+---
+
+## 🎨 Brand: "Clay Global"
+
+- **Primary:** `#f27a4f` (Peach/Orange)
+- **Background:** `#1e293b` (Deep Space Clay)
+- **Accent:** `#22d3ee` (Cyan Glow)
+>>>>>>> 714d3ee (MeauxCLOUD V1.0: Clay Global + 3D Engine + GitHub OAuth)
 
 ---
 
 ## 🗺️ Roadmap
 
+<<<<<<< HEAD
 ### Current Focus
 - ✅ Full D1 database integration
 - ✅ Analytics dashboard
@@ -399,4 +493,17 @@ This is a private enterprise platform. For access, contact the team.
 
 **Built with 💎 by the MeauxCLOUD team**
 
+=======
+- [x] Full D1 database integration
+- [x] Analytics dashboard
+- [x] GitHub-Cloudflare integration
+- [x] Clay Global UI Remaster
+- [x] 3D Propulsion Engine Integration
+- [ ] Advanced cost optimization
+- [ ] Native iOS App wrappers
+
+---
+
+*Built with 💎 by the MeauxCLOUD team.*
+>>>>>>> 714d3ee (MeauxCLOUD V1.0: Clay Global + 3D Engine + GitHub OAuth)
 *Last Updated: January 4, 2026*

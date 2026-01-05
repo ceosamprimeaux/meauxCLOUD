@@ -1,77 +1,104 @@
 name = "meauxcloud"
-main = "src/worker.js"
-account_id = "ede6590ac0d2fb7daf155b35653457b2"
+main = "src/index.ts"
 compatibility_date = "2025-11-17"
 workers_dev = true
 
-[[routes]]
-pattern = "meauxcloud.org"
-custom_domain = true
+# Account Configuration
+account_id = "ede6590ac0d2fb7daf155b35653457b2"
 
-[[routes]]
-pattern = "www.meauxcloud.org"
-custom_domain = true
+# Routes and Domains
+routes = [
+  { pattern = "meauxcloud.org/*", zone_name = "meauxcloud.org" },
+  { pattern = "www.meauxcloud.org/*", zone_name = "meauxcloud.org" },
+  { pattern = "admin.meauxcloud.org/*", zone_name = "meauxcloud.org" },
+  { pattern = "dev.meauxcloud.org/*", zone_name = "meauxcloud.org" },
+  { pattern = "fred.meauxcloud.org/*", zone_name = "meauxcloud.org" },
+  { pattern = "connor.meauxcloud.org/*", zone_name = "meauxcloud.org" }
+]
 
-[[routes]]
-pattern = "dev.meauxcloud.org"
-custom_domain = true
-
-[[routes]]
-pattern = "admin.meauxcloud.org"
-custom_domain = true
-
-[[routes]]
-pattern = "fred.meauxcloud.org"
-custom_domain = true
-
-[[routes]]
-pattern = "connor.meauxcloud.org"
-custom_domain = true
-
+# Observability
 [observability]
 enabled = true
-head_sampling_rate = 1
+logs_enabled = true
+traces_enabled = true
 
-[observability.logs]
-enabled = true
-head_sampling_rate = 1
-persist = true
-invocation_logs = true
-
-[observability.traces]
-enabled = true
-persist = true
-head_sampling_rate = 1
-
-[[rules]]
-  type = "Text"
-  globs = ["**/*.html", "**/*.css"]
-  fallthrough = true
-
-[[r2_buckets]]
-  binding = "R2_ASSETS"
-  bucket_name = "meauxcloud"
-
-[ai]
-binding = "AI"
-
-# [[vectorize]]
-# binding = "VECTOR_INDEX"
-# index_name = "allinfrastructure"
-
+# D1 Database Binding
 [[d1_databases]]
 binding = "DB"
 database_name = "meauxos"
 database_id = "d8261777-9384-44f7-924d-c92247d55b46"
 
+# R2 Bucket Binding
+[[r2_buckets]]
+binding = "R2_ASSETS"
+bucket_name = "meauxcloud"
+
+[[r2_buckets]]
+binding = "SPLINE_ICONS"
+bucket_name = "splineicons"
+
+# Analytics Engine Binding
+[[analytics_engine_datasets]]
+binding = "ANALYTICS_ENGINE"
+dataset = "meauxcloud_analytics"
+
+# Durable Object Migrations - Delete existing ChatRoom
+[[migrations]]
+tag = "v2"
+deleted_classes = ["ChatRoom"]
+
+# Hyperdrive Binding
 [[hyperdrive]]
 binding = "HYPERDRIVE"
 id = "9108dd6499bb44c286e4eb298c6ffafb"
-[durable_objects]
-bindings = [
-  { name = "CHAT_ROOM", class_name = "ChatRoom" }
-]
 
-[[migrations]]
-tag = "v1"
-new_classes = ["ChatRoom"]
+# Workers AI Binding
+[ai]
+binding = "AI"
+
+# Environment Variables (Secrets - set via wrangler secret put)
+[vars]
+ENVIRONMENT = "production"
+APP_NAME = "MeauxCLOUD"
+APP_URL = "https://meauxcloud.org"
+GITHUB_CLIENT_ID = "Ov23liNZWtaQbQT6RkZi"
+
+# Development Configuration
+[env.development]
+name = "meauxcloud-dev"
+vars = { ENVIRONMENT = "development", APP_URL = "http://localhost:8787" }
+
+# Staging Configuration
+[env.staging]
+name = "meauxcloud-staging"
+vars = { ENVIRONMENT = "staging", APP_URL = "https://dev.meauxcloud.org" }
+
+# Compatibility Flags
+compatibility_flags = ["nodejs_compat"]
+
+# Limits
+limits = { cpu_ms = 50 }
+
+[[pipelines]]
+binding = "MEAUXCLOUDPIPELINE_STREAM"
+pipeline = "meauxcloudpipeline_stream"
+
+# Vectorize (AI Memory)
+[[vectorize]]
+binding = "VECTORIZE_INDEX"
+index_name = "ai-search-meauxcloudai"
+
+# Workflows
+[[workflows]]
+name = "brand-builder"
+binding = "BRAND_BUILDER"
+class_name = "BrandBuilderWorkflow"
+
+# Service Bindings
+[[services]]
+binding = "INTERNAL_SERVICE"
+service = "meaux-services"
+
+# Browser Rendering
+[browser]
+binding = "MY_BROWSER"

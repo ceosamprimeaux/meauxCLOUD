@@ -1,0 +1,1 @@
+[{"AllowedOrigins":["https://meauxcloud.org","https://www.meauxcloud.org","http://localhost:8787"],"AllowedMethods":["GET","HEAD"],"AllowedHeaders":["*"],"MaxAgeSeconds":3000}]

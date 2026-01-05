@@ -1,40 +1,41 @@
 {
   "name": "meauxcloud",
   "version": "1.0.0",
-  "main": "index.js",
+  "description": "Infrastructure for Modern Nonprofits - Premium analytics and collaboration platform",
+  "main": "src/index.ts",
   "scripts": {
-    "dev": "npx esbuild src/main.jsx --bundle --outfile=dist/assets/main.js --servedir=dist --watch",
-    "build": "npx esbuild src/main.jsx --bundle --outfile=dist/assets/main.js --minify --sourcemap && npm run copy:html && npm run refactor",
-    "copy:html": "mkdir -p dist && cp dashboard.html index.html login.html output.css dist/ 2>/dev/null || true",
-    "refactor": "node scripts/refactor_html_for_production.js --all",
-    "refactor:file": "node scripts/refactor_html_for_production.js",
-    "preview": "npx serve dist",
-    "sync:r2": "node scripts/sync_assets_to_r2.js",
-    "deploy:worker": "npx wrangler deploy",
-    "deploy:all": "npm run build && npm run sync:r2 && npm run deploy:worker",
-    "deploy": "npm run deploy:all"
+    "dev": "wrangler dev",
+    "build": "tsc && esbuild src/index.ts --bundle --outfile=dist/index.js --format=esm --platform=browser --target=es2022",
+    "deploy": "wrangler deploy",
+    "deploy:staging": "wrangler deploy --env staging",
+    "deploy:dev": "wrangler deploy --env development",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint src --ext .ts,.tsx",
+    "test": "vitest",
+    "db:migrate": "wrangler d1 migrations apply meauxos --remote",
+    "db:local": "wrangler d1 migrations apply meauxos --local"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
-  "devDependencies": {
-    "@vitejs/plugin-react": "^5.1.2",
-    "autoprefixer": "^10.4.23",
-    "esbuild": "^0.27.2",
-    "postcss": "^8.5.6",
-    "tailwindcss": "^3.4.19",
-    "vite": "^6.4.1"
-  },
+  "keywords": [
+    "cloudflare",
+    "workers",
+    "analytics",
+    "nonprofit",
+    "meauxcloud"
+  ],
+  "author": "Sam Primeaux <sam@meauxbility.org>",
+  "license": "PROPRIETARY",
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.962.0",
-    "hono": "^4.11.3",
-    "lucide-react": "^0.562.0",
-    "mime-types": "^3.0.2",
-    "react": "^19.2.3",
-    "react-dom": "^19.2.3",
-    "react-router-dom": "^7.11.0",
-    "resend": "^6.6.0",
-    "svix": "^1.84.1"
+    "hono": "^4.0.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20230518.0",
+    "@types/node": "^20.0.0",
+    "esbuild": "^0.17.0",
+    "typescript": "^5.0.0",
+    "vitest": "^1.0.0",
+    "wrangler": "^3.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
